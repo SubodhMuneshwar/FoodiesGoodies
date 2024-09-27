@@ -1,0 +1,698 @@
+@font-face {
+    font-family: or;
+    src: url(Orange\ Squash\ Free.otf);
+}
+@font-face {
+    font-family:lt ;
+    src: url(LTPerfume-2.ttf);
+}
+@font-face {
+    font-family: march;
+    src: url(March\ Vibes.otf);
+}
+@font-face {
+    font-family: pizz;
+    src: url(YummyPizzaDemoRegular.ttf);
+}
+@font-face {
+    font-family: aq;
+    src: url(Aqua\ Wow.ttf);
+}
+@font-face {
+    font-family: roboto;
+    src: url(Roboto-Bold.ttf);
+}
+@font-face {
+    font-family: milk;
+    src: url(Milker.otf);
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+                                                       /* BODYYYYY */
+body{
+    height: 200px;
+    background:rgba(0,0,0,0.6) url(todd-quackenbush-x5SRhkFajrA-unsplash.jpg) ;
+    background-size: cover;
+    background-position: center;
+    background-blend-mode:darken;
+    background-repeat: repeat;
+    /* background-color: black; */
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+                                                        /*HeADERRR  */
+header{
+    position: fixed;
+    height: 60px;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    padding: 20px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 90px;
+    border-bottom: 2px solid white;
+    /* border-top: 2px solid white; */
+    backdrop-filter: blur(8px);
+    background-color: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.8);
+    z-index: 1;
+}
+.logo{
+    color: white;
+    font-size: 40px;
+    font-family:march;
+    margin-top: 10px;
+    padding-left: 20px;
+    float: left;
+    user-select: none;
+    transition: all 0.2s ease-in-out;
+    z-index: -0.1;
+    animation: fadeleft 1s ease-in-out ;
+}
+
+.logo:hover{
+    color: rgb(210, 168, 28);
+}
+.navbar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.navbar a{
+    position: relative;
+    font-size: 17px;
+    color: white;
+    text-decoration: none;
+    font-weight: 400;
+    padding: 10px;
+    margin-right: 20px;
+    padding-bottom: 0px;
+    transition: all 0.2s ease-in-out;
+    font-family: Arial;
+    animation: fadeInUp 0.5s ease-in-out ;
+}
+.navbar a::after{
+    content:'';
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 3px;
+    background: white;
+    border-radius: 5px;
+    transform: scaleX(0);
+    transition: transform .4s;
+}
+.navbar a:hover{
+    color: #7C7C7C;
+}
+.navbar a:hover::after{
+    transform-origin: middle;
+    transform: scaleX(1);
+}   
+#hometext{
+    border-bottom: 5px solid white;
+    color: orange;
+}
+#hometext::after{
+    visibility: hidden;
+}
+
+#sidelog{
+    margin-left: 250px;
+    border: 2px solid white;
+    /* border-radius: 10px; */
+    padding: 5px;
+    background-color: rgba(187, 122, 1, 0.507);
+}
+
+#sidelog:hover{
+    color: black;
+    background-color: wheat;
+}
+#sidelog::after{
+    visibility: hidden;
+}
+
+.aid{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.aid img{
+    width: 30px;
+    margin-left: 10px;
+    animation:bigsmol 1s ease-in-out 3s infinite alternate;
+    border-radius: 300px;
+}
+
+@keyframes bigsmol{
+    from{
+        transform: scale(1);
+        background-color: transparent;
+    }
+    to{transform: scale(1.3);
+    background-color: yellow;
+    }
+}
+/* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+
+                                                        /*VIDEO TEXTT ANDD SEARCHH */
+.video {
+    position: relative;
+    height: 600px;
+    overflow: hidden;
+}
+.backvid{
+    padding: 0px 20px;
+    width: 100%;
+    height:100%;
+    background-color:rgba(0,0,0,0.9);
+    background-blend-mode: darken;
+    margin-top: 60px;
+    object-fit: cover;
+    /* border-bottom:  solid white; */
+    z-index: -1;
+
+}
+.logo_over_video{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right:20px;
+    position: absolute;
+    top: 150px;
+    left: 400px;
+    color: white;
+    font-size: 3.5em;
+    font-family: milk;
+    border: 4px double white;
+    z-index: -0.5;
+    animation:glow 1s ease-in-out 3s infinite alternate;
+
+
+}
+@keyframes glow {
+    0% {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    50% {
+        text-shadow: 0 0 20px #fbc02d;
+    }
+    100% {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    from{ transform: scale(1);}
+    to{transform: scale(1.1);}
+}
+.aftfoodies{
+    color: rgb(210, 168, 28);
+    font-family:march;
+    font-size: 120px;
+}
+.aftgoodies{
+    position: absolute;
+    top: 300px;
+    left: 610px;
+    display: inline-block;
+    font-size: 20px;
+    color: white;
+    font-family: arial;
+    font-weight: 800;
+}
+.drooling{
+    color:rgb(210, 168, 28);
+    font-family: lt;
+    padding-right: 10px;
+    font-weight: 900;
+    font-size: 35px;
+}
+
+.search{
+    position: absolute;
+    top: 60px;
+    right: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#submit{
+    width: 50px;
+    height: 70px;
+    margin-top: 0px;
+    border-radius: 500px;
+}
+input{
+    height: 50px;
+    width: 400px;
+    border-radius: 10px;
+    /* text-align: center; */
+    margin-top: 20px;
+    padding-left: 10px;
+    border: 2px solid white;
+    color: white;
+    font-size: 20px;
+    background-color:rgba(0,0,0,0.6) ;
+    background-blend-mode: darken;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.8);
+    /* animation: inpanim 0.5s ease-in-out 0.2s alternate infinite; */
+    
+}
+
+/* @keyframes inpanim{
+    from{ background-color: color white;}
+    to{background: transparent;}
+}  */
+
+.search_icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background:orange;
+    color: black;
+    width: 45px;
+    height: 45px;
+    border-radius: 100px;
+    font-size: 2em;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    border: 2px solid white;
+}
+.search_icon:hover{
+    background-color: white;
+    color: black;
+}
+/* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+
+                                                           /*TODAYSS SELECTIONN   */
+.today_selection{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white   ;
+    font-size: 20px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 2px;
+    margin-bottom:20px; 
+    font-weight: 900;
+    font-family: casc;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    background: transparent;
+    background-color:rgba(0,0,0,0.6) ;
+    animation: tdsanim 0.5s ease-in-out 2s alternate infinite;
+    border-top: white 2px solid;
+    border-bottom: white 2px solid;
+}
+.today_selection:hover{
+    color: rgb(210, 168, 28);
+}
+@keyframes tdsanim{
+    from{ background-color: color white;}
+    to{color: rgb(210, 168, 28);}
+} 
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+
+                                                            /*DONUTSSSS */
+.donuts{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    color: white;
+    font-weight: 900;
+    font-family: pizz;
+    text-decoration: underline;
+    animation: donutanim 1s ease-in-out alternate infinite;
+}
+@keyframes donutanim{
+    from{color: white;}
+    to{color:rgb(210, 168, 28) ;}
+}
+.recipes{
+    height:100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: absolute;
+    font-family: milk;
+    animation: fadepop 0.5s ease-in-out ;
+
+}
+@keyframes fadepop {
+    from {
+        opacity: 0;
+        transform: scale(5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+.star{
+    color: yellow;
+    font-size: 20px;
+}
+#box1 a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(189, 103, 207);
+    height: 300px;
+    width: 300px;
+    margin: 20px;
+    cursor: pointer;
+    border-radius: 500px;
+    background-size: cover;
+    transition: all 0.5s ease-out;
+    animation: box1anim 2s ease-in-out 3s infinite alternate;
+    margin: 50px;
+    /* border: 2px solid white; */
+
+}
+#box1 a:hover{
+    transform: rotate(360deg);
+    scale: 1.2;
+    border-radius: 700px;
+    background-color: rgb(182, 66, 182,0);
+    text-rendering: geometricPrecision;
+    border: none;
+}
+
+#box1, #box2, #box3, #box4, #box5{
+    animation: fadepop 1s ease-in-out ;
+}
+#box1{
+    text-align: center;
+    font-size: 35px;
+    font-weight: 900;
+    color: rgb(182, 66, 182);
+}
+/* @keyframes box1anim{
+    from{ background-color: rgb(182, 66, 182);}
+    to{background-color: rgb(119, 25, 119);}
+}  */
+#box2 a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(225, 157, 30);
+    height: 300px;
+    width: 300px;
+    margin: 20px;
+    cursor: pointer;
+    border-radius: 500px;
+    background-size: cover;
+    transition: all 0.5s ease-out;
+    animation: box2anim 2s ease-in-out 3s infinite alternate;
+    margin: 50px;
+}
+#box2 a:hover{
+    transform: rotate(360deg);
+    scale: 1.2;
+    border-radius: 700px;
+    background-color: rgb(241, 162, 14,0);
+}
+#box2{
+    text-align: center;
+    font-size: 35px;
+    font-weight: 900;
+    color: rgb(241, 162, 14);
+}
+/* @keyframes box2anim{
+    from{ background-color: rgb(241, 162, 14);}
+    to{background-color: rgb(167, 112, 10);}
+} */
+#box3 a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(231, 170, 181);
+    height: 300px;
+    width:300px;
+    margin: 20px;
+    cursor: pointer;
+    border-radius: 500px;
+    background-size: cover;
+    transition: all 0.5s ease-out;
+    animation: box3anim 2s ease-in-out 3s infinite alternate;
+    margin: 50px;
+}
+#box3 a:hover{
+    transform: rotate(360deg);
+    scale: 1.2;
+    border-radius: 700px;
+    background-color: rgba(231, 170, 181,0);
+}
+#box3{
+    text-align: center;
+    font-size: 30px;
+    font-weight: 900;
+    color: pink;
+}
+/* @keyframes box3anim{
+    from{ background-color: rgb(231, 170, 181)}
+    to{background-color: rgb(179, 103, 117)}
+}  */
+#box4 a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: yellow;
+    height: 300px;
+    width: 300px;
+    margin: 20px;
+    cursor: pointer;
+    border-radius: 500px;
+    background-size: cover;
+    transition: all 0.5s ease-out;
+    animation: box4anim 2s ease-in-out 3s infinite alternate;
+    margin: 50px;
+}
+#box4 a:hover{
+    transform: rotate(360deg);
+    scale: 1.2;
+    border-radius: 700px;
+    background-color: rgba(0, 0, 0, 0);
+}
+#box4{
+    font-size: 35px;
+    font-weight: 900;
+    color: yellow;
+    text-align: center;
+}
+/* @keyframes box4anim{
+    from{ background-color: yellow;}
+    to{background-color: rgb(170, 170, 16);}
+}  */
+#box5 a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(9, 226, 9);
+    height: 300px;
+    width: 300px;
+    margin: 20px;
+    cursor: pointer;
+    border-radius: 500px;
+    background-size: cover;
+    transition: all 0.5s ease-out;
+    animation: box5anim 2s ease-in-out 3s infinite alternate;
+    margin: 50px;
+}
+#box5 a:hover{
+    transform: rotate(360deg);
+    scale: 1.2;
+    border-radius: 700px;
+    background-color: rgba(9, 226, 9,0);
+}
+#box5{
+    text-align: center;
+    font-size: 35px;
+    font-weight: 900;
+    color: rgb(9, 226, 9);
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+
+                                                            /*PIZZAAA */
+.pizza_text{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top:1050px;
+    margin-bottom: 40px;
+    height: 30px;
+    /* width: 100vw; */
+    font-size: 40px;
+    color: white;
+    font-weight: 900;
+    border-top: 7px double white;
+    padding-top: 30px;
+    font-family: pizz;
+    text-decoration: underline;
+    animation: pizzaanim 1s ease-in-out infinite alternate;
+}
+@keyframes pizzaanim{
+    from{color: white;}
+    to{color:rgb(210, 168, 28) ;}
+}
+.pizzarecipe{
+    height:100vh;
+    width:100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: absolute;
+    font-family: milk;
+    color: rgb(217, 153, 34);
+}
+
+.box1,.box2,.box3,.box4,.box5{
+    animation: fadepop 1s ease-in-out ;       
+}
+.box1 a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(185, 123, 9);
+    height: 350px;
+    width: 350px;
+    margin: 50px;
+    cursor: pointer;
+    border-radius: 500px;
+    transition: all 0.5s ease-in-out ;
+
+}
+.box1 a:hover{
+    transform: rotate(360deg);
+    scale: 1.2;
+    border-radius: 700px;
+    background-color: rgba(9, 226, 9,0);
+}
+.box1{
+    text-align: center;
+    font-size: 35px;
+    /* color: white; */
+    font-weight: 900;
+}
+.box2 a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(185, 123, 9);
+    height: 350px;
+    width: 350px;
+    margin: 50px;
+    cursor: pointer;
+    border-radius: 500px;
+    transition: all 0.5s ease-in-out;
+    
+}
+.box2 a:hover{
+    transform: rotate(360deg);
+    scale: 1.2;
+    border-radius: 700px;
+    background-color: rgba(9, 226, 9,0);
+}
+.box2{
+    text-align: center;
+    font-size: 35px;
+    /* color: white; */
+    font-weight: 900;
+}
+.box3 a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(185, 123, 9);
+    height: 350px;
+    width: 350px;
+    margin: 50px;
+    cursor: pointer;
+    border-radius: 500px;
+    transition: all 0.5s ease-in-out;
+    
+}
+.box3 a:hover{
+    transform: rotate(360deg);
+    scale: 1.2;
+    border-radius: 700px;
+    background-color: rgba(9, 226, 9,0);
+}
+.box3{
+    text-align: center;
+    font-size: 35px;
+    /* color: white; */
+    font-weight: 900;
+}
+.box4 a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(185, 123, 9);
+    height: 350px;
+    width: 350px;
+    margin: 50px;
+    cursor: pointer;
+    border-radius: 500px;
+    transition: all 0.5s ease-in-out;
+    
+}
+.box4 a:hover{
+    transform: rotate(360deg);
+    scale: 1.2;
+    border-radius: 700px;
+    background-color: rgba(9, 226, 9,0);
+}
+.box4{
+    text-align: center;
+    font-size: 35px;
+    /* color: white; */
+    font-weight: 900;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #333;
+    color: #fff;
+    margin-top: 1150px;
+    animation: fadeInUp 0.5s ease-in-out ;
+}
+.recipes{
+    animation: fadeInUp 2s ease-in-out ;
+}
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+@keyframes fadeleft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

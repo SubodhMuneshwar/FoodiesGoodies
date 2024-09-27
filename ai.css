@@ -1,0 +1,161 @@
+@font-face {
+    font-family: or;
+    src: url(Orange\ Squash\ Free.otf);
+}
+@font-face {
+    font-family:lt ;
+    src: url(LTPerfume-2.ttf);
+}
+@font-face {
+    font-family: march;
+    src: url(March\ Vibes.otf);
+}
+@font-face {
+    font-family: pizz;
+    src: url(YummyPizzaDemoRegular.ttf);
+}
+@font-face {
+    font-family: aq;
+    src: url(Aqua\ Wow.ttf);
+}
+@font-face {
+    font-family: roboto;
+    src: url(Roboto-Bold.ttf);
+}
+@font-face {
+    font-family: milk;
+    src: url(Milker.otf);
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* BODY */
+body{
+    height: 100vh;
+    background:rgba(0,0,0,0.6) url(tamara-gak-PwTDa6ngq_E-unsplash.jpg) ;
+    background-size: cover;
+    background-position: center;
+    background-blend-mode:darken;
+    background-repeat: repeat;
+}
+
+/* HEADER */
+header{
+    position: fixed;
+    height: 60px;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    padding: 20px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 90px;
+    border-bottom: 2px solid white;
+    backdrop-filter: blur(8px);
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+}
+.logo{
+    color: white;
+    font-size: 40px;
+    font-family:march;
+    margin-top: 10px;
+    padding-left: 20px;
+    float: left;
+    user-select: none;
+    transition: all 0.2s ease-in-out;
+    z-index: -0.1;
+    animation: fadeleft 1s ease-in-out ;
+}
+
+.logo:hover{
+    color: orange;
+}
+.navbar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.navbar a{
+    position: relative;
+    font-size: 17px;
+    color: white;
+    text-decoration: none;
+    font-weight: 400;
+    padding: 10px;
+    margin-right: 20px;
+    padding-bottom: 0px;
+    /* border-radius: 10px;  */
+    transition: all 0.2s ease-in-out;
+    font-family: Arial;
+    animation: fadeInUp 0.5s ease-in-out ;
+}
+.navbar a::after{
+    content:'';
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 3px;
+    background: white;
+    border-radius: 5px;
+    transform: scaleX(0);
+    transition: transform .4s;
+}
+.navbar a:hover{
+    color: #7C7C7C;
+}
+.navbar a:hover::after{
+    transform-origin: middle;
+    transform: scaleX(1);
+} 
+
+#about_text{
+    border-bottom: 5px solid white;
+    color: orange;
+}
+
+#about_text::after{
+    visibility: hidden;
+}
+
+#sidelog{
+    margin-left: 250px;
+    border: 2px solid white;
+    padding: 5px;
+    background-color: rgb(156, 102, 8);
+}
+#sidelog:hover{
+    color: black;
+    background-color: wheat;
+}
+#sidelog::after{
+    visibility: hidden;
+}
+
+.aid{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.aid img{
+    width: 30px;
+    margin: 0;
+    animation:bigsmol 1s ease-in-out 3s infinite alternate;
+    border-radius: 300px;
+}
+
+@keyframes bigsmol{
+    from{
+        transform: scale(1);
+        background-color: transparent;
+    }
+    to{transform: scale(1.3);
+    background-color: yellow;
+    }
+}

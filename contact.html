@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Contact-Foodies Goodies</title>
+  <link rel="stylesheet" href="contact.css">
+</head>
+<body>
+  <div class="main">
+    <div class="navbar">
+        <header>
+            <h2 class="logo">Foodies Goodies</h2>
+            <nav class="navbar">
+                <a href="index.html">Home</a>
+                <a href="about.html">About us</a>
+                <a id="cus" href="contact.html">Contact us</a>
+                <a href="search.html">Search Recipes</a>
+                <a class="aid" href="ai.html">AI Dietician <img src="sign.png" alt="AI Dietician"> </a>
+                <a id="sidelog" href="login.html">Login </a>
+                
+
+                <!-- <button class="btnLogin-popup">Login</button> -->
+            </nav>
+        </header>
+          <main>
+            <div class="form-container">  
+              <form action="">
+                <h1>Contact <span class="us">Us</span></h1>
+                <label for="name">Name:</label><br>
+                <input type="text" id="name" name="name" placeholder="Enter Your name" required><br>
+                <label for="email">Email:</label><br>
+                <input type="email" id="email" name="email" placeholder="Enter Your email" required><br>
+                <label for="subject">Subject:</label><br>
+                <input type="text" id="subject" name="subject" placeholder="Kya baat hai??" required><br>
+                <label for="message">Message:</label><br>
+                <textarea id="message" name="message"  rows="4" cols="35" placeholder="Let us know more" required></textarea><br>
+                <input type="button" value="Submit"  onclick="send()">
+              </form>
+            </div>
+            <div class="contact_info">
+              <div class="location">
+                <span><ion-icon name="location"></ion-icon><div class="cont"><h3>Address</h3><p>Rajendra Mane college <br>Ratnagiri <br>Ambav </p></div></span><div><iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik" frameborder="0" height="150px" width="300px"></iframe></div>
+              </div>
+              <div class="phone_no">
+                <span><ion-icon name="call"></ion-icon><div class="cont"><h4>Phone</h3><p>Subodh Muneshwar: +91 123456789<br>Nihar Narvekar: +91 541684651</p></div>
+                </span>
+              </div>
+              <div class="mail">
+                <span><ion-icon name="mail"></ion-icon><div class="cont"><h4>Email</h4><p>Subodh Muneshwar: subodh@1603 <br>Nihar Narvekar : narvkear@212</p></div></span>
+              </div>
+            </div>
+          </main>  
+    </main>
+    </div>
+</div>
+
+
+ <footer>
+  <div class="footer_text">
+      <p>© 2024 Foodies Goodies. All rights reserved. </p>
+      <p></p>
+  </div>
+ </footer>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://smtpjs.com/v3/smtp.js"></script>
+<script>
+  function send(){
+    var name=document.getElementById("name").value;
+    var email=document.getElementById("email").value;
+    var subject=document.getElementById("subject").value;
+    var mess=document.getElementById("message").value;
+
+    var body="Name: "+name+ "<br/>Email: "+email+"<br/>Subject: "+subject+"<br/>Message: "+mess;
+    console.log(body);
+    Email.send({
+     //SecureToken:
+     Host : "smtp.elasticemail.com",
+     Username : "subodhum1603@gmail.com",
+     Password : "67513F170930CACD7E1BD9ACEA0CF8EDD448",
+     To : 'subodhum1603@gmail.com',
+     From : "subodhum1603@gmail.com",
+     Subject : subject,
+     Body : body
+ }).then(
+   message =>{
+    if(message=='OK'){
+      swal("Message sent successfully!", "We will get to you soon!", "success");
+    }
+    else{
+      swal("OOPSS try again!", "something went wrong!", "error");
+    }
+   }
+ );
+  }
+</script>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
