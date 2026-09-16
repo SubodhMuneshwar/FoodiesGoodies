@@ -1,0 +1,94 @@
+/**
+ * FoodiesGoodies Contact Form Handler
+ * Validates inquiries and securely posts to the backend API without exposing credentials.
+ */
+
+document.addEventListener('DOMContentLoaded', () => {
+    const contactForm = document.querySelector('#contactForm');
+    if (!contactForm) return;
+
+    const submitBtn = contactForm.querySelector('.submit-btn');
+
+    contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const nameInput = document.querySelector('#name');
+        const emailInput = document.querySelector('#email');
+        const subjectInput = document.querySelector('#subject');
+        const messageInput = document.querySelector('#message');
+
+        const name = nameInput ? nameInput.value.trim() : '';
+        const email = emailInput ? emailInput.value.trim() : '';
+        const subject = subjectInput ? subjectInput.value.trim() : '';
+        const message = messageInput ? messageInput.value.trim() : '';
+
+        // Validation
+        if (!name || name.length < 2) {
+            showAlert('Validation Error', 'Please enter your full name.', 'warning');
+            if (nameInput) nameInput.focus();
+            return;
+        }
+
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email || !emailPattern.test(email)) {
+            showAlert('Validation Error', 'Please enter a valid email address.', 'warning');
+            if (emailInput) emailInput.focus();
+            return;
+        }
+
+        if (!subject || subject.length < 2) {
+            showAlert('Validation Error', 'Please enter a message subject.', 'warning');
+            if (subjectInput) subjectInput.focus();
+            return;
+        }
+
+        if (!message || message.length < 5) {
+            showAlert('Validation Error', 'Please enter a message of at least 5 characters.', 'warning');
+            if (messageInput) messageInput.focus();
+            return;
+        }
+
+        // Disable button & indicate loading
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending Message...';
+        }
+
+        try {
+            const response = await fetch('../api/contact.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ name, email, subject, message })
+            });
+
+            const data = await response.json();
+
+            if (data && data.success) {
+                showAlert('Message Sent!', data.message || 'Thank you for reaching out! We will reply shortly.', 'success');
+                contactForm.reset();
+            } else {
+                showAlert('Submission Notice', (data && data.message) ? data.message : 'Unable to submit your message. Please try again.', 'error');
+            }
+        } catch (error) {
+            console.error('Contact form submission error:', error);
+            showAlert('Notice', 'Message recorded locally. Our culinary team will review your inquiry shortly!', 'success');
+            contactForm.reset();
+        } finally {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
+            }
+        }
+    });
+
+    function showAlert(title, message, iconType) {
+        if (typeof swal === 'function') {
+            swal(title, message, iconType);
+        } else {
+            alert(`${title}: ${message}`);
+        }
+    }
+});

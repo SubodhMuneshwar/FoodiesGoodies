@@ -1,134 +1,131 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login -Foodies Goodies</title>
-    <link rel="stylesheet" href="../css/login.css" />
-  </head>
-  <body>
-    <header>
-      <h2 class="logo">Foodies Goodies</h2>
-      <nav class="navbar">
-        <a href="../index.html">Home</a>
-        <a href="about.html">About us</a>
-        <a href="contact.html">Contact us</a>
-        <a href="search.html">Search Recipes</a>
-        <a class="aid" href="ai.html"
-          >AI Dietician
-          <img src="../assets/images/sign.png" alt="AI Dietician" />
-        </a>
-        <button class="btnLogin-popup">Login</button>
-      </nav>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login &amp; Register - Foodies Goodies</title>
+    <meta name="description" content="Sign in or register for an account on Foodies Goodies to save favorite recipes and access customized nutrition guides.">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="icon" type="image/png" href="../assets/images/fav.png">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- NAVBAR -->
+    <header class="header">
+        <a href="../index.html" class="logo">Foodies Goodies</a>
+        <nav class="navbar" aria-label="Main Navigation">
+            <a class="nav-link" href="../index.html">Home</a>
+            <a class="nav-link" href="about.html">About us</a>
+            <a class="nav-link" href="contact.html">Contact us</a>
+            <a class="nav-link" href="search.html">Search Recipes</a>
+            <a class="nav-link aid" href="ai.html">
+                AI Dietician 
+                <img src="../assets/images/sign.png" alt="" aria-hidden="true" width="24" height="24">
+            </a>
+            <a class="nav-login-btn active" href="login.html">Login</a>
+        </nav>
     </header>
-    <div class="content">
-      <h1>
-        Foodies <span class="span1">Goodies</span><br />
-        <span class="span2">Your</span>
-        <span class="span3">Recipe</span>
-        <span class="span4">Book</span>
-      </h1>
-      <p>
-        "Indulge in a culinary adventure with FOODIES GOODIES, <br />
-        where every recipe is a delectable delight waiting to tantalize your
-        taste buds."
-      </p>
-    </div>
 
-    <div class="wrapper">
-      <span class="close">
-        <ion-icon name="close-circle"></ion-icon>
-      </span>
-      <div class="formlogin Login">
-        <h2>Login</h2>
-        <form action="../connect.php" method="post">
-          <div class="inpbox">
-            <span class="icon1"><ion-icon name="mail"></ion-icon></span>
-            <input type="email" required id="email" name="email" />
-            <label>Email</label>
-          </div>
-          <div class="inpbox">
-            <span class="icon1"><ion-icon name="lock-closed"></ion-icon></span>
-            <input type="password" required id="password" name="password" />
-            <label class="l2">Password</label>
-          </div>
-          <div class="forgotpass">
-            <label
-              ><input type="checkbox" name="Remember me" />Remember me</label
-            >
-            <a href="#">Forgot password</a>
-          </div>
-          <input type="submit" class="btn" />Login
-          <div class="loginreg">
-            <p>
-              Don't have an account?<a href="#" class="registerlnk">Register</a>
+    <!-- AUTHENTICATION PAGE LAYOUT -->
+    <main id="main-content" class="auth-page-container">
+        <!-- Hero Intro / Quote (Left Column) -->
+        <div class="auth-intro">
+            <h1>
+                Foodies <span class="span1">Goodies</span>
+                <span class="tagline-words">Your Culinary Gateway</span>
+            </h1>
+            <p class="quote">
+                &ldquo;Indulge in a culinary adventure with FOODIES GOODIES, where every recipe is a delectable delight waiting to tantalize your taste buds.&rdquo;
             </p>
-          </div>
-        </form>
-      </div>
-      <div class="formlogin Register">
-        <h2>Registration</h2>
-        <form action="#">
-          <div class="inpbox">
-            <span class="icon1"><ion-icon name="person"></ion-icon></span>
-            <input type="text" required />
-            <label>Username</label>
-          </div>
-          <div class="inpbox">
-            <span class="icon1"><ion-icon name="mail"></ion-icon></span>
-            <input type="email" required />
-            <label>Email</label>
-          </div>
-          <div class="inpbox">
-            <span class="icon1"><ion-icon name="lock-closed"></ion-icon></span>
-            <input type="password" required />
-            <label class="l2">Password</label>
-          </div>
-          <div class="forgotpass">
-            <label
-              ><input type="checkbox" />I agree to the terms and
-              conditions.</label
-            >
-          </div>
-          <button type="submit" class="btn">Register</button>
-          <div class="loginreg">
-            <p>
-              Already have an account?<a href="#" class="loginlnk">Login</a>
-            </p>
-          </div>
-        </form>
-      </div>
-    </div>
+        </div>
 
+        <!-- Auth Card Form (Right Column) -->
+        <div class="auth-card-container">
+            <div class="wrapper active-popup">
+                <!-- LOGIN FORM -->
+                <div class="formlogin Login">
+                    <h2>Welcome Back</h2>
+                    <form action="../connect.php" method="POST">
+                        <input type="hidden" name="action" value="login">
+
+                        <div class="inpbox">
+                            <span class="icon1" aria-hidden="true"><ion-icon name="mail"></ion-icon></span>
+                            <input type="email" required id="login-email" name="email" placeholder=" " autocomplete="email">
+                            <label for="login-email">Email Address</label>
+                        </div>
+
+                        <div class="inpbox">
+                            <span class="icon1" aria-hidden="true"><ion-icon name="lock-closed"></ion-icon></span>
+                            <input type="password" required id="login-password" name="password" placeholder=" " autocomplete="current-password">
+                            <label for="login-password">Password</label>
+                        </div>
+
+                        <div class="forgotpass">
+                            <label><input type="checkbox" name="remember_me"> Remember me</label>
+                            <a href="contact.html">Forgot password?</a>
+                        </div>
+
+                        <button type="submit" class="btn-auth">Login</button>
+
+                        <div class="loginreg">
+                            <p>Don't have an account? <a href="#register" class="registerlnk" role="button">Register</a></p>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- REGISTRATION FORM -->
+                <div class="formlogin Register">
+                    <h2>Join Foodies</h2>
+                    <form action="../connect.php" method="POST">
+                        <input type="hidden" name="action" value="register">
+
+                        <div class="inpbox">
+                            <span class="icon1" aria-hidden="true"><ion-icon name="person"></ion-icon></span>
+                            <input type="text" required id="reg-username" name="username" placeholder=" " autocomplete="name">
+                            <label for="reg-username">Username</label>
+                        </div>
+
+                        <div class="inpbox">
+                            <span class="icon1" aria-hidden="true"><ion-icon name="mail"></ion-icon></span>
+                            <input type="email" required id="reg-email" name="email" placeholder=" " autocomplete="email">
+                            <label for="reg-email">Email Address</label>
+                        </div>
+
+                        <div class="inpbox">
+                            <span class="icon1" aria-hidden="true"><ion-icon name="lock-closed"></ion-icon></span>
+                            <input type="password" required id="reg-password" name="password" placeholder=" " minlength="6" autocomplete="new-password">
+                            <label for="reg-password">Password (min 6 chars)</label>
+                        </div>
+
+                        <div class="forgotpass">
+                            <label><input type="checkbox" required> I agree to the terms &amp; conditions</label>
+                        </div>
+
+                        <button type="submit" class="btn-auth">Register</button>
+
+                        <div class="loginreg">
+                            <p>Already have an account? <a href="#login" class="loginlnk" role="button">Login</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
     <footer>
-      <div class="footer_text">
-        <p>© 2024 Foodies Goodies. All rights reserved.</p>
-        <p></p>
-      </div>
+        <div class="footer_text">
+            <p>&copy; 2024 Foodies Goodies. All rights reserved.</p>
+            <p class="footer-tagline">Crafting memorable food stories together.</p>
+        </div>
     </footer>
 
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="../js/nav.js"></script>
     <script src="../js/new.js"></script>
-    <script
-      type="module"
-      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
-    ></script>
-    <script
-      nomodule
-      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
-    ></script>
-    <!-- <script>
-    function auth(){
-    var email= document.getElementById("email").value;
-    var password= document.getElementById("password").value;
-    if (email=='subodh@124' && password== '124'){
-        alert("Login successfull");
-        window.location.assign('index.html');
-    }
-    else{
-        alert("Invalid");
-        return;
-    }
-    }
-</script> -->
-  </body>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
 </html>

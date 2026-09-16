@@ -1,0 +1,128 @@
+# FoodiesGoodies Code Fix Prompt
+
+Please fix the following issues in the FoodiesGoodies project:
+
+## 1. CSS Issues
+
+### Font & Styling Problems:
+- Remove duplicate @font-face declarations across all CSS files (style.css, about.css, login.css, search.css, contact.css, ai.css)
+- Fix missing font files: Aqua Wow.ttf and Roboto-Bold.ttf are referenced but don't exist in assets/fonts/
+- Fix invalid font-family: "casc" is used but not defined
+- Fix invalid CSS syntax: `background: rgba(0, 0, 0, 0.6) url(...)` should be `background: rgba(0, 0, 0, 0.6) url(...)`
+- Fix invalid animation values: `background-color: color white` is not valid CSS
+- Consolidate common styles into a base CSS file to reduce duplication
+
+### Specific CSS Fixes:
+- In style.css line 38-40: Fix background property syntax
+- In style.css line 324: Fix `@keyframes tdsanim` - `background-color: color white` is invalid
+- In style.css line 509: Fix `@keyframes box4anim` - missing closing brace
+- Fix all `@keyframes` animations that have syntax errors
+- Remove duplicate properties (justify-content appears twice in header rules)
+
+## 2. HTML Issues
+
+### ID Duplication (MUST BE UNIQUE PER PAGE):
+- Remove duplicate IDs: #hometext, #sidelog, #about_text, #cus appear multiple times
+- Replace duplicate IDs with classes where appropriate
+
+### Structural Issues:
+- Fix incorrect nesting: header should not be inside nav, div should not be inside p
+- Fix form actions: change `action="#"` or empty action to proper endpoints
+- Fix broken links: update href="#" to actual pages or remove if not needed
+- Fix empty elements: remove empty divs and anchors that serve no purpose
+- Fix closing tag order: ensure proper nesting and closing sequence
+
+### Specific HTML Fixes:
+- In index.html: Fix duplicate #hometext and #sidelog usage
+- In login.html: Fix the register link which points to "#"
+- In contact.html: Fix header nesting (header inside navbar) and duplicate navbar
+- In search.html: Fix AI Dietician link pointing to "#"
+- In ai.html: Add actual content (currently just header)
+
+## 3. JavaScript Issues
+
+### Security & Performance:
+- Remove exposed API keys from script.js (Edamam API keys)
+- Implement environment variables or proxy for API keys
+- Add proper error handling for fetch requests
+- Add loading states for async operations
+
+### Specific JS Fixes:
+- In script.js: Add try/catch for fetch, handle API errors
+- In new.js: Ensure all querySelector elements exist before adding listeners
+- Add form validation and sanitization
+
+## 4. Security Issues
+
+### Critical Fixes:
+- Remove hardcoded credentials from connect.php (email/password)
+- Implement proper password hashing (use password_hash/verify)
+- Use prepared statements properly (currently commented out)
+- Remove exposed API keys from client-side code
+- Implement server-side validation for all forms
+- Add CSRF protection for forms
+
+### PHP Security (connect.php):
+- Use proper prepared statements: `$stmt->bind_param("ss", $email, $password);`
+- Remove hardcoded credentials and use environment variables
+- Add input validation and sanitization
+- Implement proper error handling (don't expose database errors)
+
+## 5. Accessibility Issues
+
+### Fixes Needed:
+- Add proper alt text to all images
+- Ensure color contrast meets WCAG standards
+- Add ARIA labels where needed
+- Ensure form labels are properly associated with inputs
+- Add focus outlines for keyboard navigation
+- Add skip-to-content links
+- Ensure proper heading hierarchy (h1, h2, h3)
+
+## 6. Performance Issues
+
+### Optimizations:
+- Optimize and compress background images
+- Implement lazy loading for images
+- Combine and minify CSS files
+- Combine and minify JavaScript files
+- Use font-display: swap for better font loading
+- Remove unused CSS rules
+- Optimize animations to prevent layout thrashing
+
+## 7. File-Specific Fixes
+
+### connect.php:
+- Fix SQL injection by using proper prepared statements
+- Add input validation
+- Implement proper error handling
+- Remove hardcoded database credentials
+
+### All CSS Files:
+- Create a base.css with common reset and shared styles
+- Remove duplicate font-face declarations
+- Fix all syntax errors
+- Use CSS variables for colors and spacing
+
+### All HTML Files:
+- Ensure valid HTML5 structure
+- Fix all validation errors
+- Ensure proper meta tags
+- Add lang attributes where missing
+
+## Implementation Approach:
+
+1. Start with fixing critical security issues (connect.php, exposed keys)
+2. Fix HTML validation and structural issues
+3. Fix CSS syntax and duplication
+4. Fix JavaScript functionality and security
+5. Implement accessibility improvements
+6. Optimize for performance
+
+## Testing:
+After making changes, test:
+- All pages load correctly in modern browsers
+- Forms submit properly (where applicable)
+- Navigation works between all pages
+- Responsive design works on mobile/tablet/desktop
+- No console errors in browser developer tools

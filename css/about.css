@@ -1,302 +1,200 @@
-@font-face {
-  font-family: or;
-  src: url("../assets/fonts/Orange\ Squash\ Free.otf");
-}
-@font-face {
-  font-family: lt;
-  src: url("../assets/fonts/LTPerfume-2.ttf");
-}
-@font-face {
-  font-family: march;
-  src: url("../assets/fonts/March\ Vibes.otf");
-}
-@font-face {
-  font-family: pizz;
-  src: url("../assets/fonts/YummyPizzaDemoRegular.ttf");
-}
-@font-face {
-  font-family: aq;
-  src: url("../assets/fonts/Aqua\ Wow.ttf");
-}
-@font-face {
-  font-family: roboto;
-  src: url("../assets/fonts/Roboto-Bold.ttf");
-}
-@font-face {
-  font-family: milk;
-  src: url("../assets/fonts/Milker.otf");
-}
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* ==========================================================================
+   FoodiesGoodies About Us Styles (about.css)
+   ========================================================================== */
 
-/* BODY */
+@import url('base.css');
+
 body {
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.6)
-    url("../assets/images/tamara-gak-PwTDa6ngq_E-unsplash.jpg");
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.72) url("../assets/images/tamara-gak-PwTDa6ngq_E-unsplash.jpg");
   background-size: cover;
   background-position: center;
+  background-attachment: fixed;
   background-blend-mode: darken;
-  background-repeat: repeat;
 }
 
-/* HEADER */
-header {
-  position: fixed;
-  height: 60px;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  padding: 20px 20px;
+/* --------------------------------------------------------------------------
+   About Main Container
+   -------------------------------------------------------------------------- */
+.about-page-container {
+  flex: 1;
+  max-width: 1180px;
+  width: 90%;
+  margin: calc(var(--header-height) + 30px) auto 60px;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  justify-content: space-between;
-  padding-right: 90px;
-  border-bottom: 2px solid white;
-  backdrop-filter: blur(8px);
-  background-color: rgba(0, 0, 0, 0.4);
-  z-index: 1;
-}
-.logo {
-  color: white;
-  font-size: 40px;
-  font-family: march;
-  margin-top: 10px;
-  padding-left: 20px;
-  float: left;
-  user-select: none;
-  transition: all 0.2s ease-in-out;
-  z-index: -0.1;
-  animation: fadeleft 1s ease-in-out;
-}
-
-.logo:hover {
-  color: orange;
-}
-.navbar {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.navbar a {
-  position: relative;
-  font-size: 17px;
-  color: white;
-  text-decoration: none;
-  font-weight: 400;
-  padding: 10px;
-  margin-right: 20px;
-  padding-bottom: 0px;
-  /* border-radius: 10px;  */
-  transition: all 0.2s ease-in-out;
-  font-family: Arial;
-  animation: fadeInUp 0.5s ease-in-out;
-}
-.navbar a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -6px;
-  width: 100%;
-  height: 3px;
-  background: white;
-  border-radius: 5px;
-  transform: scaleX(0);
-  transition: transform 0.4s;
-}
-.navbar a:hover {
-  color: #7c7c7c;
-}
-.navbar a:hover::after {
-  transform-origin: middle;
-  transform: scaleX(1);
-}
-
-#about_text {
-  border-bottom: 5px solid white;
-  color: orange;
-}
-
-#about_text::after {
-  visibility: hidden;
-}
-
-#sidelog {
-  margin-left: 250px;
-  border: 2px solid white;
-  padding: 5px;
-  background-color: rgb(156, 102, 8);
-}
-#sidelog:hover {
-  color: black;
-  background-color: wheat;
-}
-#sidelog::after {
-  visibility: hidden;
-}
-
-.aid {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.aid img {
-  width: 30px;
-  margin: 0;
-  animation: bigsmol 1s ease-in-out 3s infinite alternate;
-  border-radius: 300px;
-}
-
-@keyframes bigsmol {
-  from {
-    transform: scale(1);
-    background-color: transparent;
-  }
-  to {
-    transform: scale(1.3);
-    background-color: yellow;
-  }
-}
-
-.about-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
-  margin-top: 100px;
-  padding: 20px;
-  color: white;
-  font-family: roboto;
+  gap: 40px;
+  animation: fadeInUp 0.7s ease-in-out;
 }
 
-.about-content h1 {
+.about-card-section {
+  background: rgba(18, 18, 24, 0.85);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: 36px 32px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   text-align: center;
-  font-size: 36px;
-  color: rgb(231, 194, 124);
-  margin-bottom: 20px;
-  font-family: milk;
-  animation: glow 1s ease-in-out 1s infinite alternate;
-}
-@keyframes glow {
-  0% {
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  }
-  50% {
-    text-shadow:
-      0 0 20px #fbc02d,
-      0 0 30px #fb2d2d;
-  }
-  100% {
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  }
 }
 
-.about-content h2 {
-  text-align: center;
-  font-size: 30px;
-  margin-top: 30px;
-  margin-bottom: 10px;
-  color: rgb(252, 194, 85);
-  font-family: march;
+.about-card-section h1 {
+  font-family: var(--font-milker);
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: var(--primary-gold);
+  margin-bottom: 16px;
+  letter-spacing: 1px;
 }
 
-.about-content p {
-  font-size: 22px;
-  line-height: 1.6;
-  margin-bottom: 20px;
-  text-align: center;
-  font-weight: 900;
-  font-family: "Times New Roman";
-}
-.section {
-  margin-bottom: 50px;
-  padding: 20px;
-  border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  animation: fadeInUp 2s ease-in-out;
-  width: 1300px;
-}
-.icon {
-  font-size: 50px;
+.about-card-section h2 {
+  font-family: var(--font-march);
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  color: var(--primary-gold);
+  margin-bottom: 14px;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.about-card-section p {
+  font-size: 1.12rem;
+  line-height: 1.7;
+  color: #e2e8f0;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-.imag {
-  animation: fadeInUp 2s ease-in-out;
+/* --------------------------------------------------------------------------
+   Food Culinary Gallery
+   -------------------------------------------------------------------------- */
+.culinary-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin: 10px 0;
+}
+
+.culinary-gallery img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  transition: transform 0.4s ease, border-color 0.4s ease;
+}
+
+.culinary-gallery img:hover {
+  transform: scale(1.03);
+  border-color: var(--primary-gold);
+}
+
+/* --------------------------------------------------------------------------
+   Chefs Grid
+   -------------------------------------------------------------------------- */
+.chefs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 30px;
+  margin-top: 24px;
+}
+
+.chef-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  padding: 24px 16px;
   display: flex;
-}
-img {
-  margin-bottom: 50px;
-  margin-left: 50px;
-  margin-right: 50px;
-}
-.chef img {
-  animation: fadeInUp 2s ease-in-out;
-  border-radius: 700px;
-  transition: all ease 0.5s;
-}
-.chef img:hover {
-  scale: 1.07;
-}
-.chef {
-  display: flex;
-}
-.chef h3 {
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  animation: fadeInUp 2s ease-in-out;
-  margin-bottom: 50px;
-  font-size: 20px;
-  font-family: arial;
-  font-weight: 900;
-  color: wheat;
+  transition: transform var(--transition-normal), border-color var(--transition-normal);
 }
-.insta,
-.twitter {
-  color: white;
-  font-size: small;
+
+.chef-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--primary-gold);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.chef-card img {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--primary-gold);
+  margin-bottom: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  transition: transform 0.4s ease;
+}
+
+.chef-card:hover img {
+  transform: scale(1.06);
+}
+
+.chef-card h3 {
+  font-size: 1.25rem;
+  color: var(--primary-gold);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.chef-card .chef-specialty {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+}
+
+.chef-socials {
   display: flex;
   justify-content: center;
+  gap: 16px;
+  margin-top: 6px;
+}
+
+.chef-socials a {
+  color: #e2e8f0;
+  font-size: 18px;
+  display: inline-flex;
   align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  transition: color var(--transition-normal);
 }
-.insta ion-icon,
-.twitter ion-icon {
-  font-size: 20px;
+
+.chef-socials a.insta:hover {
+  color: #f472b6;
 }
-.insta ion-icon {
-  color: pink;
+
+.chef-socials a.twitter:hover {
+  color: #38bdf8;
 }
-.twitter ion-icon {
-  color: rgb(33, 185, 236);
-}
-footer {
-  text-align: center;
-  padding: 20px;
-  background-color: #333;
-  color: #fff;
-  /* margin-top: 800px; */
-}
-@keyframes fadeleft {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
+
+/* --------------------------------------------------------------------------
+   Responsive Adjustments
+   -------------------------------------------------------------------------- */
+@media (max-width: 650px) {
+  .about-page-container {
+    width: 94%;
+    margin-top: calc(var(--header-height) + 16px);
+    gap: 24px;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  .about-card-section {
+    padding: 24px 16px;
+  }
+
+  .culinary-gallery {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .culinary-gallery img {
+    height: 220px;
+  }
+
+  .chefs-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
 }
+

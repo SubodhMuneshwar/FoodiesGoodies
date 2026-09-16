@@ -1,98 +1,124 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Contact-Foodies Goodies</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - Foodies Goodies</title>
+  <meta name="description" content="Get in touch with the Foodies Goodies team. We'd love to hear your thoughts, feedback, and recipe suggestions!">
+  <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/contact.css">
+    <link rel="icon" type="image/png" href="../assets/images/fav.png">
 </head>
 <body>
-  <div class="main">
-    <div class="navbar">
-        <header>
-            <h2 class="logo">Foodies Goodies</h2>
-            <nav class="navbar">
-                <a href="../index.html">Home</a>
-                <a href="about.html">About us</a>
-                <a id="cus" href="contact.html">Contact us</a>
-                <a href="search.html">Search Recipes</a>
-                <a class="aid" href="ai.html">AI Dietician <img src="../assets/images/sign.png" alt="AI Dietician"> </a>
-                <a id="sidelog" href="login.html">Login </a>
-                
+  <a href="#main-content" class="skip-link">Skip to main content</a>
 
-                <!-- <button class="btnLogin-popup">Login</button> -->
-            </nav>
-        </header>
-          <main>
-            <div class="form-container">  
-              <form action="">
-                <h1>Contact <span class="us">Us</span></h1>
-                <label for="name">Name:</label><br>
-                <input type="text" id="name" name="name" placeholder="Enter Your name" required><br>
-                <label for="email">Email:</label><br>
-                <input type="email" id="email" name="email" placeholder="Enter Your email" required><br>
-                <label for="subject">Subject:</label><br>
-                <input type="text" id="subject" name="subject" placeholder="Kya baat hai??" required><br>
-                <label for="message">Message:</label><br>
-                <textarea id="message" name="message"  rows="4" cols="35" placeholder="Let us know more" required></textarea><br>
-                <input type="button" value="Submit"  onclick="send()">
-              </form>
-            </div>
-            <div class="contact_info">
-              <div class="location">
-                <span><ion-icon name="location"></ion-icon><div class="cont"><h3>Address</h3><p>Rajendra Mane college <br>Ratnagiri <br>Ambav </p></div></span><div><iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-0.004017949104309083%2C51.47612752641776%2C0.00030577182769775396%2C51.478569861898606&layer=mapnik" frameborder="0" height="150px" width="300px"></iframe></div>
+  <!-- NAVBAR -->
+  <header class="header">
+      <a href="../index.html" class="logo">Foodies Goodies</a>
+      <nav class="navbar" aria-label="Main Navigation">
+          <a class="nav-link" href="../index.html">Home</a>
+          <a class="nav-link" href="about.html">About us</a>
+          <a class="nav-link active" href="contact.html">Contact us</a>
+          <a class="nav-link" href="search.html">Search Recipes</a>
+          <a class="nav-link aid" href="ai.html">
+              AI Dietician 
+              <img src="../assets/images/sign.png" alt="" aria-hidden="true" width="24" height="24">
+          </a>
+          <a class="nav-login-btn" href="login.html">Login</a>
+      </nav>
+  </header>
+
+  <!-- MAIN CONTACT CONTENT -->
+  <main id="main-content" class="contact-container">
+      <!-- Contact Information Card -->
+      <section class="contact-info-card" aria-label="Contact Information">
+          <h2>Get in Touch</h2>
+          <p class="subtitle">Have a question or recipe to share? Reach out to our team!</p>
+
+          <div class="info-item">
+              <div class="icon-box" aria-hidden="true">
+                  <ion-icon name="location"></ion-icon>
               </div>
-              <div class="phone_no">
-                <span><ion-icon name="call"></ion-icon><div class="cont"><h4>Phone</h3><p>Subodh Muneshwar: +91 123456789<br>Nihar Narvekar: +91 541684651</p></div>
-                </span>
+              <div class="info-content">
+                  <h3>Our Location</h3>
+                  <p>Rajendra Mane College of Engineering &amp; Technology<br>Ambav, Devrukh, Ratnagiri, Maharashtra</p>
+                  <div class="map-wrapper">
+                      <iframe 
+                          title="Rajendra Mane College of Engineering and Technology Location Map"
+                          src="https://maps.google.com/maps?q=Rajendra+Mane+College+of+Engineering+and+Technology,+Ambav,+Devrukh,+Ratnagiri,+Maharashtra&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=&amp;output=embed" 
+                          loading="lazy"
+                          allowfullscreen>
+                      </iframe>
+                      <a href="https://maps.google.com/?q=Rajendra+Mane+College+of+Engineering+and+Technology,+Ambav,+Devrukh,+Ratnagiri,+Maharashtra" target="_blank" rel="noopener noreferrer" class="map-directions-link">
+                          Open in Google Maps &rarr;
+                      </a>
+                  </div>
               </div>
-              <div class="mail">
-                <span><ion-icon name="mail"></ion-icon><div class="cont"><h4>Email</h4><p>Subodh Muneshwar: subodh@1603 <br>Nihar Narvekar : narvkear@212</p></div></span>
+          </div>
+
+          <div class="info-item">
+              <div class="icon-box" aria-hidden="true">
+                  <ion-icon name="call"></ion-icon>
               </div>
-            </div>
-          </main>  
-    </main>
-    </div>
-</div>
+              <div class="info-content">
+                  <h4>Phone Inquiries</h4>
+                  <p>Subodh Muneshwar: +91 98765 43210<br>Culinary Support: +91 91234 56789</p>
+              </div>
+          </div>
 
+          <div class="info-item">
+              <div class="icon-box" aria-hidden="true">
+                  <ion-icon name="mail"></ion-icon>
+              </div>
+              <div class="info-content">
+                  <h4>Email Us</h4>
+                  <p>General: info@foodiesgoodies.local<br>Support: support@foodiesgoodies.local</p>
+              </div>
+          </div>
+      </section>
 
- <footer>
-  <div class="footer_text">
-      <p>© 2024 Foodies Goodies. All rights reserved. </p>
-      <p></p>
-  </div>
- </footer>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script src="https://smtpjs.com/v3/smtp.js"></script>
-<script>
-  function send(){
-    var name=document.getElementById("name").value;
-    var email=document.getElementById("email").value;
-    var subject=document.getElementById("subject").value;
-    var mess=document.getElementById("message").value;
+      <!-- Contact Form Card -->
+      <section class="contact-form-card" aria-label="Send a Message">
+          <form id="contactForm" action="../api/contact.php" method="POST" novalidate>
+              <h1>Contact <span class="us">Us</span></h1>
 
-    var body="Name: "+name+ "<br/>Email: "+email+"<br/>Subject: "+subject+"<br/>Message: "+mess;
-    console.log(body);
-    Email.send({
-     //SecureToken:
-     Host : "smtp.elasticemail.com",
-     Username : "subodhum1603@gmail.com",
-     Password : "67513F170930CACD7E1BD9ACEA0CF8EDD448",
-     To : 'subodhum1603@gmail.com',
-     From : "subodhum1603@gmail.com",
-     Subject : subject,
-     Body : body
- }).then(
-   message =>{
-    if(message=='OK'){
-      swal("Message sent successfully!", "We will get to you soon!", "success");
-    }
-    else{
-      swal("OOPSS try again!", "something went wrong!", "error");
-    }
-   }
- );
-  }
-</script>
-<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+              <div class="form-group">
+                  <label for="name">Your Name</label>
+                  <input type="text" id="name" name="name" placeholder="e.g. Subodh Muneshwar" required autocomplete="name">
+              </div>
+
+              <div class="form-group">
+                  <label for="email">Your Email Address</label>
+                  <input type="email" id="email" name="email" placeholder="e.g. subodh@example.com" required autocomplete="email">
+              </div>
+
+              <div class="form-group">
+                  <label for="subject">Subject</label>
+                  <input type="text" id="subject" name="subject" placeholder="What would you like to discuss?" required>
+              </div>
+
+              <div class="form-group">
+                  <label for="message">Message</label>
+                  <textarea id="message" name="message" rows="5" placeholder="Let us know your ideas, questions, or recipe recommendations..." required></textarea>
+              </div>
+
+              <button type="submit" class="submit-btn">Send Message</button>
+          </form>
+      </section>
+  </main>  
+
+  <!-- Footer -->
+  <footer>
+      <div class="footer_text">
+          <p>&copy; 2024 Foodies Goodies. All rights reserved.</p>
+          <p class="footer-tagline">Connecting food lovers with flavorful inspirations.</p>
+      </div>
+  </footer>
+
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="../js/nav.js"></script>
+  <script src="../js/contact.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 </html>
