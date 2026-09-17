@@ -11,28 +11,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let currentRecipe = null;
 
-    // Load recipe details from API
-    try {
-        const res = await fetch(`../api/recipes.php?id=${lookupParam}`);
-        if (res.ok) {
-            const data = await res.json();
-            if (data.success && data.data) {
-                currentRecipe = data.data;
-            }
-        }
-    } catch (e) {
-        console.warn('Backend recipe lookup unavailable, checking local storage:', e);
+    // Recipe detail: load from localStorage community recipes (local-demo).
+    // No backend recipe-detail endpoint exists; api/recipes.php was a search proxy only.
+    const stored = JSON.parse(localStorage.getItem('foodies_community_recipes') || '[]');
+    if (rawId) {
+        currentRecipe = stored.find(r => String(r.id) === String(rawId));
     }
-
-    // Fallback to local storage if API didn't return a recipe
-    if (!currentRecipe) {
-        const stored = JSON.parse(localStorage.getItem('foodies_community_recipes') || '[]');
-        if (rawId) {
-            currentRecipe = stored.find(r => String(r.id) === String(rawId));
-        }
-        if (!currentRecipe && stored.length > 0) {
-            currentRecipe = stored[0];
-        }
+    if (!currentRecipe && stored.length > 0) {
+        currentRecipe = stored[0];
     }
 
     // Fallback gourmet recipe template if entirely empty
@@ -313,19 +299,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // 10. Flavor Rating Stars
+        // Rating is local-demo only — no social rating backend exists.
         document.querySelectorAll('.star-rating-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const stars = parseInt(btn.dataset.stars, 10);
                 document.querySelectorAll('.star-rating-btn').forEach((b, idx) => {
                     b.classList.toggle('active', idx < stars);
                 });
-                if (window.Social) {
-                    fetch('../api/social.php?action=rate', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ recipe_id: r.id, rating: stars })
-                    }).catch(() => {});
-                }
+                // No backend rating call — rating is local visual only
                 const fire = (typeof Swal === 'function') ? Swal.fire : (typeof swal === 'function' ? swal : alert);
                 fire({
                     title: 'Flavor Rating Submitted! ⭐',

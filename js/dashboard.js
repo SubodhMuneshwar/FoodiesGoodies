@@ -679,23 +679,7 @@ document.addEventListener('DOMContentLoaded', () => {
             yums.push(newRecipe.id);
             saveYumedRecipeIds(yums);
 
-            // Try sending to PHP backend asynchronously
-            try {
-                fetch('../api/community.php?action=create_recipe', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        title: newRecipe.title,
-                        category: newRecipe.category,
-                        cook_time: newRecipe.cookTime,
-                        difficulty: newRecipe.difficulty,
-                        image_url: newRecipe.image,
-                        description: newRecipe.description,
-                        ingredients: newRecipe.ingredients,
-                        instructions: newRecipe.instructions
-                    })
-                }).catch(() => {});
-            } catch (err) {}
+            // No community backend exists — recipe is stored locally only (local-demo).
 
             closeModal(postModal);
             postForm.reset();

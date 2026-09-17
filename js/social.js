@@ -11,43 +11,27 @@
 
 const Social = {
     // 1. TASTE IT (Like Recipe)
+    // Social features are local-demo (no social backend). localStorage is the source of truth.
     async taste(recipeId, btnEl) {
         let isTasteActive = false;
         let count = 0;
 
-        // Try API
-        try {
-            const res = await fetch('../api/social.php?action=taste', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ recipe_id: recipeId })
-            });
-            if (res.ok) {
-                const data = await res.json();
-                if (data.success) {
-                    isTasteActive = data.data.is_liked;
-                    count = data.data.likes_count;
-                }
-            }
-        } catch (e) {
-            // Local fallback
-            let yums = JSON.parse(localStorage.getItem('foodies_user_yums') || '[]');
-            let recipes = JSON.parse(localStorage.getItem('foodies_community_recipes') || '[]');
-            const rec = recipes.find(r => r.id === recipeId);
+        let yums = JSON.parse(localStorage.getItem('foodies_user_yums') || '[]');
+        let recipes = JSON.parse(localStorage.getItem('foodies_community_recipes') || '[]');
+        const rec = recipes.find(r => r.id === recipeId);
 
-            if (yums.includes(recipeId)) {
-                yums = yums.filter(id => id !== recipeId);
-                if (rec) rec.yumsCount = Math.max(0, (rec.yumsCount || 1) - 1);
-                isTasteActive = false;
-            } else {
-                yums.push(recipeId);
-                if (rec) rec.yumsCount = (rec.yumsCount || 0) + 1;
-                isTasteActive = true;
-            }
-            count = rec ? rec.yumsCount : 1;
-            localStorage.setItem('foodies_user_yums', JSON.stringify(yums));
-            localStorage.setItem('foodies_community_recipes', JSON.stringify(recipes));
+        if (yums.includes(recipeId)) {
+            yums = yums.filter(id => id !== recipeId);
+            if (rec) rec.yumsCount = Math.max(0, (rec.yumsCount || 1) - 1);
+            isTasteActive = false;
+        } else {
+            yums.push(recipeId);
+            if (rec) rec.yumsCount = (rec.yumsCount || 0) + 1;
+            isTasteActive = true;
         }
+        count = rec ? rec.yumsCount : 1;
+        localStorage.setItem('foodies_user_yums', JSON.stringify(yums));
+        localStorage.setItem('foodies_community_recipes', JSON.stringify(recipes));
 
         // Update button UI if provided
         if (btnEl) {
@@ -63,32 +47,19 @@ const Social = {
     },
 
     // 2. PIN TO KITCHEN BOARD (Bookmark)
+    // Local-demo only — no social backend exists.
     async pin(recipeId, btnEl) {
         let isPinned = false;
 
-        try {
-            const res = await fetch('../api/social.php?action=pin', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ recipe_id: recipeId })
-            });
-            if (res.ok) {
-                const data = await res.json();
-                if (data.success) {
-                    isPinned = data.data.is_pinned;
-                }
-            }
-        } catch (e) {
-            let saved = JSON.parse(localStorage.getItem('foodies_user_saved') || '[]');
-            if (saved.includes(recipeId)) {
-                saved = saved.filter(id => id !== recipeId);
-                isPinned = false;
-            } else {
-                saved.push(recipeId);
-                isPinned = true;
-            }
-            localStorage.setItem('foodies_user_saved', JSON.stringify(saved));
+        let saved = JSON.parse(localStorage.getItem('foodies_user_saved') || '[]');
+        if (saved.includes(recipeId)) {
+            saved = saved.filter(id => id !== recipeId);
+            isPinned = false;
+        } else {
+            saved.push(recipeId);
+            isPinned = true;
         }
+        localStorage.setItem('foodies_user_saved', JSON.stringify(saved));
 
         if (btnEl) {
             btnEl.classList.toggle('active-pinned', isPinned);
@@ -108,34 +79,20 @@ const Social = {
     },
 
     // 3. FORK THIS CHEF (Follow / Unfollow)
+    // Local-demo only — no social backend exists.
     async fork(chefId, btnEl) {
         let isForked = false;
         let sousChefsCount = 0;
 
-        try {
-            const res = await fetch('../api/social.php?action=fork', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chef_id: chefId })
-            });
-            if (res.ok) {
-                const data = await res.json();
-                if (data.success) {
-                    isForked = data.data.is_forked;
-                    sousChefsCount = data.data.sous_chefs_count;
-                }
-            }
-        } catch (e) {
-            let follows = JSON.parse(localStorage.getItem('foodies_user_follows') || '[]');
-            if (follows.includes(chefId)) {
-                follows = follows.filter(id => id !== chefId);
-                isForked = false;
-            } else {
-                follows.push(chefId);
-                isForked = true;
-            }
-            localStorage.setItem('foodies_user_follows', JSON.stringify(follows));
+        let follows = JSON.parse(localStorage.getItem('foodies_user_follows') || '[]');
+        if (follows.includes(chefId)) {
+            follows = follows.filter(id => id !== chefId);
+            isForked = false;
+        } else {
+            follows.push(chefId);
+            isForked = true;
         }
+        localStorage.setItem('foodies_user_follows', JSON.stringify(follows));
 
         if (btnEl) {
             btnEl.classList.toggle('following', isForked);
@@ -149,30 +106,19 @@ const Social = {
     },
 
     // 4. ADD FLAVOR NOTE (Comment)
+    // Local-demo only — no social backend exists.
     async addFlavorNote(recipeId, noteText) {
         if (!noteText || !noteText.trim()) return null;
 
-        try {
-            const res = await fetch('../api/social.php?action=flavor_note', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ recipe_id: recipeId, comment_text: noteText })
-            });
-            if (res.ok) {
-                const data = await res.json();
-                if (data.success) return data.data;
-            }
-        } catch (e) {
-            // Local fallback
-            const user = (window.Auth && Auth.getCurrentUser()) || { username: 'You', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80' };
-            return {
-                id: 'note_' + Date.now(),
-                username: user.username,
-                profile_pic: user.avatar,
-                comment_text: noteText,
-                time_ago: 'just now'
-            };
-        }
+        // Return a local note object using the current Auth user for display
+        const user = (window.Auth && Auth.getCurrentUser()) || { username: 'You', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80' };
+        return {
+            id: 'note_' + Date.now(),
+            username: user.username,
+            profile_pic: user.avatar,
+            comment_text: noteText,
+            time_ago: 'just now'
+        };
     },
 
     // 5. PASS THE RECIPE CARD (Share)

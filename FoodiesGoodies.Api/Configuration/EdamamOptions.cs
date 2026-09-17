@@ -7,5 +7,10 @@ public class EdamamOptions
     public string AppId { get; set; } = string.Empty;
     public string AppKey { get; set; } = string.Empty;
     public string BaseUrl { get; set; } = "https://api.edamam.com/api/recipes/v2";
-    public string CursorSigningKey { get; set; } = "FoodiesGoodies_Secure_Cursor_Key_2025!";
+    /// <summary>
+    /// Secret key used to HMAC-sign pagination cursors.
+    /// Must be set via User Secrets (dev) or environment variables (prod).
+    /// Never hardcode or commit a real value here.
+    /// </summary>
+    public string CursorSigningKey { get; set; } = string.Empty;
 }

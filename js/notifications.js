@@ -43,19 +43,10 @@ const Notifications = {
         });
     },
 
+    // No notifications backend exists — display local demo count.
     async checkUnread() {
-        try {
-            const res = await fetch('../api/notifications.php?unread_only=1');
-            if (res.ok) {
-                const data = await res.json();
-                if (data.success && data.data) {
-                    this.updateBadge(data.data.unread_count || 0);
-                }
-            }
-        } catch (e) {
-            // Local fallback count
-            this.updateBadge(2);
-        }
+        // Show a static demo badge count (notifications are local-demo only)
+        this.updateBadge(2);
     },
 
     updateBadge(count) {
@@ -117,47 +108,37 @@ const Notifications = {
             </div>
         `;
 
-        try {
-            const res = await fetch('../api/notifications.php');
-            const data = await res.json();
-            const notifs = (data.success && data.data && data.data.notifications) ? data.data.notifications : [
-                {
-                    from_user: 'Chef Gabriella Russo',
-                    from_avatar: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=150&q=80',
-                    message: 'tasted and loved your Pan-Seared Salmon! 😋❤️',
-                    time_ago: '15 mins ago'
-                },
-                {
-                    from_user: 'Chef Aisha Patel',
-                    from_avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80',
-                    message: 'joined your Kitchen Crew as a Sous Chef! 🍳',
-                    time_ago: '2 hours ago'
-                }
-            ];
+        // No notifications backend — render demo notifications directly
+        const notifs = [
+            {
+                from_user: 'Chef Gabriella Russo',
+                from_avatar: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=150&q=80',
+                message: 'tasted and loved your Pan-Seared Salmon! 😋❤️',
+                time_ago: '15 mins ago'
+            },
+            {
+                from_user: 'Chef Aisha Patel',
+                from_avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80',
+                message: 'joined your Kitchen Crew as a Sous Chef! 🍳',
+                time_ago: '2 hours ago'
+            }
+        ];
 
-            const listEl = drawer.querySelector('#notif-items-list');
-            listEl.innerHTML = notifs.map(n => `
-                <div style="display:flex; gap:10px; align-items:flex-start; padding:8px; background:rgba(255,255,255,0.04); border-radius:var(--radius-sm);">
-                    <img src="${n.from_avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80'}" style="width:34px; height:34px; border-radius:50%; object-fit:cover; border:1px solid var(--primary-gold); flex-shrink:0;">
-                    <div style="display:flex; flex-direction:column; font-size:0.85rem; line-height:1.4;">
-                        <span style="color:#ffffff;"><strong>${n.from_user}</strong> ${n.message}</span>
-                        <span style="color:var(--text-dim); font-size:0.75rem; margin-top:2px;">${n.time_ago || 'recently'}</span>
-                    </div>
+        const listEl = drawer.querySelector('#notif-items-list');
+        listEl.innerHTML = notifs.map(n => `
+            <div style="display:flex; gap:10px; align-items:flex-start; padding:8px; background:rgba(255,255,255,0.04); border-radius:var(--radius-sm);">
+                <img src="${n.from_avatar}" style="width:34px; height:34px; border-radius:50%; object-fit:cover; border:1px solid var(--primary-gold); flex-shrink:0;">
+                <div style="display:flex; flex-direction:column; font-size:0.85rem; line-height:1.4;">
+                    <span style="color:#ffffff;"><strong>${n.from_user}</strong> ${n.message}</span>
+                    <span style="color:var(--text-dim); font-size:0.75rem; margin-top:2px;">${n.time_ago || 'recently'}</span>
                 </div>
-            `).join('');
+            </div>
+        `).join('');
 
-            drawer.querySelector('#btn-mark-all-read').addEventListener('click', () => {
-                this.updateBadge(0);
-                fetch('../api/notifications.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'mark_read' })
-                }).catch(() => {});
-                drawer.remove();
-            });
-        } catch (e) {
-            console.error('Notification error:', e);
-        }
+        drawer.querySelector('#btn-mark-all-read').addEventListener('click', () => {
+            this.updateBadge(0);
+            drawer.remove();
+        });
     }
 };
 

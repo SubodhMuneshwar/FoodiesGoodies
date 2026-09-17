@@ -58,6 +58,7 @@ const Auth = {
     },
 
     // Verify session with server (Single Source of Truth)
+    // A network failure or unreachable backend MUST NOT result in an authenticated state.
     async checkSession() {
         try {
             const res = await fetch('/api/auth/me', {
@@ -71,18 +72,20 @@ const Auth = {
             if (res.ok) {
                 const result = await res.json();
                 if (result && result.success && result.data) {
+                    // Server confirmed session — cache profile for UI use only
                     this.setCurrentUser(result.data);
                     return result.data;
                 }
-            } else if (res.status === 401) {
-                // Session expired or unauthenticated on backend
-                this.clearUser();
-                return null;
             }
+            // Any non-OK response (401, 403, 5xx) = unauthenticated
+            this.clearUser();
+            return null;
         } catch (err) {
-            console.warn('Session verification fallback to local cache:', err);
+            // Network error / backend unreachable — clear local cache, remain unauthenticated
+            console.warn('Session check failed (backend unreachable). Clearing local session.', err);
+            this.clearUser();
+            return null;
         }
-        return this.getCurrentUser();
     },
 
     // Get all registered users from local cache
@@ -108,9 +111,11 @@ const Auth = {
     },
 
     // Perform login (ASP.NET Core Identity Cookie Authentication)
+    // Login succeeds ONLY when the server returns a successful response.
+    // A failed or unreachable backend must NOT produce an authenticated state.
     async login(email, password) {
         const cleanEmail = (email || '').trim().toLowerCase();
-        
+
         try {
             const res = await fetch('/api/auth/login', {
                 method: 'POST',
@@ -131,25 +136,20 @@ const Auth = {
             if (res.ok && data.success && data.user) {
                 this.setCurrentUser(data.user);
                 return { success: true, message: data.message || 'Login successful!', user: data.user };
-            } else if (data && !data.success) {
-                return { success: false, message: data.message || 'Invalid email or password.' };
             }
+
+            // Server rejected login (wrong password, unknown user, validation error, etc.)
+            return { success: false, message: (data && data.message) || 'Invalid email or password.' };
         } catch (err) {
-            console.warn('ASP.NET Core API login failed, checking fallback:', err);
+            // Backend unreachable — do NOT fall back to localStorage authentication
+            console.error('Login request failed (backend unreachable):', err);
+            return { success: false, message: 'Unable to reach the authentication server. Please try again.' };
         }
-
-        // Fallback for offline dev testing
-        const users = this.getRegisteredUsers();
-        const existing = users.find(u => u.email === cleanEmail);
-        if (existing) {
-            this.setCurrentUser(existing);
-            return { success: true, message: 'Welcome back, ' + existing.username + '!', user: existing };
-        }
-
-        return { success: false, message: 'Invalid email or password. Please try again.' };
     },
 
     // Perform registration (ASP.NET Core Identity)
+    // Registration succeeds ONLY when the server returns a successful response.
+    // A failed or unreachable backend must NOT produce an authenticated state.
     async register(username, email, password) {
         const cleanName = (username || '').trim() || 'Foodie Chef';
         const cleanEmail = (email || '').trim().toLowerCase();
@@ -174,28 +174,15 @@ const Auth = {
             if (res.ok && data.success && data.user) {
                 this.setCurrentUser(data.user);
                 return { success: true, message: data.message || 'Registration successful!', user: data.user };
-            } else if (data && !data.success) {
-                return { success: false, message: data.message || 'Registration failed.' };
             }
+
+            // Server rejected registration (duplicate email, validation failure, etc.)
+            return { success: false, message: (data && data.message) || 'Registration failed. Please try again.' };
         } catch (e) {
-            console.warn('ASP.NET Core API registration unavailable:', e);
+            // Backend unreachable — do NOT create a fake local account
+            console.error('Registration request failed (backend unreachable):', e);
+            return { success: false, message: 'Unable to reach the registration server. Please try again.' };
         }
-
-        const newUser = {
-            id: 'dev_' + Date.now(),
-            username: cleanName,
-            displayName: cleanName,
-            handle: '@' + cleanName.toLowerCase().replace(/[^a-z0-9_]/g, ''),
-            email: cleanEmail,
-            avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=300&q=80',
-            bio: 'New chef in town! Excited to share recipes and connect with fellow food lovers.',
-            dietaryFocus: 'Culinary Explorer',
-            rank: 'Home Cook',
-            memberSince: new Date().toISOString()
-        };
-
-        this.setCurrentUser(newUser);
-        return { success: true, message: 'Welcome to Foodies Goodies, ' + cleanName + '!', user: newUser };
     },
 
     // Quick 1-click Demo Foodie Login

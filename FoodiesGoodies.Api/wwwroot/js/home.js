@@ -55,34 +55,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 submitBtn.textContent = 'Subscribing...';
             }
 
-            try {
-                // Try backend API first
-                const res = await fetch('api/newsletter.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: email })
-                });
+            // Newsletter subscriptions are stored locally only — no backend newsletter service exists.
+            // This records intent; no server-side persistence occurs.
+            localStorage.setItem('foodies_newsletter_subscribed', 'true');
+            newsletterStatus.className = 'newsletter-msg success';
+            newsletterStatus.textContent = 'Thank you for subscribing! Delicious weekly recipes are on their way.';
+            newsletterEmail.value = '';
 
-                if (res.ok) {
-                    const data = await res.json();
-                    newsletterStatus.className = 'newsletter-msg success';
-                    newsletterStatus.textContent = data.message || 'Thank you for subscribing! Delicious weekly recipes are on their way.';
-                    newsletterEmail.value = '';
-                    localStorage.setItem('foodies_newsletter_subscribed', 'true');
-                } else {
-                    throw new Error('Subscription failed.');
-                }
-            } catch (err) {
-                // Fallback to local storage
-                localStorage.setItem('foodies_newsletter_subscribed', 'true');
-                newsletterStatus.className = 'newsletter-msg success';
-                newsletterStatus.textContent = 'Thank you for subscribing! You are on our VIP culinary list.';
-                newsletterEmail.value = '';
-            } finally {
-                if (submitBtn) {
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Subscribe Free';
-                }
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Subscribe Free';
             }
         });
     }
