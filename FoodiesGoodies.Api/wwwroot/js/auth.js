@@ -62,7 +62,7 @@ const Auth = {
         try {
             const res = await fetch('/api/auth/me', {
                 method: 'GET',
-                credentials: 'same-origin',
+                credentials: 'include',
                 headers: {
                     'Accept': 'application/json'
                 }
@@ -114,7 +114,7 @@ const Auth = {
         try {
             const res = await fetch('/api/auth/login', {
                 method: 'POST',
-                credentials: 'same-origin',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
@@ -157,7 +157,7 @@ const Auth = {
         try {
             const res = await fetch('/api/auth/register', {
                 method: 'POST',
-                credentials: 'same-origin',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
@@ -209,7 +209,7 @@ const Auth = {
         try {
             await fetch('/api/auth/logout', {
                 method: 'POST',
-                credentials: 'same-origin',
+                credentials: 'include',
                 headers: { 'Accept': 'application/json' }
             });
         } catch (e) {
@@ -263,6 +263,9 @@ const Auth = {
         }
     }
 };
+
+// Explicitly bind to global window object
+window.Auth = Auth;
 
 // Initialize navbar upon DOM readiness
 document.addEventListener('DOMContentLoaded', () => {

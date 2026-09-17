@@ -88,8 +88,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                if (window.Auth) {
-                    const result = await Auth.login(email, password);
+                const authService = window.Auth || (typeof Auth !== 'undefined' ? Auth : null);
+                if (authService) {
+                    const result = await authService.login(email, password);
                     if (result.success) {
                         await notify('Welcome Back!', result.message, 'success');
                         window.location.href = 'dashboard.html';
@@ -98,7 +99,20 @@ document.addEventListener('DOMContentLoaded', () => {
                         notify('Login Failed', result.message || 'Invalid credentials.', 'error');
                     }
                 } else {
-                    loginForm.submit();
+                    const res = await fetch('/api/auth/login', {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: JSON.stringify({ email: (email || '').trim().toLowerCase(), password: password, rememberMe: true })
+                    });
+                    const data = await res.json().catch(() => ({}));
+                    if (res.ok && data.success) {
+                        await notify('Welcome Back!', data.message || 'Login successful!', 'success');
+                        window.location.href = 'dashboard.html';
+                        return;
+                    } else {
+                        notify('Login Failed', data.message || 'Invalid credentials.', 'error');
+                    }
                 }
             } catch (err) {
                 console.error('Login error:', err);
@@ -127,8 +141,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                if (window.Auth) {
-                    const result = await Auth.register(username, email, password);
+                const authService = window.Auth || (typeof Auth !== 'undefined' ? Auth : null);
+                if (authService) {
+                    const result = await authService.register(username, email, password);
                     if (result.success) {
                         await notify('Welcome to Foodies!', result.message, 'success');
                         window.location.href = 'dashboard.html';
@@ -137,7 +152,20 @@ document.addEventListener('DOMContentLoaded', () => {
                         notify('Registration Failed', result.message || 'Registration could not be completed.', 'error');
                     }
                 } else {
-                    registerForm.submit();
+                    const res = await fetch('/api/auth/register', {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: JSON.stringify({ username: (username || '').trim(), email: (email || '').trim().toLowerCase(), password: password })
+                    });
+                    const data = await res.json().catch(() => ({}));
+                    if (res.ok && data.success) {
+                        await notify('Welcome to Foodies!', data.message || 'Registration successful!', 'success');
+                        window.location.href = 'dashboard.html';
+                        return;
+                    } else {
+                        notify('Registration Failed', data.message || 'Registration could not be completed.', 'error');
+                    }
                 }
             } catch (err) {
                 console.error('Registration error:', err);
