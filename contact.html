@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Foodies Goodies | Support, Inquiries &amp; Submissions</title>
+    <meta name="description" content="Get in touch with the Foodies Goodies team. Reach our culinary support for recipe questions, chef partnerships, and user assistance.">
+    <link rel="canonical" href="https://foodiesgoodies.com/contact.html">
+    <link rel="icon" type="image/png" href="assets/images/fav.png">
+
+    <!-- Open Graph & Twitter Cards -->
+    <meta property="og:title" content="Contact Us - Foodies Goodies | Support, Inquiries &amp; Submissions">
+    <meta property="og:description" content="Get in touch with the Foodies Goodies team. We'd love to hear your thoughts, feedback, and recipe suggestions!">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="assets/images/og-preview.png">
+    <meta property="og:url" content="https://foodiesgoodies.com/contact.html">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Schema.org ContactPage Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      "name": "Contact Us - Foodies Goodies",
+      "url": "https://foodiesgoodies.com/contact.html",
+      "description": "Get in touch with Foodies Goodies culinary team for support, recipe submissions, and feedback.",
+      "mainEntity": {
+        "@type": "Organization",
+        "name": "Foodies Goodies",
+        "url": "https://foodiesgoodies.com/",
+        "email": "admin@foodiesgoodies.local",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "Customer Support & Culinary Partnerships",
+          "email": "admin@foodiesgoodies.local",
+          "availableLanguage": ["English"]
+        }
+      }
+    }
+    </script>
+
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/contact.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- NAVBAR -->
+    <header class="header">
+        <a href="index.html" class="logo">Foodies Goodies</a>
+        <nav class="navbar" aria-label="Main Navigation">
+            <a class="nav-link" href="index.html">Home</a>
+            <a class="nav-link" href="pages/search.html">Search Recipes</a>
+            <a class="nav-link aid" href="pages/ai.html">
+                AI Dietician 
+                <img src="assets/images/sign.png" alt="" aria-hidden="true" width="24" height="24">
+            </a>
+            <a class="nav-link" href="about.html">About us</a>
+            <a class="nav-link active" href="contact.html">Contact us</a>
+            <a class="nav-link" href="privacy.html">Privacy Policy</a>
+            <a class="nav-link" href="terms.html">Terms &amp; Conditions</a>
+            <a class="nav-login-btn" href="pages/login.html">Login</a>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTACT CONTENT -->
+    <main id="main-content" class="contact-container">
+        <!-- Contact Information Card -->
+        <section class="contact-info-card" aria-label="Contact Information">
+            <h2>Get in Touch</h2>
+            <p class="subtitle">Have a question or recipe to share? Reach out to our team!</p>
+
+            <div class="info-item">
+                <div class="icon-box" aria-hidden="true">
+                    <ion-icon name="location"></ion-icon>
+                </div>
+                <div class="info-content">
+                    <h3>Our Location</h3>
+                    <p>Rajendra Mane College of Engineering &amp; Technology<br>Ambav, Devrukh, Ratnagiri, Maharashtra</p>
+                    <div class="map-wrapper">
+                        <iframe 
+                            title="Rajendra Mane College of Engineering and Technology Location Map"
+                            src="https://maps.google.com/maps?q=Rajendra+Mane+College+of+Engineering+and+Technology,+Ambav,+Devrukh,+Ratnagiri,+Maharashtra&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=&amp;output=embed" 
+                            loading="lazy"
+                            allowfullscreen>
+                        </iframe>
+                        <a href="https://maps.google.com/?q=Rajendra+Mane+College+of+Engineering+and+Technology,+Ambav,+Devrukh,+Ratnagiri,+Maharashtra" target="_blank" rel="noopener noreferrer" class="map-directions-link">
+                            <ion-icon name="navigate" aria-hidden="true"></ion-icon>
+                            <span>Open in Google Maps</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <div class="icon-box" aria-hidden="true">
+                    <ion-icon name="mail"></ion-icon>
+                </div>
+                <div class="info-content">
+                    <h3>Email Inquiries</h3>
+                    <p><a href="mailto:admin@foodiesgoodies.local" class="contact-link">admin@foodiesgoodies.local</a></p>
+                    <span class="response-badge">Average reply time: Under 24 hours</span>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <div class="icon-box" aria-hidden="true">
+                    <ion-icon name="time"></ion-icon>
+                </div>
+                <div class="info-content">
+                    <h3>Culinary Kitchen Hours</h3>
+                    <p>Monday &ndash; Saturday: 9:00 AM &ndash; 6:00 PM IST<br>Sunday: Closed for recipe testing</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Contact Form Card -->
+        <section class="contact-form-card" aria-label="Send a Message">
+            <h2>Send Us a Message</h2>
+            <p class="subtitle">Fill out the form below and a team member will reply shortly.</p>
+
+            <form id="contactForm" novalidate>
+                <div class="form-group">
+                    <label for="name">Your Full Name</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon" aria-hidden="true"><ion-icon name="person"></ion-icon></span>
+                        <input type="text" id="name" name="name" placeholder="Chef Alex Morgan" required autocomplete="name">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon" aria-hidden="true"><ion-icon name="mail"></ion-icon></span>
+                        <input type="email" id="email" name="email" placeholder="alex.morgan@example.com" required autocomplete="email">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">Subject / Category</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon" aria-hidden="true"><ion-icon name="bookmark"></ion-icon></span>
+                        <input type="text" id="subject" name="subject" placeholder="Recipe Feedback, AI Dietician, or Partnership" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Your Message</label>
+                    <div class="input-wrapper textarea-wrapper">
+                        <textarea id="message" name="message" rows="5" placeholder="Tell us what's on your culinary mind..." required></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" id="submitBtn" class="btn-submit">
+                    <span class="btn-text">Send Message</span>
+                    <ion-icon name="send" aria-hidden="true"></ion-icon>
+                </button>
+            </form>
+        </section>
+    </main>
+
+    <!-- FOOTER (Enterprise MPA Structure) -->
+    <footer class="footer-mpa">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3 class="footer-brand">Foodies Goodies</h3>
+                    <p class="brand-desc">Connecting home cooks, master chefs, and foodies worldwide with delicious recipes and smart AI culinary intelligence.</p>
+                    <div class="footer-social-links">
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><ion-icon name="logo-instagram"></ion-icon></a>
+                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><ion-icon name="logo-twitter"></ion-icon></a>
+                        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><ion-icon name="logo-youtube"></ion-icon></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Explore</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="pages/search.html">Search Recipes</a></li>
+                        <li><a href="pages/ai.html">AI Dietician</a></li>
+                        <li><a href="pages/dashboard.html">Social Kitchen</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="about.html#chefs-heading">Meet Our Chefs</a></li>
+                        <li><a href="pages/login.html">Chef Sign In</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal &amp; Policy</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms &amp; Conditions</a></li>
+                        <li><a href="pages/ai.html">Medical Disclaimer</a></li>
+                        <li><a href="privacy.html#gdpr">GDPR / CCPA Rights</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Foodies Goodies. All rights reserved. Multi-Page Application (MPA).</p>
+                <div class="footer-bottom-links">
+                    <a href="privacy.html">Privacy</a>
+                    <a href="terms.html">Terms</a>
+                    <a href="contact.html">Support</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/nav.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/contact.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

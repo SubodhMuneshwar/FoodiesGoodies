@@ -9,3 +9,13 @@ data/
 Thumbs.db
 .vscode/
 .idea/
+.claude/
+.vs/
+
+# .NET build artifacts
+**/[Bb]in/
+**/[Oo]bj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates

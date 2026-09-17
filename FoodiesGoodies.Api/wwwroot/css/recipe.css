@@ -1,0 +1,597 @@
+/* ==========================================================================
+   FoodiesGoodies Single Recipe Detail Styles (recipe.css)
+   ========================================================================== */
+
+@import url('base.css');
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: rgba(10, 10, 14, 0.94) url("../assets/images/dan-gold-5O1ddenSM4g-unsplash.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-blend-mode: darken;
+}
+
+.recipe-page-container {
+  flex: 1;
+  max-width: 1080px;
+  width: 92%;
+  margin: calc(var(--header-height) + 24px) auto 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  animation: fadeInUp 0.6s ease-in-out;
+}
+
+/* Hero Recipe Banner */
+.recipe-presentation-card {
+  background: rgba(18, 18, 24, 0.9);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+}
+
+.recipe-hero-media-wrap {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  overflow: hidden;
+}
+
+.recipe-hero-media-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.recipe-hero-badge {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid var(--primary-gold);
+  color: var(--primary-gold);
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  font-weight: 800;
+  font-size: 0.9rem;
+  backdrop-filter: blur(8px);
+}
+
+.recipe-main-content {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.recipe-header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.recipe-title-group h1 {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.recipe-title-group p.desc {
+  color: #cbd5e1;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  max-width: 720px;
+}
+
+.recipe-author-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+}
+
+.recipe-author-card img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary-gold);
+}
+
+.author-text-info strong {
+  display: block;
+  font-size: 0.95rem;
+  color: #ffffff;
+}
+
+.author-text-info span {
+  font-size: 0.82rem;
+  color: var(--primary-gold);
+}
+
+/* Quick Metrics Bar */
+.recipe-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 16px 20px;
+  border-radius: var(--radius-sm);
+}
+
+.metric-cell {
+  text-align: center;
+}
+
+.metric-cell span.label {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.metric-cell strong.val {
+  font-size: 1.15rem;
+  color: var(--primary-gold);
+  font-weight: 800;
+}
+
+/* Recipe Actions Bar */
+.recipe-actions-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 14px 0;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.action-btns-left {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-taste-action,
+.btn-pin-action,
+.btn-share-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 0.92rem;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.btn-taste-action:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.btn-pin-action:hover {
+  border-color: var(--primary-gold);
+  color: var(--primary-gold);
+}
+
+/* Flavor Rating Stars */
+.rating-stars-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.star-rating-btn {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.star-rating-btn:hover,
+.star-rating-btn.active {
+  color: #f59e0b;
+}
+
+/* Two Columns: Checklist on Left, Steps on Right */
+.recipe-instructions-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 36px;
+}
+
+.checklist-box {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 24px;
+  border-radius: var(--radius-md);
+}
+
+.checklist-box h3,
+.steps-box h3 {
+  font-size: 1.25rem;
+  color: var(--primary-gold);
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+
+.ingredients-checklist-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #e2e8f0;
+}
+
+.checklist-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary-gold);
+  cursor: pointer;
+}
+
+.checklist-item input:checked ~ .chk-label {
+  text-decoration: line-through;
+  color: var(--text-dim);
+}
+
+/* Steps List */
+.steps-box {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.step-card {
+  display: flex;
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  align-items: flex-start;
+}
+
+.step-badge {
+  width: 32px;
+  height: 32px;
+  background: var(--primary-gold);
+  color: #000;
+  font-weight: 900;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.step-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+}
+
+/* Flavor Notes (Comments Section) */
+.flavor-notes-section {
+  background: rgba(18, 18, 24, 0.9);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  backdrop-filter: blur(18px);
+}
+
+.flavor-notes-section h3 {
+  font-size: 1.4rem;
+  color: var(--primary-gold);
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+.note-input-wrap {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.note-input-wrap input {
+  flex: 1;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  color: #ffffff;
+  font-size: 0.95rem;
+}
+
+.note-input-wrap button {
+  padding: 12px 24px;
+  background: var(--primary-gold);
+  color: #000;
+  font-weight: 800;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.flavor-notes-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.note-bubble {
+  display: flex;
+  gap: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 16px;
+  border-radius: var(--radius-md);
+}
+
+.note-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid var(--primary-gold);
+  flex-shrink: 0;
+}
+
+.note-content {
+  flex: 1;
+}
+
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+}
+
+.note-header strong {
+  color: #ffffff;
+}
+
+.note-header span {
+  color: var(--text-dim);
+  font-size: 0.78rem;
+}
+
+.note-content p {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ==========================================================================
+   Dietary / Allergen Advisory Banner & Serving Scaler
+   ========================================================================== */
+.allergen-advisory-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: rgba(30, 30, 42, 0.7);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  border-left: 4px solid var(--primary-gold);
+  border-radius: var(--radius-md);
+  padding: 12px 18px;
+  backdrop-filter: blur(10px);
+}
+
+.allergen-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: #f8fafc;
+}
+
+.allergen-title ion-icon {
+  color: var(--primary-gold);
+  font-size: 1.2rem;
+}
+
+.allergen-pills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.allergen-pill {
+  font-size: 0.8rem;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  text-transform: capitalize;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.allergen-pill.badge-allergen {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+}
+
+.allergen-pill.badge-diet {
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  color: #86efac;
+}
+
+.allergen-pill.badge-neutral {
+  background: rgba(148, 163, 184, 0.15);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  color: #cbd5e1;
+}
+
+/* Serving Scaler */
+.serving-scaler-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+}
+
+.scaler-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.scaler-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-scaler {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--primary-gold);
+  background: rgba(255, 215, 0, 0.12);
+  color: var(--primary-gold);
+  font-weight: 900;
+  font-size: 1rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-scaler:hover {
+  background: var(--primary-gold);
+  color: #000;
+  transform: scale(1.08);
+}
+
+.scaler-value {
+  font-weight: 800;
+  color: #fff;
+  font-size: 0.95rem;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* Affiliate Grocery Delivery Box */
+.affiliate-order-box {
+  margin-top: 20px;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(6, 78, 59, 0.25));
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.affiliate-info .instacart-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #34d399;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.affiliate-info h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 2px 0 4px;
+}
+
+.affiliate-info p {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.btn-instacart-order {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #10b981;
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-full);
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+}
+
+.btn-instacart-order:hover {
+  background: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+}
+
+.btn-instacart-order ion-icon {
+  font-size: 1.2rem;
+}
+
+@media (max-width: 800px) {
+  .recipe-hero-media-wrap {
+    height: 260px;
+  }
+  .recipe-instructions-layout {
+    grid-template-columns: 1fr;
+  }
+  .recipe-metrics-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .affiliate-order-box {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .btn-instacart-order {
+    width: 100%;
+    justify-content: center;
+  }
+}

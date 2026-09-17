@@ -1,0 +1,223 @@
+/* ==========================================================================
+   FoodiesGoodies Explore Masonry Page Styles (explore.css)
+   ========================================================================== */
+
+@import url('base.css');
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: rgba(10, 10, 14, 0.94) url("../assets/images/todd-quackenbush-x5SRhkFajrA-unsplash.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-blend-mode: darken;
+}
+
+.explore-container {
+  flex: 1;
+  max-width: 1280px;
+  width: 94%;
+  margin: calc(var(--header-height) + 24px) auto 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  animation: fadeInUp 0.6s ease-in-out;
+}
+
+/* Explore Header & Filters */
+.explore-header-card {
+  background: rgba(18, 18, 24, 0.9);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  backdrop-filter: blur(18px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.explore-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.explore-title-row h1 {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.explore-title-row h1 span {
+  color: var(--primary-gold);
+}
+
+.explore-search-input {
+  position: relative;
+  width: 320px;
+  max-width: 100%;
+}
+
+.explore-search-input input {
+  width: 100%;
+  padding: 10px 16px 10px 42px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-full);
+  color: #ffffff;
+  font-size: 0.95rem;
+}
+
+.explore-search-input ion-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-dim);
+  font-size: 1.2rem;
+}
+
+/* Filter Dropdowns Row */
+.explore-filters-bar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.explore-select {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-sm);
+  color: #cbd5e1;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.explore-select option {
+  background: #181820;
+  color: #ffffff;
+}
+
+/* Instagram-Style Masonry / Tile Grid */
+.explore-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.explore-tile-card {
+  position: relative;
+  height: 340px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  text-decoration: none;
+  background: #15151c;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6);
+  transition: transform 0.35s ease, border-color 0.35s ease;
+}
+
+.explore-tile-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--primary-gold);
+}
+
+.explore-tile-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.explore-tile-card:hover img {
+  transform: scale(1.08);
+}
+
+/* Hover Overlay */
+.tile-hover-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0.1) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 24px 20px;
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+}
+
+.explore-tile-card:hover .tile-hover-overlay {
+  opacity: 1;
+}
+
+.tile-cuisine-pill {
+  align-self: flex-start;
+  background: rgba(210, 168, 28, 0.2);
+  border: 1px solid var(--primary-gold);
+  color: var(--primary-gold);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.tile-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.tile-author-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.tile-author-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.tile-author-name {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+}
+
+.tile-stats-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 0.88rem;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.tile-stats-row span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+@media (max-width: 650px) {
+  .explore-title-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .explore-search-input {
+    width: 100%;
+  }
+  .explore-grid {
+    grid-template-columns: 1fr;
+  }
+}
