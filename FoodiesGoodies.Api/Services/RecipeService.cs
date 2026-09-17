@@ -90,6 +90,11 @@ public class RecipeService : IRecipeService
         using var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
         request.Headers.Add("Accept", "application/json");
 
+        if (!string.IsNullOrWhiteSpace(_options.UserId))
+        {
+            request.Headers.Add("Edamam-Account-User", _options.UserId.Trim());
+        }
+
         HttpResponseMessage response;
         try
         {
@@ -108,7 +113,8 @@ public class RecipeService : IRecipeService
 
         if (!response.IsSuccessStatusCode)
         {
-            _logger.LogError("Edamam API returned HTTP status code {StatusCode}", response.StatusCode);
+            var errorBody = await response.Content.ReadAsStringAsync(cancellationToken);
+            _logger.LogError("Edamam API returned HTTP status code {StatusCode}: {ErrorBody}", response.StatusCode, errorBody);
             throw new InvalidOperationException($"Recipe service returned error status ({response.StatusCode}).");
         }
 
