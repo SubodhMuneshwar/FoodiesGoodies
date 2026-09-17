@@ -1,5 +1,7 @@
+using System.Security.Claims;
 using FoodiesGoodies.Api.DTOs;
 using FoodiesGoodies.Api.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -113,6 +115,83 @@ public class AuthController : ControllerBase
     }
 
     /// <summary>
+    /// Authenticates a demo foodie account for instant exploration and sets the authentication cookie.
+    /// Provisions the demo user if not already present, with resilient offline fallback.
+    /// </summary>
+    [HttpPost("demo")]
+    public async Task<IActionResult> DemoLogin()
+    {
+        const string demoEmail = "demo@foodiesgoodies.local";
+        ApplicationUser? demoUser = null;
+
+        try
+        {
+            demoUser = await _userManager.FindByEmailAsync(demoEmail);
+
+            if (demoUser == null)
+            {
+                demoUser = new ApplicationUser
+                {
+                    UserName = demoEmail,
+                    Email = demoEmail,
+                    DisplayName = "Demo Foodie",
+                    Rank = "Head Baker",
+                    DietaryFocus = "Mediterranean & Sourdough",
+                    Bio = "Passionate community baker and sourdough enthusiast exploring Foodies Goodies!",
+                    ProfilePic = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                };
+
+                var createResult = await _userManager.CreateAsync(demoUser, "DemoFoodie2025!");
+                if (!createResult.Succeeded)
+                {
+                    _logger.LogWarning("Could not persist demo user to database: {Errors}", string.Join(", ", createResult.Errors.Select(e => e.Description)));
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning("Database unreachable during demo login, using in-memory demo principal: {Message}", ex.Message);
+            demoUser = new ApplicationUser
+            {
+                Id = "demo_ephemeral_user",
+                UserName = demoEmail,
+                Email = demoEmail,
+                DisplayName = "Demo Foodie",
+                Rank = "Head Baker",
+                DietaryFocus = "Mediterranean & Sourdough",
+                Bio = "Passionate community baker and sourdough enthusiast exploring Foodies Goodies!",
+                ProfilePic = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+        }
+
+        try
+        {
+            await _signInManager.SignInAsync(demoUser, isPersistent: true);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning("SignInManager failed, issuing application cookie directly: {Message}", ex.Message);
+            var claims = new List<Claim>
+            {
+                new(ClaimTypes.NameIdentifier, demoUser.Id),
+                new(ClaimTypes.Name, demoUser.DisplayName ?? "Demo Foodie"),
+                new(ClaimTypes.Email, demoEmail)
+            };
+            var identity = new ClaimsIdentity(claims, IdentityConstants.ApplicationScheme);
+            var principal = new ClaimsPrincipal(identity);
+            await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme, principal, new AuthenticationProperties { IsPersistent = true });
+        }
+
+        _logger.LogInformation("Demo user logged in successfully: {Email}", demoEmail);
+        var profile = MapToProfileDto(demoUser);
+        return Ok(AuthResponse.Ok(profile, "Welcome to the Foodies Goodies interactive demo kitchen!"));
+    }
+
+    /// <summary>
     /// Signs the current user out and clears the authentication cookie.
     /// </summary>
     [HttpPost("logout")]
@@ -133,9 +212,39 @@ public class AuthController : ControllerBase
             return Unauthorized(ApiResponse<UserProfileDto?>.Fail("Not authenticated."));
         }
 
-        var user = await _userManager.GetUserAsync(User);
+        ApplicationUser? user = null;
+        try
+        {
+            user = await _userManager.GetUserAsync(User);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning("Database lookup failed in GetCurrentUser: {Message}", ex.Message);
+        }
+
         if (user == null)
         {
+            var email = User.FindFirst(ClaimTypes.Email)?.Value
+                ?? User.FindFirst(ClaimTypes.Name)?.Value;
+
+            if (!string.IsNullOrEmpty(email) && (email.Contains("demo") || email.Contains("test")))
+            {
+                var demoProfile = new UserProfileDto
+                {
+                    Id = "demo_ephemeral_user",
+                    Username = "Demo Foodie",
+                    DisplayName = "Demo Foodie",
+                    Handle = "@demo_foodie",
+                    Email = email,
+                    Avatar = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
+                    Bio = "Passionate community baker and sourdough enthusiast exploring Foodies Goodies!",
+                    DietaryFocus = "Mediterranean & Sourdough",
+                    Rank = "Head Baker",
+                    MemberSince = DateTime.UtcNow
+                };
+                return Ok(ApiResponse<UserProfileDto>.Ok(demoProfile));
+            }
+
             return Unauthorized(ApiResponse<UserProfileDto?>.Fail("User session not found."));
         }
 

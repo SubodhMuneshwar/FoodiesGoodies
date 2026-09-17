@@ -180,4 +180,29 @@ public class AuthControllerTests : IClassFixture<TestWebApplicationFactory>
 
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
+
+    // -------------------------------------------------------------------------
+    // Demo Login
+    // -------------------------------------------------------------------------
+
+    [Fact]
+    public async Task DemoLogin_IssuesSessionCookieAndReturns200()
+    {
+        var client = CreateClient();
+
+        var demoResponse = await client.PostAsync("/api/auth/demo", null);
+        demoResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var demoBody = await demoResponse.Content.ReadAsStringAsync();
+        demoBody.Should().Contain("\"success\":true");
+        demoBody.Should().Contain("demo@foodiesgoodies.local");
+
+        // Follow up with /api/auth/me using the received cookie
+        var meResponse = await client.GetAsync("/api/auth/me");
+        meResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var meBody = await meResponse.Content.ReadAsStringAsync();
+        meBody.Should().Contain("\"success\":true");
+        meBody.Should().Contain("demo@foodiesgoodies.local");
+    }
 }

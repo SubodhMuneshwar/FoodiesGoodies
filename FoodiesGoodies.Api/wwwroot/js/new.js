@@ -61,16 +61,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Quick 1-click Demo Login
     if (demoBtn) {
-        demoBtn.addEventListener('click', (e) => {
+        demoBtn.addEventListener('click', async (e) => {
             e.preventDefault();
             demoBtn.innerHTML = '<span>⚡ Signing in to Demo Kitchen...</span>';
             demoBtn.disabled = true;
-            setTimeout(() => {
+            try {
                 if (window.Auth) {
-                    Auth.quickDemoLogin();
+                    await Auth.quickDemoLogin();
                 }
-                window.location.href = 'dashboard.html';
-            }, 400);
+            } catch (err) {
+                console.warn('Demo login error:', err);
+            }
+            window.location.href = 'dashboard.html';
         });
     }
 

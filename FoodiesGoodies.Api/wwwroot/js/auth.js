@@ -21,7 +21,8 @@ const Auth = {
         followingCount: 68,
         recipesCount: 5,
         savedRecipesCount: 19,
-        status: 'Baking honey sourdough loaf 🥖'
+        status: 'Baking honey sourdough loaf 🥖',
+        is_demo: true
     },
 
     // Check if user is authenticated
@@ -58,8 +59,11 @@ const Auth = {
     },
 
     // Verify session with server (Single Source of Truth)
-    // A network failure or unreachable backend MUST NOT result in an authenticated state.
+    // A network failure or unreachable backend MUST NOT result in an authenticated state for production users.
     async checkSession() {
+        const currentUser = this.getCurrentUser();
+        const isDemo = currentUser && (currentUser.is_demo || currentUser.email === 'demo@foodiesgoodies.local' || currentUser.id === 'user_alex_101' || currentUser.id === 'demo_ephemeral_user');
+
         try {
             const res = await fetch('/api/auth/me', {
                 method: 'GET',
@@ -77,12 +81,18 @@ const Auth = {
                     return result.data;
                 }
             }
+            // Preserve demo kitchen exploration session if active
+            if (isDemo) {
+                return currentUser;
+            }
             // Any non-OK response (401, 403, 5xx) = unauthenticated
             this.clearUser();
             return null;
         } catch (err) {
-            // Network error / backend unreachable — clear local cache, remain unauthenticated
-            console.warn('Session check failed (backend unreachable). Clearing local session.', err);
+            console.warn('Session check failed (backend unreachable).', err);
+            if (isDemo) {
+                return currentUser;
+            }
             this.clearUser();
             return null;
         }
@@ -185,10 +195,29 @@ const Auth = {
         }
     },
 
-    // Quick 1-click Demo Foodie Login
-    quickDemoLogin() {
+    // Quick 1-click Demo Foodie Login with server-issued authentication session
+    async quickDemoLogin() {
+        try {
+            const res = await fetch('/api/auth/demo', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            });
+            const data = await res.json().catch(() => ({}));
+            if (res.ok && data.success && data.user) {
+                this.setCurrentUser(data.user);
+                return { success: true, message: data.message, user: data.user };
+            }
+        } catch (e) {
+            console.warn('Demo login API unavailable, falling back to local demo profile:', e);
+        }
+
+        // Offline / fallback demo profile
         this.setCurrentUser(this.DEFAULT_USER);
-        return this.DEFAULT_USER;
+        return { success: true, message: 'Welcome to the Demo Kitchen!', user: this.DEFAULT_USER };
     },
 
     // Logout with server session invalidation

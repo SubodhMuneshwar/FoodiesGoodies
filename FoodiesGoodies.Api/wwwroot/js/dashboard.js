@@ -15,6 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.Auth && typeof Auth.checkSession === 'function') {
         Auth.checkSession().then(verifiedUser => {
             if (!verifiedUser) {
+                const local = Auth.getCurrentUser();
+                if (local && (local.is_demo || local.email === 'demo@foodiesgoodies.local' || local.id === 'user_alex_101')) {
+                    // Retain demo exploration session
+                    return;
+                }
                 window.location.href = 'login.html';
             } else {
                 currentUser = verifiedUser;

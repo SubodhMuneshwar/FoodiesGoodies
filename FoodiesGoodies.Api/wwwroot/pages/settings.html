@@ -160,12 +160,12 @@
             <!-- Username & Email (Read-Only) -->
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
                 <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" class="form-control" value="chef_alex" disabled>
+                    <label for="settings-username">Username</label>
+                    <input type="text" id="settings-username" class="form-control" value="Chef Foodie" disabled>
                 </div>
                 <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" class="form-control" value="alex@foodiesgoodies.com" disabled>
+                    <label for="settings-email">Email</label>
+                    <input type="email" id="settings-email" class="form-control" value="chef@foodiesgoodies.com" disabled>
                 </div>
             </div>
 
@@ -192,36 +192,130 @@
     </main>
 
     <!-- FOOTER -->
-    <footer>
-        <div class="footer_text">
-            <p>&copy; 2024 Foodies Goodies. All rights reserved.</p>
-            <p class="footer-tagline">Connecting passion and flavor worldwide.</p>
+    <footer class="footer-mpa">
+        <div class="footer-inner">
+            <div class="footer-grid">
+                <div class="footer-col brand-col">
+                    <a href="../index.html" class="footer-logo">Foodies Goodies</a>
+                    <p class="footer-desc">A premium culinary platform connecting foodies with millions of recipes, live Edamam nutrition data, and interactive AI meal intelligence.</p>
+                    <div class="footer-social-links">
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><ion-icon name="logo-instagram"></ion-icon></a>
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><ion-icon name="logo-facebook"></ion-icon></a>
+                        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><ion-icon name="logo-youtube"></ion-icon></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Explore</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="search.html">Search Recipes</a></li>
+                        <li><a href="ai.html">AI Dietician</a></li>
+                        <li><a href="dashboard.html">Social Kitchen</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="about.html#chefs-heading">Meet Our Chefs</a></li>
+                        <li><a href="login.html">Chef Sign In</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal &amp; Policy</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms &amp; Conditions</a></li>
+                        <li><a href="ai.html">Medical Disclaimer</a></li>
+                        <li><a href="privacy.html#gdpr">GDPR / CCPA Rights</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Foodies Goodies. All rights reserved. Multi-Page Application (MPA).</p>
+                <div class="footer-bottom-links">
+                    <a href="privacy.html">Privacy</a>
+                    <a href="terms.html">Terms</a>
+                    <a href="contact.html">Support</a>
+                </div>
+            </div>
         </div>
     </footer>
 
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../js/nav.js"></script>
     <script src="../js/auth.js"></script>
     <script src="../js/notifications.js"></script>
     <script>
-        document.getElementById('settings-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const bio = document.getElementById('bio').value;
-            const pic = document.getElementById('profile_pic_url').value;
-            const isPrivate = document.getElementById('is_private').checked;
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = (window.Auth && Auth.getCurrentUser()) || {};
+            if (user.username || user.displayName) {
+                const unameInput = document.getElementById('settings-username');
+                if (unameInput) unameInput.value = user.displayName || user.username || 'Foodie Chef';
+            }
+            if (user.email) {
+                const emailInput = document.getElementById('settings-email');
+                if (emailInput) emailInput.value = user.email;
+            }
+            if (user.avatar || user.profile_pic) {
+                const avatarUrl = user.avatar || user.profile_pic;
+                const picInput = document.getElementById('profile_pic_url');
+                const previewImg = document.getElementById('avatar-preview');
+                if (picInput) picInput.value = avatarUrl;
+                if (previewImg) previewImg.src = avatarUrl;
+            }
+            if (user.bio) {
+                const bioInput = document.getElementById('bio');
+                if (bioInput) bioInput.value = user.bio;
+            }
+            if (typeof user.is_private !== 'undefined') {
+                const privInput = document.getElementById('is_private');
+                if (privInput) privInput.checked = !!user.is_private;
+            }
 
-            const currentUser = JSON.parse(localStorage.getItem('foodies_user') || '{}');
-            currentUser.bio = bio;
-            currentUser.profile_pic = pic;
-            currentUser.is_private = isPrivate;
-            localStorage.setItem('foodies_user', JSON.stringify(currentUser));
+            // Real-time URL preview change
+            document.getElementById('profile_pic_url')?.addEventListener('input', (e) => {
+                const preview = document.getElementById('avatar-preview');
+                if (preview && e.target.value.trim()) {
+                    preview.src = e.target.value.trim();
+                }
+            });
 
-            document.getElementById('avatar-preview').src = pic;
+            document.getElementById('settings-form')?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const bio = document.getElementById('bio').value;
+                const pic = document.getElementById('profile_pic_url').value;
+                const isPrivate = document.getElementById('is_private').checked;
 
-            swal({
-                title: 'Profile Updated! 👨🍳',
-                text: 'Your chef bio and kitchen privacy settings have been saved.',
-                icon: 'success'
+                const activeUser = (window.Auth && Auth.getCurrentUser()) || {};
+                activeUser.bio = bio;
+                activeUser.avatar = pic;
+                activeUser.profile_pic = pic;
+                activeUser.is_private = isPrivate;
+
+                if (window.Auth) {
+                    Auth.setCurrentUser(activeUser);
+                } else {
+                    localStorage.setItem('foodies_active_user', JSON.stringify(activeUser));
+                }
+
+                const preview = document.getElementById('avatar-preview');
+                if (preview) preview.src = pic;
+
+                if (typeof Swal === 'function' && Swal.fire) {
+                    Swal.fire({
+                        title: 'Profile Updated! 👨‍🍳',
+                        text: 'Your chef bio and kitchen privacy settings have been saved.',
+                        icon: 'success'
+                    });
+                } else if (typeof swal === 'function') {
+                    swal({
+                        title: 'Profile Updated! 👨‍🍳',
+                        text: 'Your chef bio and kitchen privacy settings have been saved.',
+                        icon: 'success'
+                    });
+                }
             });
         });
     </script>

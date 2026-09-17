@@ -320,14 +320,58 @@
     </main>
 
     <!-- FOOTER -->
-    <footer>
-        <div class="footer_text">
-            <p>&copy; 2024 Foodies Goodies. All rights reserved.</p>
-            <p class="footer-tagline">Connecting passion and flavor worldwide.</p>
+    <footer class="footer-mpa">
+        <div class="footer-inner">
+            <div class="footer-grid">
+                <div class="footer-col brand-col">
+                    <a href="../index.html" class="footer-logo">Foodies Goodies</a>
+                    <p class="footer-desc">A premium culinary platform connecting foodies with millions of recipes, live Edamam nutrition data, and interactive AI meal intelligence.</p>
+                    <div class="footer-social-links">
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><ion-icon name="logo-instagram"></ion-icon></a>
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><ion-icon name="logo-facebook"></ion-icon></a>
+                        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><ion-icon name="logo-youtube"></ion-icon></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Explore</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="search.html">Search Recipes</a></li>
+                        <li><a href="ai.html">AI Dietician</a></li>
+                        <li><a href="dashboard.html">Social Kitchen</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="about.html#chefs-heading">Meet Our Chefs</a></li>
+                        <li><a href="login.html">Chef Sign In</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal &amp; Policy</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms &amp; Conditions</a></li>
+                        <li><a href="ai.html">Medical Disclaimer</a></li>
+                        <li><a href="privacy.html#gdpr">GDPR / CCPA Rights</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Foodies Goodies. All rights reserved. Multi-Page Application (MPA).</p>
+                <div class="footer-bottom-links">
+                    <a href="privacy.html">Privacy</a>
+                    <a href="terms.html">Terms</a>
+                    <a href="contact.html">Support</a>
+                </div>
+            </div>
         </div>
     </footer>
 
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../js/nav.js"></script>
     <script src="../js/auth.js"></script>
     <script src="../js/notifications.js"></script>
@@ -393,6 +437,12 @@
 
             const steps = Array.from(document.querySelectorAll('.step-text')).map(input => input.value.trim()).filter(Boolean);
 
+            // Dynamically attribute recipe to current authenticated user
+            const activeUser = (window.Auth && Auth.getCurrentUser()) || {};
+            const authorName = activeUser.displayName || activeUser.username || 'Chef Alex Morgan';
+            const authorHandle = activeUser.handle || ('@' + authorName.toLowerCase().replace(/\s+/g, '_'));
+            const authorAvatar = activeUser.avatar || activeUser.profile_pic || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80';
+
             const newId = 'rec_' + Date.now();
             const recipeObj = {
                 id: newId,
@@ -409,9 +459,9 @@
                 image_path: image,
                 likesCount: 1,
                 comments_count: 0,
-                authorName: 'Chef Alex Morgan',
-                authorHandle: '@chef_alex',
-                authorAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
+                authorName: authorName,
+                authorHandle: authorHandle,
+                authorAvatar: authorAvatar,
                 ingredients: ings,
                 steps: steps
             };
@@ -420,11 +470,21 @@
             existing.unshift(recipeObj);
             localStorage.setItem('foodies_community_recipes', JSON.stringify(existing));
 
-            swal({
-                title: 'Recipe Published to Community! 🍳',
-                text: `"${title}" is now live in the community feed!`,
-                icon: 'success'
-            }).then(() => {
+            const alertPromise = (typeof Swal === 'function' && Swal.fire)
+                ? Swal.fire({
+                    title: 'Recipe Published to Community! 🍳',
+                    text: `"${title}" is now live in the community feed!`,
+                    icon: 'success'
+                })
+                : (typeof swal === 'function'
+                    ? swal({
+                        title: 'Recipe Published to Community! 🍳',
+                        text: `"${title}" is now live in the community feed!`,
+                        icon: 'success'
+                    })
+                    : (alert(`Recipe Published: "${title}"`), Promise.resolve()));
+
+            Promise.resolve(alertPromise).then(() => {
                 window.location.href = `recipe.html?id=${newId}`;
             });
         });

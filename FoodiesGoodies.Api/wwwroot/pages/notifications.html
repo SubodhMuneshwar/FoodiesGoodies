@@ -124,13 +124,13 @@
         <a href="../index.html" class="logo">Foodies Goodies</a>
         <nav class="navbar" aria-label="Main Navigation">
             <a class="nav-link" href="../index.html">Home</a>
-            <a class="nav-link" href="explore.html">Explore</a>
-            <a class="nav-link" href="ai.html">AI Dietician</a>
+            <a class="nav-link" href="search.html">Search Recipes</a>
+            <a class="nav-link aid" href="ai.html">AI Dietician</a>
+            <a class="nav-link" href="about.html">About us</a>
             <a class="nav-link" href="contact.html">Contact us</a>
-            <a class="nav-login-btn" href="dashboard.html">
-                <ion-icon name="grid-outline"></ion-icon>
-                <span>Dashboard</span>
-            </a>
+            <a class="nav-link" href="privacy.html">Privacy Policy</a>
+            <a class="nav-link" href="terms.html">Terms &amp; Conditions</a>
+            <a class="nav-login-btn" href="login.html">Login</a>
         </nav>
     </header>
 
@@ -183,27 +183,79 @@
     </main>
 
     <!-- FOOTER -->
-    <footer>
-        <div class="footer_text">
-            <p>&copy; 2024 Foodies Goodies. All rights reserved.</p>
-            <p class="footer-tagline">Connecting passion and flavor worldwide.</p>
+    <footer class="footer-mpa">
+        <div class="footer-inner">
+            <div class="footer-grid">
+                <div class="footer-col brand-col">
+                    <a href="../index.html" class="footer-logo">Foodies Goodies</a>
+                    <p class="footer-desc">A premium culinary platform connecting foodies with millions of recipes, live Edamam nutrition data, and interactive AI meal intelligence.</p>
+                    <div class="footer-social-links">
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><ion-icon name="logo-instagram"></ion-icon></a>
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><ion-icon name="logo-facebook"></ion-icon></a>
+                        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><ion-icon name="logo-youtube"></ion-icon></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Explore</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="search.html">Search Recipes</a></li>
+                        <li><a href="ai.html">AI Dietician</a></li>
+                        <li><a href="dashboard.html">Social Kitchen</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="about.html#chefs-heading">Meet Our Chefs</a></li>
+                        <li><a href="login.html">Chef Sign In</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal &amp; Policy</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms &amp; Conditions</a></li>
+                        <li><a href="ai.html">Medical Disclaimer</a></li>
+                        <li><a href="privacy.html#gdpr">GDPR / CCPA Rights</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Foodies Goodies. All rights reserved. Multi-Page Application (MPA).</p>
+                <div class="footer-bottom-links">
+                    <a href="privacy.html">Privacy</a>
+                    <a href="terms.html">Terms</a>
+                    <a href="contact.html">Support</a>
+                </div>
+            </div>
         </div>
     </footer>
 
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../js/nav.js"></script>
     <script src="../js/auth.js"></script>
     <script>
         document.getElementById('btn-mark-all-read')?.addEventListener('click', () => {
             document.querySelectorAll('.notif-item').forEach(item => item.classList.remove('unread'));
-            swal('All caught up! 🔔', 'All kitchen alerts marked as read.', 'success');
+            if (typeof Swal === 'function' && Swal.fire) {
+                Swal.fire({ title: 'All caught up! 🔔', text: 'All kitchen alerts marked as read.', icon: 'success' });
+            } else if (typeof swal === 'function') {
+                swal('All caught up! 🔔', 'All kitchen alerts marked as read.', 'success');
+            }
         });
 
         function respondRequest(id, action, btn) {
             const container = btn.closest('.request-actions');
             if (action === 'accept') {
                 container.innerHTML = '<span style="color:#10b981;font-weight:700;font-size:0.85rem;">✓ Accepted to Kitchen Crew!</span>';
-                swal('Sous Chef Accepted! 👨🍳', 'Chef has been welcomed into your Kitchen Crew!', 'success');
+                if (typeof Swal === 'function' && Swal.fire) {
+                    Swal.fire({ title: 'Sous Chef Accepted! 👨‍🍳', text: 'Chef has been welcomed into your Kitchen Crew!', icon: 'success' });
+                } else if (typeof swal === 'function') {
+                    swal('Sous Chef Accepted! 👨🍳', 'Chef has been welcomed into your Kitchen Crew!', 'success');
+                }
             } else {
                 container.innerHTML = '<span style="color:#94a3b8;font-size:0.85rem;">Request declined.</span>';
             }

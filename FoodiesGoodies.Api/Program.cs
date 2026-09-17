@@ -18,7 +18,7 @@ builder.Services.AddDbContext<FoodiesGoodiesDbContext>(options =>
     // Use fixed MySQL 8.0 server version to allow schema generation/migrations without live server dependency
     options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 36)), mySqlOptions =>
     {
-        mySqlOptions.EnableRetryOnFailure(maxRetryCount: 3, maxRetryDelay: TimeSpan.FromSeconds(5), errorNumbersToAdd: null);
+        mySqlOptions.EnableRetryOnFailure(maxRetryCount: 1, maxRetryDelay: TimeSpan.FromSeconds(1), errorNumbersToAdd: null);
     });
 });
 

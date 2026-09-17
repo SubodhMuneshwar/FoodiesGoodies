@@ -29,6 +29,7 @@ ASP.NET Core Web API  (FoodiesGoodies.Api/)
 ```
 
 The canonical static frontend is served from:
+
 ```
 FoodiesGoodies.Api/wwwroot/
 ```
@@ -37,18 +38,18 @@ FoodiesGoodies.Api/wwwroot/
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Language | C# 12 / .NET 8 |
-| Web Framework | ASP.NET Core Web API |
-| ORM | Entity Framework Core 8 |
-| Identity | ASP.NET Core Identity |
-| Database | MySQL 8.x (Pomelo EF Core provider) |
-| Email | MailKit |
-| Recipe API | Edamam Recipe Search API v2 |
-| Frontend | HTML5 / CSS3 / Vanilla JavaScript |
-| API Docs | Swagger / OpenAPI (dev only) |
-| Testing | xUnit / Moq / FluentAssertions / WebApplicationFactory |
+| Layer         | Technology                                             |
+| ------------- | ------------------------------------------------------ |
+| Language      | C# 12 / .NET 8                                         |
+| Web Framework | ASP.NET Core Web API                                   |
+| ORM           | Entity Framework Core 8                                |
+| Identity      | ASP.NET Core Identity                                  |
+| Database      | MySQL 8.x (Pomelo EF Core provider)                    |
+| Email         | MailKit                                                |
+| Recipe API    | Edamam Recipe Search API v2                            |
+| Frontend      | HTML5 / CSS3 / Vanilla JavaScript                      |
+| API Docs      | Swagger / OpenAPI (dev only)                           |
+| Testing       | xUnit / Moq / FluentAssertions / WebApplicationFactory |
 
 ---
 
@@ -83,9 +84,10 @@ FoodiesGoodies/
 Authentication uses **ASP.NET Core Identity** with HTTP-only cookie sessions.
 
 - `POST /api/auth/register` — Create account, issues auth cookie
-- `POST /api/auth/login`    — Login, issues auth cookie
-- `POST /api/auth/logout`   — Clears auth cookie
-- `GET  /api/auth/me`       — Returns current user profile or 401
+- `POST /api/auth/login` — Login, issues auth cookie
+- `POST /api/auth/demo` — 1-click interactive demo login, issues auth cookie
+- `POST /api/auth/logout` — Clears auth cookie
+- `GET  /api/auth/me` — Returns current user profile or 401
 
 Cookies are `HttpOnly`, `SameSite=Lax`, expire after 7 days with sliding expiration.
 
@@ -112,17 +114,17 @@ All sensitive values must be supplied externally. **Never commit real values.**
 
 ### Required configuration keys
 
-| Key | Description |
-|-----|-------------|
-| `ConnectionStrings:DefaultConnection` | MySQL connection string |
-| `Edamam:AppId` | Edamam API App ID |
-| `Edamam:AppKey` | Edamam API App Key |
-| `Edamam:CursorSigningKey` | Random secret for cursor HMAC signing |
-| `Smtp:Host` | SMTP server hostname |
-| `Smtp:Port` | SMTP port (default 587) |
-| `Smtp:Username` | SMTP username |
-| `Smtp:Password` | SMTP password |
-| `Smtp:AdminEmail` | Destination for contact form submissions |
+| Key                                   | Description                              |
+| ------------------------------------- | ---------------------------------------- |
+| `ConnectionStrings:DefaultConnection` | MySQL connection string                  |
+| `Edamam:AppId`                        | Edamam API App ID                        |
+| `Edamam:AppKey`                       | Edamam API App Key                       |
+| `Edamam:CursorSigningKey`             | Random secret for cursor HMAC signing    |
+| `Smtp:Host`                           | SMTP server hostname                     |
+| `Smtp:Port`                           | SMTP port (default 587)                  |
+| `Smtp:Username`                       | SMTP username                            |
+| `Smtp:Password`                       | SMTP password                            |
+| `Smtp:AdminEmail`                     | Destination for contact form submissions |
 
 ### Local development — User Secrets
 
@@ -158,6 +160,7 @@ Smtp__Host="..."
 MySQL 8.x must be running locally.
 
 1. **Create the database:**
+
    ```sql
    CREATE DATABASE foodiesgoodies CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
    ```
@@ -165,12 +168,14 @@ MySQL 8.x must be running locally.
 2. **Configure the connection string** via User Secrets (see above).
 
 3. **Apply EF Core migrations:**
+
    ```bash
    cd FoodiesGoodies.Api
    dotnet ef database update
    ```
 
    If `dotnet-ef` is not installed globally:
+
    ```bash
    dotnet tool restore
    dotnet ef database update
@@ -212,6 +217,7 @@ dotnet test FoodiesGoodies.Tests/FoodiesGoodies.Tests.csproj --verbosity normal
 ```
 
 Test coverage:
+
 - **Auth**: registration, duplicate rejection, invalid input, login, wrong password, logout, `/api/auth/me`
 - **Recipes**: query validation, mocked upstream success/failure, cursor validation (invalid, tampered, missing)
 - **Contact**: all field validation, mocked SMTP success/failure
@@ -231,6 +237,7 @@ Test coverage:
 The Edamam credentials `7aa516a5` / `dc836a223fb788b11ae390504d9e97ce` were previously hardcoded in `api/recipes.php`, which was committed to this repository's Git history.
 
 **These credentials must be rotated immediately:**
+
 1. Log in to [developer.edamam.com](https://developer.edamam.com)
 2. Regenerate the App Key for App ID `7aa516a5`
 3. Update your local User Secrets and production environment with the new key
@@ -241,8 +248,8 @@ The old credentials should be considered compromised as they are in the public G
 
 ## Stage History
 
-| Stage | Description |
-|-------|-------------|
-| 1 | Replaced PHP backend with ASP.NET Core Web API (Auth, Recipes, Contact) |
-| 1.5 | Removed auth localStorage bypass; purged all active PHP frontend dependencies |
-| 2 | Test suite, PHP file removal, legacy frontend cleanup, README, final audit |
+| Stage | Description                                                                   |
+| ----- | ----------------------------------------------------------------------------- |
+| 1     | Replaced PHP backend with ASP.NET Core Web API (Auth, Recipes, Contact)       |
+| 1.5   | Removed auth localStorage bypass; purged all active PHP frontend dependencies |
+| 2     | Test suite, PHP file removal, legacy frontend cleanup, README, final audit    |

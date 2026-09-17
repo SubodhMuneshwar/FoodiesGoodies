@@ -1,7 +1,44 @@
 /**
- * FoodiesGoodies Mobile Navigation Menu Toggle
- * Provides accessible mobile hamburger navigation across all devices.
+ * FoodiesGoodies Mobile Navigation Menu Toggle & Global Utilities
+ * Provides accessible mobile hamburger navigation and global library shims across all devices.
  */
+
+// Universal SweetAlert Compatibility Shim: maps legacy swal(title, text, icon) to Swal.fire
+(function initSweetAlertShim() {
+    if (typeof window === 'undefined') return;
+
+    function createSwalShim() {
+        if (typeof window.Swal === 'function' && (typeof window.swal !== 'function' || !window.swal._isShim)) {
+            const shim = function(arg1, arg2, arg3) {
+                if (typeof arg1 === 'object' && arg1 !== null) {
+                    const opts = { ...arg1 };
+                    if (opts.buttons) {
+                        opts.showCancelButton = true;
+                        if (Array.isArray(opts.buttons) && opts.buttons.length >= 2) {
+                            opts.cancelButtonText = opts.buttons[0];
+                            opts.confirmButtonText = opts.buttons[1];
+                        }
+                        delete opts.buttons;
+                    }
+                    if (opts.dangerMode) {
+                        opts.confirmButtonColor = '#dc2626';
+                    }
+                    return window.Swal.fire(opts).then(res => res.isConfirmed);
+                }
+                const title = arg1 || '';
+                const text = arg2 || '';
+                const icon = arg3 || 'info';
+                return window.Swal.fire({ title, text, icon });
+            };
+            shim._isShim = true;
+            window.swal = shim;
+        }
+    }
+
+    createSwalShim();
+    window.addEventListener('load', createSwalShim);
+    document.addEventListener('DOMContentLoaded', createSwalShim);
+})();
 
 document.addEventListener('DOMContentLoaded', () => {
     const header = document.querySelector('header.header') || document.querySelector('header');
