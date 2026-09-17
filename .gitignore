@@ -1,6 +1,7 @@
 # Environment variables and credentials
 .env
 .env.*
+!.env.example
 *.log
 data/
 
@@ -19,3 +20,12 @@ Thumbs.db
 *.suo
 *.userosscache
 *.sln.docstates
+*.slnx
+
+# Test results
+**/TestResults/
+*.coverage
+*.coveragexml
+
+# PHP — no PHP backend in this project
+*.php

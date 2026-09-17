@@ -123,3 +123,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// Expose Program class for integration tests (WebApplicationFactory<Program>)
+public partial class Program { }
