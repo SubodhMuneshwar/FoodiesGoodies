@@ -1,5 +1,6 @@
 /* ==========================================================================
    FoodiesGoodies AI Dietician Styles (ai.css)
+   Clean, Minimal, Editorial Nutrition Planner & Macro Intelligence
    ========================================================================== */
 
 @import url('base.css');
@@ -8,11 +9,6 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: rgba(0, 0, 0, 0.75) url("../assets/images/tamara-gak-PwTDa6ngq_E-unsplash.jpg");
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  background-blend-mode: darken;
 }
 
 /* --------------------------------------------------------------------------
@@ -20,51 +16,51 @@ body {
    -------------------------------------------------------------------------- */
 .ai-page-container {
   flex: 1;
-  max-width: 1200px;
+  max-width: var(--container-max);
   width: 92%;
-  margin: calc(var(--header-height) + 30px) auto 60px;
-  animation: fadeInUp 0.7s ease-in-out;
+  margin: calc(var(--header-height) + 40px) auto 80px;
+  animation: fadeInUp 0.5s ease-out;
 }
 
 /* Header Banner */
 .ai-hero-banner {
   text-align: center;
-  margin-bottom: 36px;
+  margin-bottom: 44px;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .ai-hero-badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(210, 168, 28, 0.15);
-  border: 1px solid var(--primary-gold);
-  color: var(--primary-gold);
+  background: var(--primary-subtle);
+  border: 1px solid rgba(194, 112, 58, 0.2);
+  color: var(--primary);
   padding: 6px 16px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-pill);
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.08em;
   margin-bottom: 14px;
 }
 
 .ai-hero-banner h1 {
-  font-family: var(--font-body);
+  font-family: var(--font-heading);
   font-size: clamp(2.2rem, 4.5vw, 3.2rem);
-  font-weight: 900;
+  font-weight: 800;
   color: var(--text-primary);
   margin-bottom: 12px;
-}
-
-.ai-hero-banner h1 span {
-  color: var(--primary-gold);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
 .ai-hero-banner p {
-  color: #cbd5e1;
-  font-size: 1.15rem;
-  max-width: 760px;
-  margin: 0 auto;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  line-height: 1.65;
 }
 
 /* --------------------------------------------------------------------------
@@ -73,26 +69,25 @@ body {
 .ai-grid {
   display: grid;
   grid-template-columns: 1fr 1.25fr;
-  gap: 36px;
+  gap: clamp(28px, 4vw, 44px);
   align-items: start;
 }
 
 /* Planner Form Card */
 .ai-form-card {
-  background: rgba(18, 18, 24, 0.88);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-md);
-  padding: 32px 28px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: clamp(24px, 3vw, 36px);
+  box-shadow: var(--shadow-sm);
 }
 
 .ai-form-card h2 {
-  font-size: 1.5rem;
-  color: var(--primary-gold);
+  font-family: var(--font-heading);
+  font-size: 1.45rem;
+  color: var(--text-primary);
   margin-bottom: 20px;
-  font-weight: 800;
+  font-weight: 700;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -111,8 +106,8 @@ body {
 
 .ai-form-card label {
   display: block;
-  font-size: 0.9rem;
-  color: var(--text-muted);
+  font-size: 0.86rem;
+  color: var(--text-secondary);
   font-weight: 600;
   margin-bottom: 6px;
 }
@@ -120,91 +115,89 @@ body {
 .ai-form-card input,
 .ai-form-card select {
   width: 100%;
-  padding: 12px 14px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  padding: 11px 14px;
+  background: var(--bg-surface-elevated);
+  border: 1.5px solid var(--border-strong);
   border-radius: var(--radius-sm);
-  color: #ffffff;
+  color: var(--text-primary);
   font-family: var(--font-body);
-  font-size: 0.95rem;
-  transition: all var(--transition-normal);
+  font-size: 0.94rem;
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .ai-form-card select option {
-  background: #181820;
-  color: #ffffff;
+  background: var(--bg-surface);
+  color: var(--text-primary);
 }
 
 .ai-form-card input:focus,
 .ai-form-card select:focus {
-  outline: none;
-  border-color: var(--primary-gold);
-  background: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 0 10px rgba(210, 168, 28, 0.35);
+  border-color: var(--primary);
+  background: var(--bg-surface);
+  box-shadow: 0 0 0 3px var(--primary-subtle);
 }
 
 .btn-generate-plan {
   width: 100%;
-  padding: 14px;
-  background-color: var(--primary-gold);
-  color: #000;
-  font-weight: 800;
-  font-size: 1.05rem;
+  padding: 13px;
+  background-color: var(--primary);
+  color: #FFFFFF;
+  font-weight: 600;
+  font-size: 0.98rem;
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all var(--transition-normal);
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-top: 10px;
+  margin-top: 14px;
 }
 
 .btn-generate-plan:hover,
 .btn-generate-plan:focus {
-  background-color: var(--primary-gold-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(210, 168, 28, 0.4);
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
 }
 
 /* --------------------------------------------------------------------------
    Results Card
    -------------------------------------------------------------------------- */
 .ai-results-card {
-  background: rgba(18, 18, 24, 0.9);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-md);
-  padding: 32px 28px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: clamp(24px, 3vw, 36px);
+  box-shadow: var(--shadow-sm);
   min-height: 480px;
 }
 
 /* Results Placeholder before generation */
 .results-placeholder {
   text-align: center;
-  padding: 60px 20px;
-  color: var(--text-dim);
+  padding: 80px 20px;
+  color: var(--text-muted);
 }
 
 .results-placeholder .icon-placeholder {
-  font-size: 54px;
-  color: var(--primary-gold);
+  font-size: 48px;
+  color: var(--primary);
   margin-bottom: 16px;
-  animation: pulseGlow 2s infinite;
+  display: block;
 }
 
 .results-placeholder h3 {
+  font-family: var(--font-heading);
   color: var(--text-primary);
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   margin-bottom: 8px;
 }
 
 /* Active Results Display */
 .results-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  border-bottom: 1px solid var(--border-subtle);
   padding-bottom: 18px;
   margin-bottom: 24px;
   display: flex;
@@ -215,18 +208,19 @@ body {
 }
 
 .results-header h2 {
-  font-size: 1.5rem;
-  color: var(--primary-gold);
+  font-family: var(--font-heading);
+  font-size: 1.45rem;
+  color: var(--text-primary);
 }
 
 .goal-tag {
-  background: rgba(210, 168, 28, 0.2);
-  border: 1px solid var(--primary-gold);
-  color: var(--primary-gold);
+  background: var(--primary-subtle);
+  border: 1px solid rgba(194, 112, 58, 0.25);
+  color: var(--primary);
   padding: 4px 12px;
-  border-radius: var(--radius-full);
-  font-size: 0.85rem;
-  font-weight: 700;
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  font-weight: 600;
 }
 
 /* Macro Metrics Dashboard */
@@ -238,412 +232,66 @@ body {
 }
 
 .macro-box {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
   padding: 14px 10px;
   text-align: center;
 }
 
 .macro-box .macro-label {
-  font-size: 0.78rem;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-
-.macro-box .macro-val {
-  font-size: 1.4rem;
-  font-weight: 800;
-  color: var(--primary-gold);
-}
-
-.macro-box .macro-unit {
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   color: var(--text-muted);
-}
-
-/* Daily Meals Timeline */
-.meals-container {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.meal-item {
-  background: rgba(255, 255, 255, 0.04);
-  border-left: 4px solid var(--primary-gold);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  padding: 14px 16px;
-  transition: transform var(--transition-normal);
-}
-
-.meal-item:hover {
-  transform: translateX(4px);
-  background: rgba(255, 255, 255, 0.07);
-}
-
-.meal-item h4 {
-  font-size: 1.05rem;
-  color: var(--primary-gold);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  display: block;
   margin-bottom: 4px;
-  display: flex;
-  justify-content: space-between;
 }
 
-.meal-item h4 span.meal-cals {
-  font-size: 0.85rem;
-  color: var(--text-dim);
-  font-weight: 500;
+.macro-box .macro-value {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--primary);
 }
 
-.meal-item p {
-  font-size: 0.92rem;
-  color: #e2e8f0;
-  line-height: 1.45;
+/* Recommendations list */
+.plan-recommendations {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-subtle);
 }
 
-/* Nutrition Tips Box */
-.dietician-tips-box {
-  background: rgba(210, 168, 28, 0.1);
-  border: 1px solid rgba(210, 168, 28, 0.3);
-  border-radius: var(--radius-sm);
-  padding: 14px 18px;
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-}
-
-.dietician-tips-box ion-icon {
-  font-size: 24px;
-  color: var(--primary-gold);
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.dietician-tips-box p {
-  font-size: 0.9rem;
-  color: #e2e8f0;
-  line-height: 1.5;
-}
-
-/* --------------------------------------------------------------------------
-   Feature Cards Under Planner
-   -------------------------------------------------------------------------- */
-.ai-features-section {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
-  margin-top: 50px;
-}
-
-.ai-feature-card {
-  background: rgba(18, 18, 24, 0.82);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-md);
-  padding: 28px 24px;
-  text-align: center;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-.ai-feature-card .feature-icon {
-  font-size: 36px;
-  color: var(--primary-gold);
+.plan-recommendations h3 {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
   margin-bottom: 12px;
 }
 
-.ai-feature-card h3 {
-  font-size: 1.25rem;
-  color: var(--text-primary);
-  margin-bottom: 8px;
+.tips-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.ai-feature-card p {
-  color: var(--text-dim);
-  font-size: 0.95rem;
-  line-height: 1.5;
+.tips-list li {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  padding: 10px 14px;
+  border-radius: var(--radius-xs);
+  font-size: 0.92rem;
+  color: var(--text-secondary);
 }
 
-/* --------------------------------------------------------------------------
-   Responsive Adjustments
-   -------------------------------------------------------------------------- */
 @media (max-width: 900px) {
   .ai-grid {
     grid-template-columns: 1fr;
   }
-
   .macro-dashboard {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-
-@media (max-width: 600px) {
-  .ai-page-container {
-    width: 95%;
-    margin-top: calc(var(--header-height) + 16px);
-  }
-
-  .form-row {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .ai-form-card,
-  .ai-results-card {
-    padding: 22px 16px;
-  }
-
-  .ai-features-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* --------------------------------------------------------------------------
-   Medical Disclaimer Banner & Unit Toggle
-   -------------------------------------------------------------------------- */
-.medical-disclaimer-banner {
-  background: rgba(30, 27, 46, 0.85);
-  border: 1px solid rgba(210, 168, 28, 0.35);
-  border-left: 4px solid var(--primary-gold);
-  border-radius: var(--radius-md);
-  padding: 14px 20px;
-  margin-bottom: 28px;
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  backdrop-filter: blur(12px);
-}
-
-.medical-disclaimer-banner ion-icon {
-  font-size: 1.6rem;
-  color: var(--primary-gold);
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.disclaimer-text strong {
-  color: #ffffff;
-  display: block;
-  font-size: 0.95rem;
-  margin-bottom: 4px;
-}
-
-.disclaimer-text p {
-  color: #94a3b8;
-  font-size: 0.84rem;
-  line-height: 1.5;
-  margin: 0;
-}
-
-/* Unit Toggle Switch */
-.unit-toggle-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-full);
-  padding: 4px 6px;
-  margin-bottom: 20px;
-}
-
-.unit-toggle-label {
-  font-size: 0.85rem;
-  color: #cbd5e1;
-  font-weight: 600;
-  padding-left: 10px;
-}
-
-.unit-toggle-buttons {
-  display: flex;
-  gap: 4px;
-}
-
-.btn-unit-toggle {
-  background: transparent;
-  border: none;
-  color: #94a3b8;
-  padding: 6px 14px;
-  border-radius: var(--radius-full);
-  font-size: 0.85rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-unit-toggle.active {
-  background: var(--primary-gold);
-  color: #000000;
-  box-shadow: 0 2px 8px rgba(210, 168, 28, 0.4);
-}
-
-/* Pro Paywall / 7-Day Plan Upgrade Card */
-.pro-paywall-card {
-  margin-top: 28px;
-  background: linear-gradient(135deg, rgba(210, 168, 28, 0.12), rgba(20, 16, 2, 0.8));
-  border: 1px solid rgba(210, 168, 28, 0.4);
-  border-radius: var(--radius-md);
-  padding: 24px;
-  position: relative;
-  overflow: hidden;
-}
-
-.pro-header-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.pro-badge {
-  background: var(--primary-gold);
-  color: #000000;
-  font-size: 0.75rem;
-  font-weight: 900;
-  padding: 4px 10px;
-  border-radius: var(--radius-full);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.pro-price {
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: #ffffff;
-}
-
-.pro-price span {
-  color: var(--primary-gold);
-}
-
-.pro-paywall-card h3 {
-  font-size: 1.3rem;
-  color: #ffffff;
-  margin: 4px 0 8px;
-  font-weight: 800;
-}
-
-.pro-paywall-card p.pro-subtext {
-  color: #cbd5e1;
-  font-size: 0.92rem;
-  line-height: 1.5;
-  margin-bottom: 16px;
-}
-
-.pro-perks-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.pro-perk-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.88rem;
-  color: #f1f5f9;
-}
-
-.pro-perk-item ion-icon {
-  color: var(--primary-gold);
-  font-size: 1.1rem;
-  flex-shrink: 0;
-}
-
-.pro-actions-group {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.btn-upgrade-pro {
-  flex: 1;
-  min-width: 200px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 20px;
-  background: linear-gradient(135deg, var(--primary-gold), #f59e0b);
-  color: #000000;
-  font-weight: 900;
-  font-size: 1rem;
-  border: none;
-  border-radius: var(--radius-full);
-  cursor: pointer;
-  transition: all 0.25s ease;
-  box-shadow: 0 4px 18px rgba(210, 168, 28, 0.4);
-}
-
-.btn-upgrade-pro:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(210, 168, 28, 0.6);
-}
-
-.btn-pdf-print {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 18px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #f8fafc;
-  font-weight: 700;
-  font-size: 0.95rem;
-  border-radius: var(--radius-full);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-pdf-print:hover {
-  background: rgba(255, 255, 255, 0.16);
-  border-color: var(--primary-gold);
-}
-
-@media (max-width: 600px) {
-  .pro-perks-grid {
-    grid-template-columns: 1fr;
-  }
-  .pro-actions-group {
-    flex-direction: column;
-    align-items: stretch;
-  }
-}
-
-/* Print Optimization */
-@media print {
-  body {
-    background: #ffffff !important;
-    color: #000000 !important;
-  }
-  .header, footer, .ai-form-card, .ai-features-section, .btn-upgrade-pro, .unit-toggle-container {
-    display: none !important;
-  }
-  .ai-page-container {
-    margin: 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-  .ai-results-card {
-    background: #ffffff !important;
-    color: #000000 !important;
-    border: 1px solid #ccc !important;
-    box-shadow: none !important;
-  }
-  .macro-box {
-    background: #f8f9fa !important;
-    border: 1px solid #ddd !important;
-  }
-  .macro-val, .macro-label, .meal-item h4 {
-    color: #000000 !important;
-  }
-}
-
-

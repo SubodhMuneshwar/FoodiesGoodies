@@ -3,53 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login &amp; Register - Foodies Goodies</title>
+    <title>Sign In &amp; Register - Foodies Goodies</title>
     <meta name="description" content="Sign in or register for an account on Foodies Goodies to save favorite recipes and access customized nutrition guides.">
-    <link rel="stylesheet" href="../css/variables.css">
-    <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/global.css">
-    <link rel="stylesheet" href="../css/login.css">
     <link rel="icon" type="image/png" href="../assets/images/fav.png">
 
     <!-- Open Graph & Twitter Cards -->
-    <meta property="og:title" content="Login &amp; Register - Foodies Goodies">
+    <meta property="og:title" content="Sign In &amp; Register - Foodies Goodies">
     <meta property="og:description" content="Sign in or register for an account on Foodies Goodies to save favorite recipes and access customized nutrition guides.">
     <meta property="og:type" content="website">
     <meta property="og:image" content="../assets/images/og-preview.png">
     <meta property="og:url" content="https://foodiesgoodies.com/pages/login.html">
     <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Google Fonts: Playfair Display & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/login.css">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <!-- NAVBAR -->
+    <!-- NAVBAR (Slim 64px Editorial Navigation) -->
     <header class="header">
         <a href="../index.html" class="logo">Foodies Goodies</a>
         <nav class="navbar" aria-label="Main Navigation">
             <a class="nav-link" href="../index.html">Home</a>
-            <a class="nav-link" href="search.html">Search Recipes</a>
-            <a class="nav-link aid" href="ai.html">
-                AI Dietician
-            </a>
-            <a class="nav-link" href="about.html">About us</a>
-            <a class="nav-link" href="contact.html">Contact us</a>
-            <a class="nav-link" href="privacy.html">Privacy Policy</a>
-            <a class="nav-link" href="terms.html">Terms &amp; Conditions</a>
-            <a class="nav-login-btn active" href="login.html">Login</a>
+            <a class="nav-link" href="search.html">Recipes</a>
+            <a class="nav-link aid" href="ai.html">AI Dietician</a>
+            <a class="nav-link" href="about.html">About</a>
+            <a class="nav-link" href="contact.html">Contact</a>
+            <a class="nav-login-btn active" href="login.html">Sign In</a>
         </nav>
     </header>
 
-    <!-- AUTHENTICATION PAGE LAYOUT -->
+    <!-- AUTHENTICATION PAGE LAYOUT (Editorial Split View) -->
     <main id="main-content" class="auth-page-container">
-        <!-- Hero Intro / Quote (Left Column) -->
+        <!-- Hero Editorial Column (Left Column) -->
         <div class="auth-intro">
-            <h1>
-                Foodies <span class="span1">Goodies</span>
-                <span class="tagline-words">Your Culinary Gateway</span>
-            </h1>
-            <p class="quote">
-                &ldquo;Indulge in a culinary adventure with FOODIES GOODIES, where every recipe is a delectable delight waiting to tantalize your taste buds.&rdquo;
-            </p>
+            <div class="auth-intro-card">
+                <div class="auth-intro-bg" style="background-image: url('../assets/images/dan-gold-5O1ddenSM4g-unsplash.jpg');"></div>
+                <div class="auth-intro-scrim"></div>
+                <div class="auth-intro-content">
+                    <span class="auth-intro-tag">Your Culinary Gateway</span>
+                    <h1>Culinary Inspiration, <em>Every Day.</em></h1>
+                    <p class="quote">
+                        &ldquo;Good food is the foundation of genuine happiness. Save recipes, build custom meal plans, and connect with chefs worldwide.&rdquo;
+                    </p>
+                </div>
+            </div>
         </div>
 
         <!-- Auth Card Form (Right Column) -->
@@ -58,9 +64,10 @@
                 <!-- LOGIN FORM -->
                 <div class="formlogin Login">
                     <h2>Welcome Back</h2>
+                    <p class="auth-subtitle">Sign in to access your saved recipes &amp; diet plan</p>
                     <form>
                         <div class="inpbox">
-                            <span class="icon1" aria-hidden="true"><ion-icon name="mail"></ion-icon></span>
+                            <span class="icon1" aria-hidden="true"><ion-icon name="mail-outline"></ion-icon></span>
                             <input type="email" required id="login-email" name="email" placeholder=" " autocomplete="email">
                             <label for="login-email">Email Address</label>
                         </div>
@@ -78,29 +85,30 @@
                             <a href="contact.html">Forgot password?</a>
                         </div>
 
-                        <button type="submit" class="btn-auth">Login</button>
-                        <button type="button" class="btn-demo-auth" style="margin-top: 10px; width: 100%; padding: 10px; background: rgba(210, 168, 28, 0.15); border: 1px dashed var(--primary-gold); color: var(--primary-gold); border-radius: var(--radius-sm); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
-                            <span>✨ Quick Demo Foodie Login (1-Click)</span>
+                        <button type="submit" class="btn-auth">Sign In</button>
+                        <button type="button" class="btn-demo-auth">
+                            <span>✨ Quick Demo Login (1-Click)</span>
                         </button>
 
                         <div class="loginreg">
-                            <p>Don't have an account? <a href="#register" class="registerlnk" role="button">Register</a></p>
+                            <p>Don't have an account? <a href="#register" class="registerlnk" role="button">Create Account</a></p>
                         </div>
                     </form>
                 </div>
 
                 <!-- REGISTRATION FORM -->
                 <div class="formlogin Register">
-                    <h2>Join Foodies</h2>
+                    <h2>Create Account</h2>
+                    <p class="auth-subtitle">Join Foodies Goodies to unlock all culinary features</p>
                     <form>
                         <div class="inpbox">
-                            <span class="icon1" aria-hidden="true"><ion-icon name="person"></ion-icon></span>
+                            <span class="icon1" aria-hidden="true"><ion-icon name="person-outline"></ion-icon></span>
                             <input type="text" required id="reg-username" name="username" placeholder=" " autocomplete="name">
-                            <label for="reg-username">Username</label>
+                            <label for="reg-username">Full Name</label>
                         </div>
 
                         <div class="inpbox">
-                            <span class="icon1" aria-hidden="true"><ion-icon name="mail"></ion-icon></span>
+                            <span class="icon1" aria-hidden="true"><ion-icon name="mail-outline"></ion-icon></span>
                             <input type="email" required id="reg-email" name="email" placeholder=" " autocomplete="email">
                             <label for="reg-email">Email Address</label>
                         </div>
@@ -110,17 +118,17 @@
                                 <ion-icon name="eye-outline"></ion-icon>
                             </button>
                             <input type="password" required id="reg-password" name="password" placeholder=" " minlength="8" autocomplete="new-password">
-                            <label for="reg-password">Password (min 8 chars)</label>
+                            <label for="reg-password">Password (min 8 characters)</label>
                         </div>
 
                         <div class="forgotpass">
-                            <label><input type="checkbox" required> I agree to the terms &amp; conditions</label>
+                            <label><input type="checkbox" required> I agree to the <a href="terms.html" style="color:var(--primary);text-decoration:underline;">terms &amp; conditions</a></label>
                         </div>
 
-                        <button type="submit" class="btn-auth">Register</button>
+                        <button type="submit" class="btn-auth">Create Account</button>
 
                         <div class="loginreg">
-                            <p>Already have an account? <a href="#login" class="loginlnk" role="button">Login</a></p>
+                            <p>Already have an account? <a href="#login" class="loginlnk" role="button">Sign In</a></p>
                         </div>
                     </form>
                 </div>
@@ -128,19 +136,16 @@
         </div>
     </main>
 
-    <!-- FOOTER -->
+    <!-- FOOTER (Enterprise MPA Structure) -->
     <footer class="footer-mpa">
         <div class="footer-container">
             <div class="footer-grid">
-                <div class="footer-col footer-brand-col">
-                    <a href="../index.html" class="footer-logo">Foodies Goodies</a>
-                    <p class="footer-desc">
-                        A modern culinary haven connecting passionate home chefs, seasoned epicureans, and AI-driven personalized dietary guidance worldwide.
-                    </p>
-                    <div class="footer-social-icons">
-                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><ion-icon name="logo-twitter"></ion-icon></a>
+                <div class="footer-col">
+                    <h3 class="footer-brand">Foodies Goodies</h3>
+                    <p class="brand-desc">Connecting home cooks, master chefs, and food lovers worldwide with delicious recipes and smart AI culinary intelligence.</p>
+                    <div class="footer-social-links">
                         <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><ion-icon name="logo-instagram"></ion-icon></a>
-                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><ion-icon name="logo-facebook"></ion-icon></a>
+                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><ion-icon name="logo-twitter"></ion-icon></a>
                         <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><ion-icon name="logo-youtube"></ion-icon></a>
                     </div>
                 </div>
@@ -173,7 +178,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Foodies Goodies. All rights reserved. Multi-Page Application (MPA).</p>
+                <p>&copy; 2025&ndash;2026 Foodies Goodies. All rights reserved.</p>
                 <div class="footer-bottom-links">
                     <a href="privacy.html">Privacy</a>
                     <a href="terms.html">Terms</a>

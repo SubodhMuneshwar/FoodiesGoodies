@@ -8,32 +8,26 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: rgba(10, 10, 14, 0.94) url("../assets/images/dan-gold-5O1ddenSM4g-unsplash.jpg");
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  background-blend-mode: darken;
 }
 
 .recipe-page-container {
   flex: 1;
   max-width: 1080px;
   width: 92%;
-  margin: calc(var(--header-height) + 24px) auto 60px;
+  margin: calc(var(--header-height) + 36px) auto 80px;
   display: flex;
   flex-direction: column;
-  gap: 32px;
-  animation: fadeInUp 0.6s ease-in-out;
+  gap: 36px;
+  animation: fadeInUp 0.5s ease-out;
 }
 
 /* Hero Recipe Banner */
 .recipe-presentation-card {
-  background: rgba(18, 18, 24, 0.9);
-  border: 1px solid var(--card-border);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  backdrop-filter: blur(20px);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  box-shadow: var(--shadow-sm);
 }
 
 .recipe-hero-media-wrap {

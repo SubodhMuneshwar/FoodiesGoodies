@@ -7,10 +7,10 @@
 // 1. Early Theme Initialization (Prevents FOUC)
 (function initTheme() {
     try {
-        const savedTheme = localStorage.getItem('foodies_theme') || 'dark';
+        const savedTheme = localStorage.getItem('foodies_theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
     } catch (e) {
-        document.documentElement.setAttribute('data-theme', 'dark');
+        document.documentElement.setAttribute('data-theme', 'light');
     }
 })();
 
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
         themeToggleBtn.setAttribute('aria-label', 'Toggle Light/Dark Theme');
 
         function updateThemeIcon() {
-            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
             themeToggleBtn.innerHTML = currentTheme === 'light' ? '🌙' : '☀️';
             themeToggleBtn.title = currentTheme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode';
         }
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         themeToggleBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
             const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
             document.documentElement.setAttribute('data-theme', nextTheme);
             try {
@@ -160,6 +160,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Insert into header next to navbar or login btn
         header.appendChild(themeToggleBtn);
+
+        // Header shadow on scroll
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                header.classList.add('header--scrolled');
+            } else {
+                header.classList.remove('header--scrolled');
+            }
+        }, { passive: true });
     }
 
     if (!navbar) return;

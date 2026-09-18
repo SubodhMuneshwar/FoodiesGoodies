@@ -15,6 +15,12 @@
     <meta property="og:url" content="https://foodiesgoodies.com/pages/privacy.html">
     <meta name="twitter:card" content="summary_large_image">
 
+    <!-- Google Fonts: Playfair Display & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/about.css">
     <style>
@@ -22,15 +28,17 @@
             text-align: left;
         }
         .legal-content h2 {
-            margin-top: 24px;
-            font-size: 1.5rem;
+            margin-top: 32px;
+            font-size: 1.4rem;
             text-align: left;
+            font-family: var(--font-display);
+            color: var(--text-primary);
         }
         .legal-content p, .legal-content ul {
             margin-bottom: 16px;
-            font-size: 1.05rem;
+            font-size: 1rem;
             line-height: 1.8;
-            color: #cbd5e1;
+            color: var(--text-secondary);
         }
         .legal-content ul {
             padding-left: 24px;
@@ -39,9 +47,9 @@
             margin-bottom: 8px;
         }
         .last-updated {
-            font-size: 0.95rem;
-            color: var(--primary-gold);
-            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: var(--accent);
+            margin-bottom: 24px;
             font-style: italic;
         }
     </style>
@@ -66,20 +74,16 @@
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <!-- NAVBAR -->
+    <!-- NAVBAR (Slim 64px Editorial Navigation) -->
     <header class="header">
         <a href="../index.html" class="logo">Foodies Goodies</a>
         <nav class="navbar" aria-label="Main Navigation">
             <a class="nav-link" href="../index.html">Home</a>
-            <a class="nav-link" href="search.html">Search Recipes</a>
-            <a class="nav-link aid" href="ai.html">
-                AI Dietician
-            </a>
-            <a class="nav-link" href="about.html">About us</a>
-            <a class="nav-link" href="contact.html">Contact us</a>
-            <a class="nav-link active" href="privacy.html">Privacy Policy</a>
-            <a class="nav-link" href="terms.html">Terms &amp; Conditions</a>
-            <a class="nav-login-btn" href="login.html">Login</a>
+            <a class="nav-link" href="search.html">Recipes</a>
+            <a class="nav-link aid" href="ai.html">AI Dietician</a>
+            <a class="nav-link" href="about.html">About</a>
+            <a class="nav-link" href="contact.html">Contact</a>
+            <a class="nav-login-btn" href="login.html">Sign In</a>
         </nav>
     </header>
 
@@ -126,12 +130,12 @@
 
             <h2>5. Data Retention and Deletion Rights (GDPR &amp; CCPA)</h2>
             <p>
-                You retain full ownership over your account data. Under GDPR and CCPA guidelines, you have the right to inspect, update, or request permanent deletion of your account and all associated recipes and comments. To exercise these rights, please submit a request through our <a href="contact.html" style="color:var(--primary-gold);">Contact Us</a> page.
+                You retain full ownership over your account data. Under GDPR and CCPA guidelines, you have the right to inspect, update, or request permanent deletion of your account and all associated recipes and comments. To exercise these rights, please submit a request through our <a href="contact.html" style="color:var(--accent); font-weight:600;">Contact Us</a> page.
             </p>
 
             <h2>6. Contact Information</h2>
             <p>
-                If you have questions or concerns regarding this Privacy Policy or our data management practices, please reach out via email at <a href="mailto:admin@foodiesgoodies.local" style="color:var(--primary-gold);">admin@foodiesgoodies.local</a> or through our online contact form.
+                If you have questions or concerns regarding this Privacy Policy or our data management practices, please reach out via email at <a href="mailto:admin@foodiesgoodies.local" style="color:var(--accent); font-weight:600;">admin@foodiesgoodies.local</a> or through our online contact form.
             </p>
         </section>
     </main>

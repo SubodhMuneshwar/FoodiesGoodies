@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chef Profile Settings - Foodies Goodies</title>
+    <!-- Google Fonts: Playfair Display & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/global.css">
@@ -13,30 +18,30 @@
         .settings-container {
             max-width: 760px;
             width: 92%;
-            margin: calc(var(--header-height) + 24px) auto 60px;
-            background: rgba(18, 18, 24, 0.92);
-            border: 1px solid var(--card-border);
+            margin: calc(var(--header-height) + 36px) auto 70px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
             border-radius: var(--radius-lg);
-            padding: 36px;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
-            animation: fadeInUp 0.5s ease-in-out;
+            padding: clamp(24px, 4vw, 40px);
+            box-shadow: var(--shadow-sm);
+            animation: fadeInUp 0.5s ease-out;
         }
         .settings-header {
             display: flex;
             align-items: center;
             gap: 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid var(--border-subtle);
             padding-bottom: 20px;
             margin-bottom: 28px;
         }
         .settings-header ion-icon {
             font-size: 2.2rem;
-            color: var(--primary-gold);
+            color: var(--primary);
         }
         .settings-header h1 {
+            font-family: var(--font-heading);
             font-size: 1.8rem;
-            color: #fff;
+            color: var(--text-primary);
         }
         .avatar-preview-row {
             display: flex;
@@ -45,11 +50,11 @@
             margin-bottom: 24px;
         }
         .avatar-preview-img {
-            width: 90px;
-            height: 90px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid var(--primary-gold);
+            border: 3px solid var(--border-subtle);
         }
         .form-group {
             display: flex;
@@ -58,78 +63,84 @@
             margin-bottom: 20px;
         }
         .form-group label {
-            font-size: 0.88rem;
-            font-weight: 700;
-            color: #cbd5e1;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.04em;
         }
         .form-control {
             padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1.5px solid rgba(255, 255, 255, 0.15);
+            background: var(--bg-surface-elevated);
+            border: 1.5px solid var(--border-strong);
             border-radius: var(--radius-sm);
-            color: #ffffff;
+            color: var(--text-primary);
             font-size: 0.95rem;
-            transition: border-color 0.3s;
+            outline: none;
+            transition: border-color var(--transition-fast);
         }
         .form-control:focus {
-            outline: none;
-            border-color: var(--primary-gold);
+            border-color: var(--primary);
         }
         .toggle-row {
             display: flex;
             align-items: center;
             gap: 12px;
-            background: rgba(255, 255, 255, 0.04);
+            background: var(--bg-surface-elevated);
             padding: 14px 18px;
             border-radius: var(--radius-sm);
             margin-bottom: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-subtle);
         }
         .toggle-row input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            accent-color: var(--primary-gold);
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
             cursor: pointer;
         }
         .toggle-row label {
             cursor: pointer;
-            color: #f1f5f9;
-            font-size: 0.95rem;
+            color: var(--text-primary);
+            font-size: 0.92rem;
         }
         .btn-save-settings {
-            background: linear-gradient(135deg, var(--primary-gold) 0%, #b8860b 100%);
-            color: #0d0d12;
-            font-weight: 800;
-            font-size: 1.05rem;
+            background: var(--primary);
+            color: #FFFFFF;
+            font-weight: 600;
+            font-size: 1rem;
             border: none;
-            padding: 14px 28px;
-            border-radius: var(--radius-full);
+            padding: 13px 28px;
+            border-radius: var(--radius-pill);
             cursor: pointer;
             width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            box-shadow: 0 6px 20px rgba(210, 168, 28, 0.35);
+            transition: background-color var(--transition-fast);
+        }
+        .btn-save-settings:hover {
+            background: var(--primary-hover);
         }
     </style>
 </head>
 <body>
     <a href="#settings-main" class="skip-link">Skip to settings form</a>
 
-    <!-- HEADER NAVBAR -->
+    <!-- HEADER NAVBAR (Slim 64px Editorial Navigation) -->
     <header class="header">
         <a href="../index.html" class="logo">Foodies Goodies</a>
         <nav class="navbar" aria-label="Main Navigation">
             <a class="nav-link" href="../index.html">Home</a>
-            <a class="nav-link" href="explore.html">Explore</a>
-            <a class="nav-link" href="ai.html">AI Dietician</a>
-            <a class="nav-link" href="contact.html">Contact us</a>
+            <a class="nav-link" href="search.html">Recipes</a>
+            <a class="nav-link aid" href="ai.html">AI Dietician</a>
+            <a class="nav-link" href="about.html">About</a>
+            <a class="nav-link" href="contact.html">Contact</a>
             <a class="nav-login-btn" href="dashboard.html">
-                <ion-icon name="grid-outline"></ion-icon>
-                <span>Dashboard</span>
+                <span class="user-nav-badge">
+                    <img id="nav-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Profile">
+                    <span id="nav-user-name">Dashboard</span>
+                </span>
             </a>
         </nav>
     </header>

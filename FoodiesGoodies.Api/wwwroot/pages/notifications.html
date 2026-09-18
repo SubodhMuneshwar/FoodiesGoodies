@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kitchen Notifications - Foodies Goodies</title>
+    <!-- Google Fonts: Playfair Display & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/global.css">
@@ -13,84 +18,86 @@
         .notif-page-container {
             max-width: 800px;
             width: 92%;
-            margin: calc(var(--header-height) + 24px) auto 60px;
-            background: rgba(18, 18, 24, 0.92);
-            border: 1px solid var(--card-border);
+            margin: calc(var(--header-height) + 36px) auto 70px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
             border-radius: var(--radius-lg);
-            padding: 32px;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
-            animation: fadeInUp 0.5s ease-in-out;
+            padding: clamp(24px, 4vw, 36px);
+            box-shadow: var(--shadow-sm);
+            animation: fadeInUp 0.5s ease-out;
         }
         .notif-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid var(--border-subtle);
             padding-bottom: 20px;
             margin-bottom: 24px;
         }
         .notif-header h1 {
+            font-family: var(--font-heading);
             font-size: 1.8rem;
-            color: #fff;
+            color: var(--text-primary);
             display: flex;
             align-items: center;
             gap: 12px;
         }
         .notif-header h1 ion-icon {
-            color: var(--primary-gold);
+            color: var(--primary);
         }
         .btn-mark-read {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #cbd5e1;
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-strong);
+            color: var(--text-secondary);
             padding: 8px 16px;
-            border-radius: var(--radius-full);
+            border-radius: var(--radius-pill);
             cursor: pointer;
             font-size: 0.88rem;
-            transition: all 0.2s;
+            font-weight: 500;
+            transition: all var(--transition-fast);
         }
         .btn-mark-read:hover {
-            border-color: var(--primary-gold);
-            color: var(--primary-gold);
+            border-color: var(--primary);
+            color: var(--primary);
         }
         .notif-item {
             display: flex;
             align-items: flex-start;
             gap: 16px;
-            padding: 18px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 16px;
+            background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-subtle);
             border-radius: var(--radius-md);
             margin-bottom: 12px;
-            transition: transform 0.2s, background 0.2s;
+            transition: transform var(--transition-fast), border-color var(--transition-fast);
         }
         .notif-item.unread {
-            background: rgba(210, 168, 28, 0.06);
-            border-color: rgba(210, 168, 28, 0.3);
+            background: var(--primary-subtle);
+            border-color: rgba(194, 112, 58, 0.25);
         }
         .notif-item:hover {
-            transform: translateX(4px);
-            background: rgba(255, 255, 255, 0.06);
+            transform: translateX(3px);
+            border-color: rgba(194, 112, 58, 0.35);
         }
         .notif-avatar {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             object-fit: cover;
+            border: 1.5px solid var(--border-subtle);
         }
         .notif-body {
             flex: 1;
         }
         .notif-text {
-            color: #f1f5f9;
-            font-size: 0.95rem;
+            color: var(--text-primary);
+            font-size: 0.94rem;
             line-height: 1.5;
             margin-bottom: 6px;
         }
         .notif-time {
             font-size: 0.8rem;
-            color: #94a3b8;
+            color: var(--text-muted);
         }
         .request-actions {
             display: flex;
@@ -98,41 +105,53 @@
             margin-top: 10px;
         }
         .btn-accept-request {
-            background: var(--primary-gold);
-            color: #000;
+            background: var(--primary);
+            color: #FFFFFF;
             border: none;
             padding: 6px 14px;
-            border-radius: 6px;
-            font-weight: 700;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
             font-size: 0.82rem;
             cursor: pointer;
+            transition: background-color var(--transition-fast);
+        }
+        .btn-accept-request:hover {
+            background: var(--primary-hover);
         }
         .btn-decline-request {
-            background: rgba(255, 255, 255, 0.1);
-            color: #cbd5e1;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: var(--bg-surface);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-strong);
             padding: 6px 14px;
-            border-radius: 6px;
+            border-radius: var(--radius-sm);
             font-size: 0.82rem;
             cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .btn-decline-request:hover {
+            border-color: var(--text-primary);
+            color: var(--text-primary);
         }
     </style>
 </head>
 <body>
     <a href="#notif-main" class="skip-link">Skip to notifications</a>
 
-    <!-- HEADER NAVBAR -->
+    <!-- HEADER NAVBAR (Slim 64px Editorial Navigation) -->
     <header class="header">
         <a href="../index.html" class="logo">Foodies Goodies</a>
         <nav class="navbar" aria-label="Main Navigation">
             <a class="nav-link" href="../index.html">Home</a>
-            <a class="nav-link" href="search.html">Search Recipes</a>
+            <a class="nav-link" href="search.html">Recipes</a>
             <a class="nav-link aid" href="ai.html">AI Dietician</a>
-            <a class="nav-link" href="about.html">About us</a>
-            <a class="nav-link" href="contact.html">Contact us</a>
-            <a class="nav-link" href="privacy.html">Privacy Policy</a>
-            <a class="nav-link" href="terms.html">Terms &amp; Conditions</a>
-            <a class="nav-login-btn" href="login.html">Login</a>
+            <a class="nav-link" href="about.html">About</a>
+            <a class="nav-link" href="contact.html">Contact</a>
+            <a class="nav-login-btn" href="dashboard.html">
+                <span class="user-nav-badge">
+                    <img id="nav-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Profile">
+                    <span id="nav-user-name">Dashboard</span>
+                </span>
+            </a>
         </nav>
     </header>
 

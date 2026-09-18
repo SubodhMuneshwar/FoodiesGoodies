@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Recipes - Foodies Goodies</title>
     <meta name="description" content="Explore over 2.3 million recipes powered live by the Edamam Recipe API. Find ingredients, cooking instructions, and nutrition details.">
-    <link rel="stylesheet" href="../css/variables.css">
-    <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/global.css">
-    <link rel="stylesheet" href="../css/search.css">
     <link rel="icon" type="image/png" href="../assets/images/fav.png">
 
     <!-- Open Graph & Twitter Cards -->
@@ -18,24 +14,30 @@
     <meta property="og:image" content="../assets/images/og-preview.png">
     <meta property="og:url" content="https://foodiesgoodies.com/pages/search.html">
     <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Google Fonts: Playfair Display & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/search.css">
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <!-- NAVBAR -->
+    <!-- NAVBAR (Slim 64px Editorial Navigation) -->
     <header class="header">
         <a href="../index.html" class="logo">Foodies Goodies</a>
         <nav class="navbar" aria-label="Main Navigation">
             <a class="nav-link" href="../index.html">Home</a>
-            <a class="nav-link active" href="search.html">Search Recipes</a>
-            <a class="nav-link aid" href="ai.html">
-                AI Dietician
-            </a>
-            <a class="nav-link" href="about.html">About us</a>
-            <a class="nav-link" href="contact.html">Contact us</a>
-            <a class="nav-link" href="privacy.html">Privacy Policy</a>
-            <a class="nav-link" href="terms.html">Terms &amp; Conditions</a>
-            <a class="nav-login-btn" href="login.html">Login</a>
+            <a class="nav-link active" href="search.html">Recipes</a>
+            <a class="nav-link aid" href="ai.html">AI Dietician</a>
+            <a class="nav-link" href="about.html">About</a>
+            <a class="nav-link" href="contact.html">Contact</a>
+            <a class="nav-login-btn" href="login.html">Sign In</a>
         </nav>
     </header>
 
@@ -44,9 +46,9 @@
         <div class="search-header">
             <div class="api-status-badge">
                 <span class="live-dot" aria-hidden="true"></span>
-                <span>Powered by EDAMAM Recipe Cloud</span>
+                <span>Powered by Edamam Recipe Cloud</span>
             </div>
-            <h1>Search Over <span>2.3 Million Recipes</span></h1>
+            <h1>Search Over 2.3 Million Recipes</h1>
             <p>Type any dish, ingredient, or craving to discover live culinary recipes with complete nutrition information.</p>
         </div>
 
@@ -63,15 +65,15 @@
         <!-- Quick Search Suggestion Chips -->
         <div class="quick-tags-container" aria-label="Popular Recipe Searches">
             <span class="quick-tags-label">Popular Searches:</span>
-            <button type="button" class="quick-tag" data-query="Pizza">🍕 Pizza</button>
-            <button type="button" class="quick-tag" data-query="Pasta">🍝 Pasta</button>
-            <button type="button" class="quick-tag" data-query="Burger">🍔 Burgers</button>
-            <button type="button" class="quick-tag" data-query="Donuts">🍩 Donuts</button>
-            <button type="button" class="quick-tag" data-query="Salad">🥗 Salads</button>
-            <button type="button" class="quick-tag" data-query="Tacos">🌮 Tacos</button>
-            <button type="button" class="quick-tag" data-query="Vegan">🥑 Vegan</button>
-            <button type="button" class="quick-tag" data-query="Salmon">🐟 Salmon</button>
-            <button type="button" class="quick-tag" data-query="Brownies">🍫 Brownies</button>
+            <button type="button" class="quick-tag" data-query="Pizza">Pizza</button>
+            <button type="button" class="quick-tag" data-query="Pasta">Pasta</button>
+            <button type="button" class="quick-tag" data-query="Burger">Burgers</button>
+            <button type="button" class="quick-tag" data-query="Donuts">Donuts</button>
+            <button type="button" class="quick-tag" data-query="Salad">Salads</button>
+            <button type="button" class="quick-tag" data-query="Tacos">Tacos</button>
+            <button type="button" class="quick-tag" data-query="Vegan">Vegan</button>
+            <button type="button" class="quick-tag" data-query="Salmon">Salmon</button>
+            <button type="button" class="quick-tag" data-query="Brownies">Brownies</button>
         </div>
 
         <!-- RESULTS CONTAINER -->
@@ -85,7 +87,7 @@
             </div>
         </section>
 
-        <!-- QUICK VIEW MODAL (Feature Polish) -->
+        <!-- QUICK VIEW MODAL -->
         <div id="quickViewModalBackdrop" class="quickview-modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="quickViewTitle">
             <div class="quickview-modal">
                 <button type="button" class="quickview-close-btn" id="quickViewCloseBtn" aria-label="Close recipe quick view">&times;</button>
@@ -99,7 +101,7 @@
                     <h3 class="quickview-section-heading"><span>🛒</span> Basic Ingredients</h3>
                     <ul class="quickview-ingredients-list" id="quickViewIngredients"></ul>
                     <div class="quickview-footer-actions">
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="btn-primary-glass" id="quickViewExternalBtn">View Full Preparation &amp; Instructions ↗</a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="btn-primary" id="quickViewExternalBtn">View Full Instructions &rarr;</a>
                     </div>
                 </div>
             </div>
@@ -112,7 +114,7 @@
             <div class="footer-grid">
                 <div class="footer-col">
                     <h3 class="footer-brand">Foodies Goodies</h3>
-                    <p class="brand-desc">Connecting home cooks, master chefs, and foodies worldwide with delicious recipes and smart AI culinary intelligence.</p>
+                    <p class="brand-desc">Connecting home cooks, master chefs, and food lovers worldwide with delicious recipes and smart AI culinary intelligence.</p>
                     <div class="footer-social-links">
                         <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><ion-icon name="logo-instagram"></ion-icon></a>
                         <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><ion-icon name="logo-twitter"></ion-icon></a>
@@ -148,7 +150,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Foodies Goodies. All rights reserved. Multi-Page Application (MPA).</p>
+                <p>&copy; 2025&ndash;2026 Foodies Goodies. All rights reserved.</p>
                 <div class="footer-bottom-links">
                     <a href="privacy.html">Privacy</a>
                     <a href="terms.html">Terms</a>

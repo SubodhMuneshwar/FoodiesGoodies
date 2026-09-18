@@ -3,17 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foodies Goodies - Delicious Recipes &amp; AI Culinary Intelligence</title>
-    <meta name="description" content="Discover mouthwatering trending recipes, chef spotlights, global cuisines, and personalized meal planning powered live by Edamam and AI.">
+    <title>Foodies Goodies - Curated Recipes &amp; AI Culinary Intelligence</title>
+    <meta name="description" content="Discover hand-crafted recipes, chef spotlights, global culinary traditions, and personalized nutrition planning powered live by Edamam and AI.">
     <link rel="icon" type="image/png" href="assets/images/fav.png">
 
     <!-- Open Graph & Twitter Cards -->
-    <meta property="og:title" content="Foodies Goodies - Delicious Recipes &amp; AI Culinary Intelligence">
-    <meta property="og:description" content="Discover mouthwatering trending recipes, chef spotlights, global cuisines, and personalized meal planning powered live by Edamam and AI.">
+    <meta property="og:title" content="Foodies Goodies - Curated Recipes &amp; AI Culinary Intelligence">
+    <meta property="og:description" content="Discover hand-crafted recipes, chef spotlights, global culinary traditions, and personalized nutrition planning powered live by Edamam and AI.">
     <meta property="og:type" content="website">
     <meta property="og:image" content="assets/images/og-preview.png">
     <meta property="og:url" content="https://foodiesgoodies.com/">
     <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Google Fonts: Playfair Display (Editorial Serif) & Plus Jakarta Sans (Clean Modern Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
@@ -23,53 +28,38 @@
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <!-- NAVBAR -->
+    <!-- NAVBAR (Slim 64px Editorial Navigation) -->
     <header class="header">
         <a href="index.html" class="logo">Foodies Goodies</a>
         <nav class="navbar" aria-label="Main Navigation">
             <a class="nav-link active" href="index.html">Home</a> 
-            <a class="nav-link" href="pages/search.html">Search Recipes</a>
-            <a class="nav-link aid" href="pages/ai.html">
-                AI Dietician
-            </a>
-            <a class="nav-link" href="pages/about.html">About us</a>
-            <a class="nav-link" href="pages/contact.html">Contact us</a>
-            <a class="nav-link" href="pages/privacy.html">Privacy Policy</a>
-            <a class="nav-link" href="pages/terms.html">Terms &amp; Conditions</a>
-            <a class="nav-login-btn" href="pages/login.html">Login</a>
+            <a class="nav-link" href="pages/search.html">Recipes</a>
+            <a class="nav-link aid" href="pages/ai.html">AI Dietician</a>
+            <a class="nav-link" href="pages/about.html">About</a>
+            <a class="nav-link" href="pages/contact.html">Contact</a>
+            <a class="nav-login-btn" href="pages/login.html">Sign In</a>
         </nav>
     </header>
 
     <main id="main-content">
-        <!-- Background Video and Hero Text -->
-        <section class="video-hero" aria-label="Hero Video Banner">
-            <video class="backvid" src="assets/videos/backvid.mp4" poster="assets/images/pizza2.png" autoplay loop muted playsinline aria-hidden="true"></video>
-            <div class="hero-overlay">
-                <div class="logo_over_video">
-                    <h1 class="fgtext">Foodies <span class="aftfoodies">Goodies</span></h1>
-                </div>
-                <p class="aftgoodies">We're not <span class="drooling">drooling</span>.. you are..</p>
+        <!-- HERO SECTION (Editorial, Minimal, High-Impact) -->
+        <section class="minimal-hero" aria-label="Culinary Inspiration Hero">
+            <div class="hero-backdrop" style="background-image: url('assets/images/pizza2.png');"></div>
+            <div class="hero-overlay-scrim"></div>
+            <div class="hero-content">
+                <span class="hero-eyebrow">Curated Culinary Journal &bull; Live Intelligence</span>
+                <h1 class="hero-heading">Discover Recipes That <em>Inspire</em> Your Kitchen.</h1>
+                <p class="hero-subtext">Over 2.3 million chef-tested recipes, authentic global culinary cultures, and intelligent macro-balanced meal planning.</p>
                 
                 <!-- Live Search Bar Connected to Edamam API -->
                 <form action="pages/search.html" method="GET" class="hero-search-form" role="search" aria-label="Search recipes on Edamam">
                     <div class="hero-search-wrapper">
                         <span class="hero-search-icon" aria-hidden="true">🔍</span>
                         <label for="home-search-input" class="visually-hidden" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;">Search recipes</label>
-                        <input type="text" id="home-search-input" name="q" placeholder="Search 2.3M+ recipes via Edamam (e.g. Pasta, Tacos, Salmon, Pancakes)..." required autocomplete="off">
+                        <input type="text" id="home-search-input" name="q" placeholder="Search by dish or ingredients (e.g. Pasta, Tacos, Salmon, Pancakes)..." required autocomplete="off">
                         <button type="submit" class="hero-search-btn">Search Recipes</button>
                     </div>
                 </form>
-            </div>
-        </section>
-
-        <!-- TODAY'S SELECTION TICKER -->
-        <section class="today_selection" aria-label="Daily Announcement">
-            <div class="ticker-container">
-                <div class="ticker-track">
-                    <span class="ticker-text">
-                        ✨ <strong>Chef's Spotlight of the Day</strong>: Artisanal Wood-Fired Truffle Margherita &bull; Powered live by the <strong>EDAMAM Recipe Cloud</strong> &bull; Custom nutrition blueprints via our <strong>AI Dietician</strong>!
-                    </span>
-                </div>
             </div>
         </section>
 
@@ -78,35 +68,35 @@
             <div class="spotlight-card">
                 <div class="spotlight-media">
                     <img src="assets/images/pizza2.png" alt="Artisanal Wood-Fired Truffle Margherita Pizza" loading="lazy" decoding="async">
-                    <span class="spotlight-badge">Today's Signature Spotlight</span>
+                    <span class="spotlight-badge">Signature Spotlight</span>
                 </div>
                 <div class="spotlight-content">
                     <div class="spotlight-rating" aria-label="Rating 4.9 out of 5 stars">
-                        ⭐⭐⭐⭐⭐ <strong>4.9</strong> <span>(1,240 foodies loved this)</span>
+                        <span class="stars">★★★★★</span> <strong>4.9</strong> <span class="review-count">(1,240 foodies saved this)</span>
                     </div>
                     <h2 id="spotlight-title" class="spotlight-title">Wood-Fired Truffle Margherita &amp; Sweet Basil</h2>
                     
                     <div class="spotlight-chef">
                         <img src="assets/images/chef1.jpeg" alt="Chef Gabriella Russo">
                         <div class="chef-info">
-                            <div class="name">Curated by Chef Gabriella Russo</div>
-                            <div class="role">Executive Italian &amp; Mediterranean Specialist</div>
+                            <div class="name">Chef Gabriella Russo</div>
+                            <div class="role">Executive Mediterranean Specialist</div>
                         </div>
                     </div>
 
                     <p class="spotlight-desc">
-                        Slow-fermented 48-hour sourdough base, San Marzano plum tomato sauce, torn fresh buffalo mozzarella, fragrant sweet basil, and a finishing drizzle of cold-pressed white truffle oil.
+                        Slow-fermented 48-hour sourdough base, San Marzano plum tomato reduction, torn fresh buffalo mozzarella, aromatic sweet basil, and a finishing drizzle of cold-pressed white truffle oil.
                     </p>
 
                     <div class="spotlight-metrics">
-                        <div class="spotlight-metric-item">⏱️ Prep: <strong>25 mins</strong></div>
-                        <div class="spotlight-metric-item">🔥 Calories: <strong>420 kcal/slice</strong></div>
-                        <div class="spotlight-metric-item">🧀 Protein: <strong>18g</strong></div>
+                        <div class="spotlight-metric-item">Prep: <strong>25 mins</strong></div>
+                        <div class="spotlight-metric-item">Calories: <strong>420 kcal</strong></div>
+                        <div class="spotlight-metric-item">Protein: <strong>18g</strong></div>
                     </div>
 
                     <div class="spotlight-actions">
                         <a href="pages/search.html?q=Truffle+Margherita" class="btn-spotlight-primary">
-                            Cook This Tonight ↗
+                            Cook This Tonight &rarr;
                         </a>
                         <a href="pages/search.html?q=Italian" class="btn-spotlight-secondary">
                             Explore Italian Classics
@@ -119,11 +109,8 @@
         <!-- 2. TRENDING RECIPES WITH INTERACTIVE TABS -->
         <section class="trending-section" aria-labelledby="trending-title">
             <div class="section-header">
-                <div class="section-tag">
-                    <ion-icon name="flame" aria-hidden="true"></ion-icon>
-                    Community Favorites
-                </div>
-                <h2 id="trending-title" class="section-title">Trending <span>Culinary Delights</span></h2>
+                <span class="section-tag">Community Favorites</span>
+                <h2 id="trending-title" class="section-title">Trending Culinary Delights</h2>
                 <p class="section-subtitle">
                     Explore popular recipes discovered across our live Edamam culinary network, categorized for your schedule and cravings.
                 </p>
@@ -131,10 +118,10 @@
 
             <!-- Filter Tabs -->
             <div class="filter-tabs-container" role="tablist" aria-label="Recipe Filter Categories">
-                <button type="button" class="filter-tab-btn active" data-filter="all" role="tab">🔥 All Trending</button>
-                <button type="button" class="filter-tab-btn" data-filter="quick" role="tab">⚡ 30-Min Dinners</button>
-                <button type="button" class="filter-tab-btn" data-filter="healthy" role="tab">🥑 Healthy &amp; Clean</button>
-                <button type="button" class="filter-tab-btn" data-filter="bakery" role="tab">🍩 Bakery &amp; Treats</button>
+                <button type="button" class="filter-tab-btn active" data-filter="all" role="tab">All Trending</button>
+                <button type="button" class="filter-tab-btn" data-filter="quick" role="tab">30-Min Dinners</button>
+                <button type="button" class="filter-tab-btn" data-filter="healthy" role="tab">Healthy &amp; Clean</button>
+                <button type="button" class="filter-tab-btn" data-filter="bakery" role="tab">Bakery &amp; Treats</button>
             </div>
 
             <!-- Recipe Grid -->
@@ -143,16 +130,16 @@
                 <article class="trending-recipe-card" data-category="quick">
                     <div class="trending-card-media">
                         <img src="assets/images/pizza1.png" alt="Crispy Pepperoni &amp; Hot Honey Pizza" loading="lazy" decoding="async">
-                        <span class="trending-cuisine-badge">Italian &bull; Quick</span>
+                        <span class="trending-cuisine-badge">Italian</span>
                     </div>
                     <div class="trending-card-body">
-                        <h3 class="trending-card-title">Crispy Pepperoni &amp; Hot Honey Pizza</h3>
                         <div class="trending-metrics">
-                            <span>⏱️ <strong>25 mins</strong></span>
-                            <span>🔥 <strong>560 kcal</strong></span>
+                            <span>⏱ 25 mins</span>
+                            <span>🔥 560 kcal</span>
                         </div>
+                        <h3 class="trending-card-title">Crispy Pepperoni &amp; Hot Honey Pizza</h3>
                         <p class="trending-desc">Charred sourdough crust with artisan pepperoni cups and sweet chili hot honey glaze.</p>
-                        <a href="pages/search.html?q=Pepperoni+Pizza" class="btn-card-cook">View Edamam Recipe ↗</a>
+                        <a href="pages/search.html?q=Pepperoni+Pizza" class="btn-card-cook">View Recipe &rarr;</a>
                     </div>
                 </article>
 
@@ -160,16 +147,16 @@
                 <article class="trending-recipe-card" data-category="bakery">
                     <div class="trending-card-media">
                         <img src="assets/images/blueberry.png" alt="Artisanal Blueberry Lemon Glazed Donut" loading="lazy" decoding="async">
-                        <span class="trending-cuisine-badge">Bakery &bull; Dessert</span>
+                        <span class="trending-cuisine-badge">Bakery</span>
                     </div>
                     <div class="trending-card-body">
-                        <h3 class="trending-card-title">Blueberry Lemon Glazed Donuts</h3>
                         <div class="trending-metrics">
-                            <span>⏱️ <strong>30 mins</strong></span>
-                            <span>🔥 <strong>280 kcal</strong></span>
+                            <span>⏱ 30 mins</span>
+                            <span>🔥 280 kcal</span>
                         </div>
+                        <h3 class="trending-card-title">Blueberry Lemon Glazed Donuts</h3>
                         <p class="trending-desc">Baked organic whole wheat donuts infused with fresh berries and zesty citrus glaze.</p>
-                        <a href="pages/search.html?q=Blueberry+Donuts" class="btn-card-cook">View Edamam Recipe ↗</a>
+                        <a href="pages/search.html?q=Blueberry+Donuts" class="btn-card-cook">View Recipe &rarr;</a>
                     </div>
                 </article>
 
@@ -177,16 +164,16 @@
                 <article class="trending-recipe-card" data-category="quick healthy">
                     <div class="trending-card-media">
                         <img src="assets/images/2.jpeg" alt="Pan-Tossed Garlic Herb Tomato Pasta" loading="lazy" decoding="async">
-                        <span class="trending-cuisine-badge">Mediterranean &bull; 20 Mins</span>
+                        <span class="trending-cuisine-badge">Mediterranean</span>
                     </div>
                     <div class="trending-card-body">
-                        <h3 class="trending-card-title">Pan-Tossed Garlic Herb Pasta</h3>
                         <div class="trending-metrics">
-                            <span>⏱️ <strong>20 mins</strong></span>
-                            <span>🔥 <strong>390 kcal</strong></span>
+                            <span>⏱ 20 mins</span>
+                            <span>🔥 390 kcal</span>
                         </div>
+                        <h3 class="trending-card-title">Pan-Tossed Garlic Herb Pasta</h3>
                         <p class="trending-desc">Al dente pasta tossed in cold-pressed extra virgin olive oil, burst cherry tomatoes, and basil.</p>
-                        <a href="pages/search.html?q=Garlic+Tomato+Pasta" class="btn-card-cook">View Edamam Recipe ↗</a>
+                        <a href="pages/search.html?q=Garlic+Tomato+Pasta" class="btn-card-cook">View Recipe &rarr;</a>
                     </div>
                 </article>
 
@@ -194,16 +181,16 @@
                 <article class="trending-recipe-card" data-category="bakery">
                     <div class="trending-card-media">
                         <img src="assets/images/caramel.png" alt="Golden Salted Butter Caramel Donut" loading="lazy" decoding="async">
-                        <span class="trending-cuisine-badge">Bakery &bull; Indulgence</span>
+                        <span class="trending-cuisine-badge">Bakery</span>
                     </div>
                     <div class="trending-card-body">
-                        <h3 class="trending-card-title">Golden Salted Caramel Donuts</h3>
                         <div class="trending-metrics">
-                            <span>⏱️ <strong>35 mins</strong></span>
-                            <span>🔥 <strong>310 kcal</strong></span>
+                            <span>⏱ 35 mins</span>
+                            <span>🔥 310 kcal</span>
                         </div>
+                        <h3 class="trending-card-title">Golden Salted Caramel Donuts</h3>
                         <p class="trending-desc">Fluffy yeast dough dipped in browned-butter caramel and topped with flaky sea salt.</p>
-                        <a href="pages/search.html?q=Caramel+Donuts" class="btn-card-cook">View Edamam Recipe ↗</a>
+                        <a href="pages/search.html?q=Caramel+Donuts" class="btn-card-cook">View Recipe &rarr;</a>
                     </div>
                 </article>
 
@@ -211,16 +198,16 @@
                 <article class="trending-recipe-card" data-category="healthy quick">
                     <div class="trending-card-media">
                         <img src="assets/images/pizza3.png" alt="Garden Farmhouse Veggie Medley" loading="lazy" decoding="async">
-                        <span class="trending-cuisine-badge">Healthy &bull; Vegetarian</span>
+                        <span class="trending-cuisine-badge">Vegetarian</span>
                     </div>
                     <div class="trending-card-body">
-                        <h3 class="trending-card-title">Garden Farmhouse Veggie Pizza</h3>
                         <div class="trending-metrics">
-                            <span>⏱️ <strong>25 mins</strong></span>
-                            <span>🔥 <strong>380 kcal</strong></span>
+                            <span>⏱ 25 mins</span>
+                            <span>🔥 380 kcal</span>
                         </div>
+                        <h3 class="trending-card-title">Garden Farmhouse Veggie Pizza</h3>
                         <p class="trending-desc">Loaded with roasted bell peppers, baby mushrooms, red onion, and low-fat mozzarella.</p>
-                        <a href="pages/search.html?q=Farmhouse+Pizza" class="btn-card-cook">View Edamam Recipe ↗</a>
+                        <a href="pages/search.html?q=Farmhouse+Pizza" class="btn-card-cook">View Recipe &rarr;</a>
                     </div>
                 </article>
 
@@ -228,16 +215,16 @@
                 <article class="trending-recipe-card" data-category="bakery">
                     <div class="trending-card-media">
                         <img src="assets/images/strawberry.png" alt="Fresh Strawberry Glazed Cronut" loading="lazy" decoding="async">
-                        <span class="trending-cuisine-badge">Bakery &bull; Patisserie</span>
+                        <span class="trending-cuisine-badge">Patisserie</span>
                     </div>
                     <div class="trending-card-body">
-                        <h3 class="trending-card-title">Fresh Strawberry Glazed Cronuts</h3>
                         <div class="trending-metrics">
-                            <span>⏱️ <strong>40 mins</strong></span>
-                            <span>🔥 <strong>290 kcal</strong></span>
+                            <span>⏱ 40 mins</span>
+                            <span>🔥 290 kcal</span>
                         </div>
+                        <h3 class="trending-card-title">Fresh Strawberry Glazed Cronuts</h3>
                         <p class="trending-desc">Flaky laminated croissant-donut pastry filled with sweet strawberry puree and cream.</p>
-                        <a href="pages/search.html?q=Strawberry+Donuts" class="btn-card-cook">View Edamam Recipe ↗</a>
+                        <a href="pages/search.html?q=Strawberry+Donuts" class="btn-card-cook">View Recipe &rarr;</a>
                     </div>
                 </article>
             </div>
@@ -246,11 +233,8 @@
         <!-- 3. EXPLORE BY GLOBAL CUISINES HUB -->
         <section class="cuisines-section" aria-labelledby="cuisines-title">
             <div class="section-header">
-                <div class="section-tag">
-                    <ion-icon name="globe" aria-hidden="true"></ion-icon>
-                    World Flavors
-                </div>
-                <h2 id="cuisines-title" class="section-title">Explore by <span>Global Cuisine</span></h2>
+                <span class="section-tag">World Gastronomy</span>
+                <h2 id="cuisines-title" class="section-title">Explore by Global Cuisine</h2>
                 <p class="section-subtitle">
                     Dive into authentic recipes from world gastronomic cultures powered by the live Edamam recipe database.
                 </p>
@@ -261,7 +245,6 @@
                 <a href="pages/search.html?q=Italian" class="cuisine-card">
                     <img src="assets/images/3.jpeg" alt="Italian Cuisine" class="cuisine-card-bg" loading="lazy" decoding="async">
                     <div class="cuisine-card-overlay">
-                        <span class="cuisine-icon" aria-hidden="true">🍝</span>
                         <h3>Italian Trattoria</h3>
                         <p>Artisanal pasta, Neapolitan pizzas &amp; creamy risottos</p>
                         <span class="explore-link">Explore Italian Recipes &rarr;</span>
@@ -272,7 +255,6 @@
                 <a href="pages/search.html?q=Asian" class="cuisine-card">
                     <img src="assets/images/dan-gold-5O1ddenSM4g-unsplash.jpg" alt="Asian Fusion Cuisine" class="cuisine-card-bg" loading="lazy" decoding="async">
                     <div class="cuisine-card-overlay">
-                        <span class="cuisine-icon" aria-hidden="true">🍣</span>
                         <h3>Asian &amp; Fusion</h3>
                         <p>Steaming ramen, crispy dumplings &amp; wok stir-fries</p>
                         <span class="explore-link">Explore Asian Recipes &rarr;</span>
@@ -283,7 +265,6 @@
                 <a href="pages/search.html?q=Mexican" class="cuisine-card">
                     <img src="assets/images/flame.jpeg" alt="Mexican Street Food" class="cuisine-card-bg" loading="lazy" decoding="async">
                     <div class="cuisine-card-overlay">
-                        <span class="cuisine-icon" aria-hidden="true">🌮</span>
                         <h3>Mexican &amp; Latin Grill</h3>
                         <p>Sizzling tacos, quesadillas &amp; vibrant salsa bowls</p>
                         <span class="explore-link">Explore Mexican Recipes &rarr;</span>
@@ -294,7 +275,6 @@
                 <a href="pages/search.html?q=Indian" class="cuisine-card">
                     <img src="assets/images/annie-spratt-R3LcfTvcGWY-unsplash.jpg" alt="Indian Spice Cuisine" class="cuisine-card-bg" loading="lazy" decoding="async">
                     <div class="cuisine-card-overlay">
-                        <span class="cuisine-icon" aria-hidden="true">🍛</span>
                         <h3>Indian &amp; Fragrant Spices</h3>
                         <p>Aromatic biryanis, tikka masalas &amp; warm naan breads</p>
                         <span class="explore-link">Explore Indian Recipes &rarr;</span>
@@ -305,7 +285,6 @@
                 <a href="pages/search.html?q=Salad" class="cuisine-card">
                     <img src="assets/images/green-apple.png" alt="Fresh &amp; Healthy Cuisine" class="cuisine-card-bg" loading="lazy" decoding="async">
                     <div class="cuisine-card-overlay">
-                        <span class="cuisine-icon" aria-hidden="true">🥗</span>
                         <h3>Fresh &amp; Healthy Fit</h3>
                         <p>Nutrient-rich macro bowls, superfood salads &amp; juices</p>
                         <span class="explore-link">Explore Healthy Recipes &rarr;</span>
@@ -316,7 +295,6 @@
                 <a href="pages/search.html?q=Dessert" class="cuisine-card">
                     <img src="assets/images/bannana.png" alt="Bakery &amp; Desserts" class="cuisine-card-bg" loading="lazy" decoding="async">
                     <div class="cuisine-card-overlay">
-                        <span class="cuisine-icon" aria-hidden="true">🍩</span>
                         <h3>Bakery &amp; Patisserie</h3>
                         <p>Golden donuts, flaky pastries &amp; decadent sweets</p>
                         <span class="explore-link">Explore Desserts &rarr;</span>
@@ -328,10 +306,7 @@
         <!-- 3.5. TESTIMONIALS SECTION -->
         <section class="testimonials-section" aria-labelledby="testimonials-heading">
             <div class="section-header">
-                <div class="section-tag">
-                    <ion-icon name="heart" aria-hidden="true"></ion-icon>
-                    Community Love
-                </div>
+                <span class="section-tag">Community Voices</span>
                 <h2 id="testimonials-heading" class="section-title">Loved by Foodies &amp; Home Chefs</h2>
                 <p class="section-subtitle">See how Foodies Goodies has transformed kitchen adventures around the world.</p>
             </div>
@@ -371,7 +346,7 @@
                 <article class="testimonial-card">
                     <div>
                         <div class="testimonial-stars" aria-label="5 stars">★★★★★</div>
-                        <p class="testimonial-quote">"The social kitchen feature lets me follow real chefs and save ideas to my board. It feels like Instagram meets a Michelin-star masterclass!"</p>
+                        <p class="testimonial-quote">"The curated collections let me follow real chefs and save ideas to my board. It feels like a high-end food magazine meets a Michelin-star kitchen!"</p>
                     </div>
                     <div class="testimonial-author">
                         <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80" alt="Elena R." class="testimonial-avatar">
@@ -387,26 +362,20 @@
         <!-- 4. AI DIETICIAN SHOWCASE TEASER -->
         <section class="ai-teaser-section" aria-labelledby="ai-teaser-title">
             <div class="ai-teaser-card">
-                <div class="ai-teaser-badge">
-                    <ion-icon name="sparkles" aria-hidden="true"></ion-icon>
-                    Smart Culinary Intelligence
-                </div>
+                <span class="ai-teaser-badge">Smart Culinary Intelligence</span>
                 <h2 id="ai-teaser-title">Eat What You Love. <span>Hit Your Health Goals.</span></h2>
                 <p>
-                    Wondering how your favorite gourmet recipes fit into your health journey? Our smart AI Dietician calculates your personalized BMR, daily caloric deficit/surplus, and optimal macronutrient split in seconds.
+                    Wondering how your favorite gourmet recipes fit into your health journey? Our smart AI Dietician calculates your personalized BMR, daily caloric targets, and optimal macronutrient split in seconds.
                 </p>
 
                 <div class="ai-teaser-features">
                     <div class="ai-feature-pill">
-                        <span class="icon" aria-hidden="true">🔥</span>
                         <span>Personalized Caloric Targets</span>
                     </div>
                     <div class="ai-feature-pill">
-                        <span class="icon" aria-hidden="true">🥩</span>
                         <span>Optimized Protein &amp; Macro Splits</span>
                     </div>
                     <div class="ai-feature-pill">
-                        <span class="icon" aria-hidden="true">💧</span>
                         <span>Custom Hydration Blueprint</span>
                     </div>
                 </div>
@@ -420,11 +389,11 @@
         <!-- 5. NEWSLETTER SIGNUP SECTION -->
         <section class="newsletter-section" aria-labelledby="newsletter-title">
             <div class="newsletter-card">
+                <span class="newsletter-tag">Sunday Digest</span>
                 <h2 id="newsletter-title">Join the <span>Foodies Goodies</span> Table</h2>
-                <p>Get handpicked seasonal recipes, chef culinary secrets, and smart macro guides delivered fresh to your inbox every Sunday.</p>
+                <p>Get handpicked seasonal recipes, chef culinary secrets, and smart macro guides delivered fresh to your inbox every Sunday morning.</p>
                 <form id="newsletter-form" class="newsletter-form" novalidate>
                     <div class="newsletter-input-wrap">
-                        <span class="newsletter-icon" aria-hidden="true">✉️</span>
                         <input type="email" id="newsletter-email" placeholder="Enter your email address..." required autocomplete="email" class="newsletter-input">
                     </div>
                     <button type="submit" class="newsletter-btn">Subscribe Free</button>
@@ -440,7 +409,7 @@
             <div class="footer-grid">
                 <div class="footer-col">
                     <h3 class="footer-brand">Foodies Goodies</h3>
-                    <p class="brand-desc">Connecting home cooks, master chefs, and foodies worldwide with delicious recipes and smart AI culinary intelligence.</p>
+                    <p class="brand-desc">Connecting home cooks, master chefs, and food lovers worldwide with delicious recipes and smart AI culinary intelligence.</p>
                     <div class="footer-social-links">
                         <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><ion-icon name="logo-instagram"></ion-icon></a>
                         <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><ion-icon name="logo-twitter"></ion-icon></a>
@@ -476,7 +445,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025&ndash;2026 Foodies Goodies. All rights reserved. Multi-Page Application (MPA).</p>
+                <p>&copy; 2025&ndash;2026 Foodies Goodies. All rights reserved.</p>
                 <div class="footer-bottom-links">
                     <a href="pages/privacy.html">Privacy</a>
                     <a href="pages/terms.html">Terms</a>
