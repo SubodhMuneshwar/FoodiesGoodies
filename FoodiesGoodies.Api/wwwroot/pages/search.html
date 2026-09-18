@@ -55,7 +55,7 @@
         <!-- Search Bar Form -->
         <form id="recipeSearchForm" class="search-form" role="search">
             <div class="search-input-wrapper">
-                <span class="search-icon" aria-hidden="true">🔍</span>
+                <span class="search-icon" aria-hidden="true"><ion-icon name="search-outline"></ion-icon></span>
                 <label for="search" class="visually-hidden" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;">Search recipes</label>
                 <input type="text" id="search" name="q" placeholder="Search by dish or ingredients (e.g. Pasta, Tacos, Salmon, Pancakes)..." required autocomplete="off">
             </div>
@@ -80,7 +80,7 @@
         <section id="results" aria-label="Recipe Search Results" aria-live="polite">
             <div class="search-status-message">
                 <div class="edamam-logo-badge">
-                    <span style="font-size: 38px;">🍽️</span>
+                    <span style="font-size: 38px;"><ion-icon name="restaurant-outline"></ion-icon></span>
                 </div>
                 <h3>Ready to Explore Delicious Recipes?</h3>
                 <p>Type any recipe name above or click one of the popular search tags to pull live culinary data from the Edamam Recipe API.</p>
@@ -98,7 +98,7 @@
                 <div class="quickview-body">
                     <h2 class="quickview-title" id="quickViewTitle"></h2>
                     <div class="quickview-metrics" id="quickViewMetrics"></div>
-                    <h3 class="quickview-section-heading"><span>🛒</span> Basic Ingredients</h3>
+                    <h3 class="quickview-section-heading"><span class="icon-wrap"><ion-icon name="cart-outline"></ion-icon></span> Basic Ingredients</h3>
                     <ul class="quickview-ingredients-list" id="quickViewIngredients"></ul>
                     <div class="quickview-footer-actions">
                         <a href="#" target="_blank" rel="noopener noreferrer" class="btn-primary" id="quickViewExternalBtn">View Full Instructions &rarr;</a>

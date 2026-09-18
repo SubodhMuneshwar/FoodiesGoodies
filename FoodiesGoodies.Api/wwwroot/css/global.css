@@ -1,11 +1,13 @@
 /* ==========================================================================
    FoodiesGoodies - global.css
-   Shared Component Architecture, Clean Cards, Theme Switcher, Quick View Modal
+   Shared Component Architecture: Clean Surfaces, Minimalist UI
    ========================================================================== */
 
-/* --------------------------------------------------------------------------
-   1. Base Surface Overrides & Transitions
-   -------------------------------------------------------------------------- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 body {
   background-color: var(--bg-canvas) !important;
   color: var(--text-primary) !important;
@@ -14,22 +16,20 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   2. Clean Solid Surface & Card System (Replaces Glassmorphism)
+   1. Clean Surface System (Replaces Glassmorphism)
    -------------------------------------------------------------------------- */
 .glass-panel,
-.glass-card,
-.surface-card {
+.glass-card {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-md);
   transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
 }
 
 .glass-panel:hover,
-.glass-card:hover,
-.surface-card:hover {
-  border-color: rgba(194, 112, 58, 0.35);
+.glass-card:hover {
+  border-color: var(--primary);
   box-shadow: var(--shadow-md);
 }
 
@@ -40,11 +40,11 @@ body {
 .card-hover-lift:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
-  border-color: rgba(194, 112, 58, 0.4);
+  border-color: var(--primary);
 }
 
 /* --------------------------------------------------------------------------
-   3. Aspect Ratios & Layout Protections
+   2. Aspect Ratio & Layout Shift Protections
    -------------------------------------------------------------------------- */
 .aspect-16-9 {
   aspect-ratio: 16 / 9;
@@ -69,103 +69,92 @@ img[loading="lazy"] {
 }
 
 /* --------------------------------------------------------------------------
-   4. Buttons & Interactive Controls
+   3. Modern Buttons & Micro-Interactions
    -------------------------------------------------------------------------- */
 .btn-primary-glass,
 .btn-primary {
   background: var(--primary);
-  color: #FFFFFF !important;
-  font-family: var(--font-body);
+  color: #fff !important;
   font-weight: 600;
-  font-size: 0.95rem;
   border: none;
-  padding: 10px 24px;
+  padding: 10px 22px;
   border-radius: var(--radius-pill);
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(194, 112, 58, 0.2);
-  transition: transform var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  text-decoration: none;
 }
 
-.btn-primary-glass:hover,
-.btn-primary:hover {
+.btn-primary-glass:hover {
   background: var(--primary-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(194, 112, 58, 0.35);
+  box-shadow: var(--shadow-md);
 }
 
-.btn-primary-glass:active,
-.btn-primary:active {
+.btn-primary-glass:active {
   transform: translateY(0);
 }
 
 .btn-secondary-glass,
 .btn-secondary {
-  background: var(--bg-surface);
+  background: var(--bg-surface-elevated);
   color: var(--text-primary) !important;
-  font-family: var(--font-body);
   font-weight: 500;
-  font-size: 0.95rem;
-  border: 1px solid var(--border-strong);
-  padding: 10px 22px;
+  border: 1px solid var(--border-subtle);
+  padding: 10px 20px;
   border-radius: var(--radius-pill);
   cursor: pointer;
   transition: all var(--transition-fast);
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  text-decoration: none;
 }
 
-.btn-secondary-glass:hover,
-.btn-secondary:hover {
-  background: var(--bg-surface-elevated);
+.btn-secondary-glass:hover {
+  background: var(--primary-subtle);
   border-color: var(--primary);
   color: var(--primary) !important;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
 /* --------------------------------------------------------------------------
-   5. Dark / Light Mode Toggle Button
+   4. Theme Toggle Button
    -------------------------------------------------------------------------- */
 .theme-toggle-btn {
-  background: var(--bg-surface);
+  background: var(--bg-surface-elevated);
   border: 1px solid var(--border-subtle);
   color: var(--text-primary);
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: var(--radius-pill);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 1.1rem;
-  transition: all var(--transition-fast);
+  font-size: 1.15rem;
+  transition: all var(--transition-normal);
   padding: 0;
   flex-shrink: 0;
-  margin-left: 8px;
-  box-shadow: var(--shadow-sm);
+  margin-left: 10px;
 }
 
 .theme-toggle-btn:hover {
+  background: var(--primary-subtle);
   border-color: var(--primary);
   color: var(--primary);
-  transform: scale(1.05);
 }
 
 /* --------------------------------------------------------------------------
-   6. Mobile Slide-Out Drawer Backdrop
+   5. Mobile Navigation Drawer (Minimal)
    -------------------------------------------------------------------------- */
 .drawer-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(28, 25, 23, 0.45);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.4);
   opacity: 0;
   visibility: hidden;
   transition: opacity var(--transition-normal), visibility var(--transition-normal);
@@ -177,15 +166,57 @@ img[loading="lazy"] {
   visibility: visible;
 }
 
+@media (max-width: 992px) {
+  .header .navbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 290px;
+    max-width: 85vw;
+    background: var(--bg-surface);
+    border-left: 1px solid var(--border-subtle);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 80px 24px 30px;
+    transform: translateX(100%);
+    transition: transform var(--transition-smooth);
+    z-index: 999;
+    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+  }
+
+  .header .navbar.nav-open {
+    transform: translateX(0);
+  }
+
+  .header .navbar .nav-link {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 1.05rem;
+  }
+
+  .header .navbar .nav-link:hover,
+  .header .navbar .nav-link.active {
+    background: var(--primary-subtle);
+    color: var(--primary) !important;
+  }
+
+  .header .navbar .nav-login-btn {
+    margin-top: 18px;
+    width: 100%;
+    text-align: center;
+  }
+}
+
 /* --------------------------------------------------------------------------
-   7. Quick View Recipe Modal
+   6. Minimal Recipe Modal
    -------------------------------------------------------------------------- */
 .quickview-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(28, 25, 23, 0.55);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -204,14 +235,14 @@ img[loading="lazy"] {
 .quickview-modal {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  box-shadow: var(--shadow-xl);
+  box-shadow: var(--shadow-lg);
   border-radius: var(--radius-lg);
   max-width: 680px;
   width: 100%;
   max-height: 88vh;
   overflow-y: auto;
   position: relative;
-  transform: scale(0.96) translateY(12px);
+  transform: scale(0.94) translateY(16px);
   transition: transform var(--transition-smooth);
   color: var(--text-primary);
 }
@@ -224,30 +255,31 @@ img[loading="lazy"] {
   position: absolute;
   top: 16px;
   right: 16px;
-  background: rgba(28, 25, 23, 0.6);
-  color: #FFFFFF;
-  border: none;
-  width: 34px;
-  height: 34px;
+  background: var(--bg-surface-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   z-index: 5;
-  transition: background-color var(--transition-fast), transform var(--transition-fast);
+  transition: all var(--transition-fast);
 }
 
 .quickview-close-btn:hover {
-  background: #C2410C;
-  transform: scale(1.08);
+  background: var(--accent-berry);
+  color: #fff;
+  transform: scale(1.1);
 }
 
 .quickview-header-media {
   position: relative;
   width: 100%;
-  height: 250px;
+  height: 240px;
   overflow: hidden;
   border-top-left-radius: var(--radius-lg);
   border-top-right-radius: var(--radius-lg);
@@ -261,34 +293,34 @@ img[loading="lazy"] {
 
 .quickview-media-badge {
   position: absolute;
-  bottom: 14px;
-  left: 18px;
-  background: rgba(28, 25, 23, 0.85);
-  color: #FFFFFF;
-  font-size: 0.82rem;
+  bottom: 12px;
+  left: 16px;
+  background: rgba(0, 0, 0, 0.7);
+  color: var(--primary);
+  font-size: 0.85rem;
   font-weight: 600;
   padding: 4px 12px;
   border-radius: var(--radius-pill);
+  border: 1px solid rgba(194, 112, 58, 0.3);
 }
 
 .quickview-body {
-  padding: 28px;
+  padding: 24px;
 }
 
 .quickview-title {
-  font-family: var(--font-heading);
-  font-size: 1.65rem;
-  font-weight: 700;
+  font-size: 1.6rem;
   margin: 0 0 12px 0;
   color: var(--text-primary);
-  line-height: 1.25;
+  font-family: var(--font-heading);
+  line-height: 1.3;
 }
 
 .quickview-metrics {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
   gap: 12px;
-  margin-bottom: 22px;
+  margin-bottom: 20px;
 }
 
 .quickview-metric-pill {
@@ -301,28 +333,26 @@ img[loading="lazy"] {
 
 .quickview-metric-pill span {
   display: block;
-  font-size: 0.72rem;
-  font-weight: 600;
+  font-size: 0.75rem;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
 }
 
 .quickview-metric-pill strong {
   display: block;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   color: var(--primary);
   margin-top: 2px;
 }
 
 .quickview-section-heading {
-  font-family: var(--font-heading);
-  font-size: 1.15rem;
-  margin: 20px 0 10px 0;
-  color: var(--text-primary);
+  font-size: 1.1rem;
+  margin: 18px 0 10px 0;
+  color: var(--text-secondary);
   display: flex;
   align-items: center;
   gap: 8px;
+  font-family: var(--font-heading);
 }
 
 .quickview-ingredients-list {
@@ -337,32 +367,59 @@ img[loading="lazy"] {
 .quickview-ingredients-list li {
   background: var(--bg-surface-elevated);
   border: 1px solid var(--border-subtle);
-  padding: 8px 14px;
+  padding: 8px 12px;
   border-radius: var(--radius-xs);
-  font-size: 0.94rem;
-  color: var(--text-secondary);
+  font-size: 0.95rem;
   display: flex;
   align-items: flex-start;
   gap: 10px;
 }
 
 .quickview-ingredients-list li::before {
-  content: '•';
-  color: var(--primary);
-  font-weight: bold;
+  content: '🥄';
+  font-size: 0.9rem;
 }
 
 .quickview-footer-actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 22px;
+  margin-top: 20px;
   padding-top: 16px;
   border-top: 1px solid var(--border-subtle);
 }
 
 /* --------------------------------------------------------------------------
-   8. Floating Scroll to Top
+   Profile Badges (Simplified)
+   -------------------------------------------------------------------------- */
+.badge-pill-rank {
+  background: var(--primary-subtle);
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  padding: 5px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badge-pill-dietary {
+  background: var(--accent-olive-subtle);
+  border: 1px solid var(--accent-olive);
+  color: var(--accent-olive);
+  padding: 5px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* --------------------------------------------------------------------------
+   Floating Scroll to Top
    -------------------------------------------------------------------------- */
 .scroll-to-top-btn {
   position: fixed;
@@ -372,7 +429,7 @@ img[loading="lazy"] {
   height: 44px;
   border-radius: 50%;
   background: var(--primary);
-  color: #FFFFFF;
+  color: #fff;
   border: none;
   cursor: pointer;
   display: flex;
@@ -381,7 +438,7 @@ img[loading="lazy"] {
   opacity: 0;
   visibility: hidden;
   transform: translateY(16px) scale(0.9);
-  transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.3s ease;
   z-index: 990;
   box-shadow: var(--shadow-md);
 }
@@ -394,10 +451,10 @@ img[loading="lazy"] {
 
 .scroll-to-top-btn:hover {
   background: var(--primary-hover);
-  transform: translateY(-2px) scale(1.04);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: var(--shadow-md);
 }
 
 .scroll-to-top-btn:active {
-  transform: translateY(0) scale(0.96);
+  transform: translateY(0) scale(0.95);
 }

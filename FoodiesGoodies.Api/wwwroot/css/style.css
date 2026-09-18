@@ -59,7 +59,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: #FDE8D7;
+  color: var(--primary-light);
   margin-bottom: 16px;
 }
 
@@ -85,6 +85,7 @@
   max-width: 640px;
   margin: 0 auto 32px;
   line-height: 1.6;
+  font-family: var(--font-body);
 }
 
 /* Hero Live Search Form */
@@ -98,7 +99,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  background: #FFFFFF;
+  background: var(--bg-surface);
   border-radius: var(--radius-pill);
   padding: 6px 6px 6px 46px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
@@ -122,14 +123,14 @@
   background: transparent;
   border: none;
   outline: none;
-  color: #1C1917;
+  color: var(--text-primary);
   font-size: 0.98rem;
   font-family: var(--font-body);
   padding: 8px 4px;
 }
 
 .hero-search-wrapper input::placeholder {
-  color: #78716C;
+  color: var(--text-muted);
 }
 
 .hero-search-btn {
@@ -183,10 +184,10 @@
 .section-tag {
   display: inline-block;
   font-family: var(--font-body);
-  font-size: 0.78rem;
-  font-weight: 700;
+  font-size: 0.8rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 2px;
   color: var(--primary);
   margin-bottom: 10px;
 }

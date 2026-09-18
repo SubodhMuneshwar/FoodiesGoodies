@@ -479,13 +479,13 @@
 
             const alertPromise = (typeof Swal === 'function' && Swal.fire)
                 ? Swal.fire({
-                    title: 'Recipe Published to Community! 🍳',
+                    title: 'Recipe Published to Community!',
                     text: `"${title}" is now live in the community feed!`,
                     icon: 'success'
                 })
                 : (typeof swal === 'function'
                     ? swal({
-                        title: 'Recipe Published to Community! 🍳',
+                        title: 'Recipe Published to Community!',
                         text: `"${title}" is now live in the community feed!`,
                         icon: 'success'
                     })

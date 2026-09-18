@@ -168,7 +168,7 @@
             <div class="notif-item unread">
                 <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=150&q=80" alt="Chef Gabriella" class="notif-avatar">
                 <div class="notif-body">
-                    <div class="notif-text">Chef Gabriella Russo tasted and loved your Wood-Fired Truffle Margherita! 😋❤️</div>
+                    <div class="notif-text">Chef Gabriella Russo tasted and loved your Wood-Fired Truffle Margherita!</div>
                     <div class="notif-time">10 mins ago</div>
                 </div>
             </div>
@@ -176,7 +176,7 @@
             <div class="notif-item unread">
                 <img src="https://images.unsplash.com/photo-1583394293214-28ded15ee548?auto=format&fit=crop&w=150&q=80" alt="Chef Luca" class="notif-avatar">
                 <div class="notif-body">
-                    <div class="notif-text">Chef Luca Bianchi left a Flavor Note on your Artisanal Honey Rye Sourdough: "Incredible oven spring and caramelized crust!" 📝</div>
+                    <div class="notif-text">Chef Luca Bianchi left a Flavor Note on your Artisanal Honey Rye Sourdough: "Incredible oven spring and caramelized crust!"</div>
                     <div class="notif-time">1 hour ago</div>
                 </div>
             </div>
@@ -184,7 +184,7 @@
             <div class="notif-item unread">
                 <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80" alt="Chef Aisha" class="notif-avatar">
                 <div class="notif-body">
-                    <div class="notif-text">Chef Aisha Patel wants to join your Kitchen Crew! 🍳</div>
+                    <div class="notif-text">Chef Aisha Patel wants to join your Kitchen Crew!</div>
                     <div class="notif-time">3 hours ago</div>
                     <div class="request-actions">
                         <button type="button" class="btn-accept-request" onclick="respondRequest(103, 'accept', this)">Accept to Kitchen</button>
@@ -196,7 +196,7 @@
             <div class="notif-item">
                 <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80" alt="Chef Kenji" class="notif-avatar">
                 <div class="notif-body">
-                    <div class="notif-text">Chef Kenji Sato pinned your Superfood Quinoa Salmon Bowl to their Kitchen Board! 📌</div>
+                    <div class="notif-text">Chef Kenji Sato pinned your Superfood Quinoa Salmon Bowl to their Kitchen Board!</div>
                     <div class="notif-time">1 day ago</div>
                 </div>
             </div>
@@ -262,20 +262,20 @@
         document.getElementById('btn-mark-all-read')?.addEventListener('click', () => {
             document.querySelectorAll('.notif-item').forEach(item => item.classList.remove('unread'));
             if (typeof Swal === 'function' && Swal.fire) {
-                Swal.fire({ title: 'All caught up! 🔔', text: 'All kitchen alerts marked as read.', icon: 'success' });
+                Swal.fire({ title: 'All caught up!', text: 'All kitchen alerts marked as read.', icon: 'success' });
             } else if (typeof swal === 'function') {
-                swal('All caught up! 🔔', 'All kitchen alerts marked as read.', 'success');
+                swal('All caught up!', 'All kitchen alerts marked as read.', 'success');
             }
         });
 
         function respondRequest(id, action, btn) {
             const container = btn.closest('.request-actions');
             if (action === 'accept') {
-                container.innerHTML = '<span style="color:#10b981;font-weight:700;font-size:0.85rem;">✓ Accepted to Kitchen Crew!</span>';
+                container.innerHTML = '<span style="color:#10b981;font-weight:700;font-size:0.85rem;"><ion-icon name="checkmark-outline"></ion-icon> Accepted to Kitchen Crew!</span>';
                 if (typeof Swal === 'function' && Swal.fire) {
-                    Swal.fire({ title: 'Sous Chef Accepted! 👨‍🍳', text: 'Chef has been welcomed into your Kitchen Crew!', icon: 'success' });
+                    Swal.fire({ title: 'Sous Chef Accepted!', text: 'Chef has been welcomed into your Kitchen Crew!', icon: 'success' });
                 } else if (typeof swal === 'function') {
-                    swal('Sous Chef Accepted! 👨🍳', 'Chef has been welcomed into your Kitchen Crew!', 'success');
+                    swal('Sous Chef Accepted!', 'Chef has been welcomed into your Kitchen Crew!', 'success');
                 }
             } else {
                 container.innerHTML = '<span style="color:#94a3b8;font-size:0.85rem;">Request declined.</span>';

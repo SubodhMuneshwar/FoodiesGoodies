@@ -1,10 +1,26 @@
 /* ==========================================================================
-   FoodiesGoodies Base CSS (base.css)
-   Modern Editorial Reset, Typography, Minimal Header, Mobile Drawer & Footer
+   FoodiesGoodies Base CSS
+   Centralized Design System, Typography, Header, Footer & Accessibility
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   1. CSS Reset & Base Elements
+   Typography Declarations
+   Loading Google Fonts in HTML; fallback to system serifs/sans-serifs here.
+   -------------------------------------------------------------------------- */
+
+/* Removing all custom @font-face declarations for decorative fonts
+   (March, LTPerfume, Milker, Orange Squash, YummyPizza) to enforce
+   minimal editorial consistency. */
+
+/* --------------------------------------------------------------------------
+   CSS Custom Properties (Theme Tokens)
+   -------------------------------------------------------------------------- */
+:root {
+  /* Redundant declarations removed; all handled in variables.css */
+}
+
+/* --------------------------------------------------------------------------
+   CSS Reset & Box Sizing
    -------------------------------------------------------------------------- */
 *, *::before, *::after {
   margin: 0;
@@ -15,7 +31,6 @@
 html {
   scroll-behavior: smooth;
   font-size: 16px;
-  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -23,61 +38,26 @@ body {
   font-family: var(--font-body);
   color: var(--text-primary);
   background-color: var(--bg-canvas);
-  line-height: 1.65;
+  line-height: 1.6;
   overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading);
-  color: var(--text-primary);
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: -0.015em;
-}
-
-p {
-  color: var(--text-secondary);
-  line-height: 1.7;
-}
-
-a {
-  color: var(--primary);
-  text-decoration: none;
-  transition: color var(--transition-fast), opacity var(--transition-fast);
-}
-
-a:hover {
-  color: var(--primary-hover);
-}
-
-img, picture, video, canvas, svg {
-  display: block;
-  max-width: 100%;
-}
-
-input, button, textarea, select {
-  font: inherit;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
 }
 
 /* --------------------------------------------------------------------------
-   2. Accessibility: Skip Link & Focus Rings
+   Accessibility: Skip Link & Focus Rings
    -------------------------------------------------------------------------- */
 .skip-link {
   position: absolute;
   top: -80px;
   left: 20px;
   background: var(--primary);
-  color: #ffffff;
-  padding: 10px 20px;
+  color: #fff;
+  padding: 12px 20px;
   border-radius: var(--radius-sm);
-  font-weight: 600;
-  font-size: 0.9rem;
+  font-weight: 700;
   text-decoration: none;
   z-index: 10000;
   transition: top 0.2s ease;
-  box-shadow: var(--shadow-md);
 }
 
 .skip-link:focus {
@@ -85,12 +65,12 @@ input, button, textarea, select {
 }
 
 :focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 3px solid var(--primary);
   outline-offset: 3px;
 }
 
 /* --------------------------------------------------------------------------
-   3. Minimal Editorial Header & Navigation
+   Global Header & Navigation (Minimal Editorial)
    -------------------------------------------------------------------------- */
 header.header,
 header {
@@ -99,33 +79,26 @@ header {
   top: 0;
   left: 0;
   width: 100%;
-  padding: 0 clamp(20px, 4vw, 48px);
+  padding: 0 36px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: var(--bg-surface);
   border-bottom: 1px solid var(--border-subtle);
-  box-shadow: var(--shadow-sm);
+  background-color: var(--bg-surface);
   z-index: 1000;
-  transition: background-color var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal);
-}
-
-header.header--scrolled {
-  box-shadow: 0 4px 20px rgba(28, 25, 23, 0.07);
+  transition: background-color var(--transition-normal), box-shadow var(--transition-normal);
 }
 
 .logo {
   color: var(--text-primary);
-  font-size: 1.45rem;
+  font-size: 24px;
   font-family: var(--font-heading);
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  letter-spacing: -0.5px;
   text-decoration: none;
   user-select: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: color var(--transition-fast);
+  transition: color var(--transition-normal);
+  display: inline-block;
 }
 
 .logo:hover,
@@ -136,107 +109,81 @@ header.header--scrolled {
 .navbar {
   display: flex;
   align-items: center;
-  gap: clamp(12px, 1.8vw, 28px);
+  gap: clamp(12px, 1.5vw, 24px);
   flex-wrap: nowrap;
 }
 
 .navbar a.nav-link,
-.navbar a:not(.nav-login-btn):not(.theme-toggle-btn) {
+.navbar a {
   position: relative;
-  font-size: 0.94rem;
-  font-weight: 500;
+  font-size: 14px;
   color: var(--text-secondary);
   text-decoration: none;
-  padding: 6px 4px;
-  transition: color var(--transition-fast);
+  font-weight: 500;
+  padding: 6px 0;
+  transition: color var(--transition-normal);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   white-space: nowrap;
 }
 
-.navbar a.nav-link:hover,
-.navbar a:not(.nav-login-btn):hover {
+.navbar a:hover,
+.navbar a:focus {
   color: var(--primary);
 }
 
 /* Active Navigation Item */
 .navbar a.active,
 .navbar a.nav-link-active {
-  color: var(--primary) !important;
+  color: var(--primary);
   font-weight: 600;
 }
 
-/* Login Button in Navbar */
+/* Login Button - Minimalist Outline Style */
 .nav-login-btn,
 .navbar .nav-login-btn {
-  margin-left: 6px;
-  padding: 8px 22px;
-  background-color: var(--primary);
-  color: #ffffff !important;
+  margin-left: 10px;
+  padding: 8px 20px;
+  background-color: transparent;
+  color: var(--text-primary) !important;
   font-weight: 600;
-  font-size: 0.92rem;
+  font-size: 14px;
   border-radius: var(--radius-pill);
-  border: none;
+  border: 1px solid var(--border-strong);
   text-decoration: none;
-  transition: all var(--transition-fast);
+  transition: all var(--transition-normal);
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  box-shadow: 0 2px 8px rgba(194, 112, 58, 0.2);
 }
 
 .nav-login-btn:hover,
 .nav-login-btn:focus {
-  background-color: var(--primary-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(194, 112, 58, 0.32);
+  background-color: var(--primary);
+  color: #fff !important;
+  border-color: var(--primary);
 }
 
-.nav-login-btn:active {
-  transform: translateY(0);
-}
-
-.nav-login-btn .user-nav-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.nav-login-btn .user-nav-badge img {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 1.5px solid rgba(255, 255, 255, 0.8);
-}
-
-/* AI Dietician Nav Link Indicator */
+/* AI Dietician Badge - Subtle accent */
 .aid {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-}
-
-.aid img {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  object-fit: cover;
+  color: var(--primary);
 }
 
 /* --------------------------------------------------------------------------
-   4. Global Footer (Warm, Modern & Editorial)
+   Global Footer (Minimalist Editorial)
    -------------------------------------------------------------------------- */
 footer,
 footer.footer-mpa {
-  background-color: #1C1917;
-  color: #A8A29E;
-  font-size: 0.92rem;
+  background-color: var(--bg-canvas);
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 14px;
   position: relative;
   z-index: 10;
   margin-top: auto;
-  padding: 70px 24px 30px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 60px 24px 30px;
 }
 
 .footer-container {
@@ -246,36 +193,34 @@ footer.footer-mpa {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.6fr repeat(3, 1fr);
-  gap: clamp(30px, 4vw, 50px);
-  margin-bottom: 50px;
+  grid-template-columns: 1.5fr repeat(3, 1fr);
+  gap: 40px;
+  margin-bottom: 40px;
   text-align: left;
 }
 
 .footer-col h3.footer-brand {
   font-family: var(--font-heading);
-  font-size: 1.6rem;
-  color: #FFFFFF;
-  margin-bottom: 14px;
-  letter-spacing: -0.01em;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  margin-bottom: 12px;
 }
 
 .footer-col p.brand-desc {
-  font-size: 0.92rem;
-  color: #A8A29E;
-  line-height: 1.65;
-  margin-bottom: 20px;
-  max-width: 320px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 16px;
+  max-width: 300px;
 }
 
 .footer-col h4 {
-  font-family: var(--font-body);
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 700;
-  color: #E7E5E4;
-  margin-bottom: 18px;
+  color: var(--text-primary);
+  margin-bottom: 16px;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 1px;
 }
 
 .footer-links-list {
@@ -288,95 +233,85 @@ footer.footer-mpa {
 }
 
 .footer-links-list li a {
-  color: #D6D3D1;
+  color: var(--text-muted);
   text-decoration: none;
-  font-size: 0.92rem;
-  transition: color var(--transition-fast), transform var(--transition-fast);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
 }
 
 .footer-links-list li a:hover,
 .footer-links-list li a:focus {
-  color: #FFFFFF;
-  transform: translateX(3px);
+  color: var(--primary);
 }
 
 .footer-social-links {
   display: flex;
-  gap: 10px;
-  margin-top: 16px;
+  gap: 12px;
+  margin-top: 14px;
 }
 
 .footer-social-links a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  color: #FFFFFF;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
   font-size: 1.1rem;
   text-decoration: none;
-  transition: all var(--transition-fast);
+  transition: all 0.25s ease;
 }
 
 .footer-social-links a:hover {
-  background: var(--primary);
+  color: var(--primary);
   border-color: var(--primary);
-  color: #FFFFFF;
   transform: translateY(-2px);
 }
 
 .footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding-top: 26px;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 16px;
-  font-size: 0.88rem;
-  color: #78716C;
+  gap: 14px;
+  font-size: 0.85rem;
 }
 
 .footer-bottom p {
   margin: 0;
-  color: #78716C;
+  color: var(--text-dim);
 }
 
 .footer-bottom-links {
   display: flex;
-  gap: 20px;
+  gap: 16px;
   align-items: center;
 }
 
 .footer-bottom-links a {
-  color: #A8A29E;
+  color: var(--text-muted);
   text-decoration: none;
   font-weight: 500;
-  font-size: 0.88rem;
 }
 
 .footer-bottom-links a:hover {
-  color: #FFFFFF;
-  text-decoration: underline;
+  color: var(--primary);
 }
 
 @media (max-width: 900px) {
   .footer-grid {
     grid-template-columns: 1fr 1fr;
-    gap: 36px;
   }
 }
 
 @media (max-width: 560px) {
   .footer-grid {
     grid-template-columns: 1fr;
-    gap: 28px;
   }
   .footer-bottom {
     flex-direction: column;
@@ -385,55 +320,31 @@ footer.footer-mpa {
 }
 
 /* --------------------------------------------------------------------------
-   5. Keyframe Animations (Subtle & Performant)
-   -------------------------------------------------------------------------- */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* --------------------------------------------------------------------------
-   6. Responsive Mobile Hamburger Drawer
+   Responsive Mobile Navigation
    -------------------------------------------------------------------------- */
 .nav-toggle {
   display: none;
   flex-direction: column;
-  justify-content: center;
-  gap: 5px;
-  width: 36px;
-  height: 36px;
+  justify-content: space-around;
+  width: 30px;
+  height: 24px;
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 4px;
+  padding: 0;
   z-index: 1001;
 }
 
 .nav-toggle .hamburger-bar {
-  width: 22px;
+  width: 100%;
   height: 2px;
   background-color: var(--text-primary);
   border-radius: 2px;
-  transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .nav-toggle.is-active .hamburger-bar:nth-child(1) {
-  transform: translateY(7px) rotate(45deg);
+  transform: translateY(8px) rotate(45deg);
   background-color: var(--primary);
 }
 
@@ -442,14 +353,17 @@ footer.footer-mpa {
 }
 
 .nav-toggle.is-active .hamburger-bar:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg);
+  transform: translateY(-8px) rotate(-45deg);
   background-color: var(--primary);
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1140px) {
   header.header, header {
-    padding: 0 20px;
-    height: var(--header-height);
+    padding: 0 18px;
+  }
+
+  .logo {
+    font-size: 20px;
   }
 
   .nav-toggle {
@@ -458,54 +372,54 @@ footer.footer-mpa {
 
   .navbar {
     position: fixed;
-    top: 0;
-    right: 0;
-    width: 300px;
-    max-width: 85vw;
-    height: 100vh;
+    top: var(--header-height);
+    left: 0;
+    width: 100%;
+    height: calc(100vh - var(--header-height));
     background: var(--bg-surface);
-    border-left: 1px solid var(--border-subtle);
-    box-shadow: -8px 0 24px rgba(28, 25, 23, 0.12);
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
-    padding: 80px 24px 40px;
-    gap: 8px;
-    overflow-y: auto;
-    transform: translateX(100%);
-    transition: transform var(--transition-smooth);
-    z-index: 1000;
+    padding: 28px 24px 40px;
+    transform: translateY(-110%);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s;
+    border-bottom: 2px solid var(--primary);
   }
 
   .navbar.nav-open {
-    transform: translateX(0);
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
   }
 
   .navbar a.nav-link,
-  .navbar a:not(.nav-login-btn) {
-    font-size: 1.05rem;
-    font-weight: 500;
-    padding: 12px 16px;
+  .navbar a {
+    font-size: 1.1rem;
+    padding: 14px 18px;
     border-radius: var(--radius-sm);
-    color: var(--text-primary);
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
     width: 100%;
-    display: flex;
-    align-items: center;
     justify-content: space-between;
   }
 
-  .navbar a.nav-link:hover,
-  .navbar a.active {
-    background-color: var(--primary-subtle);
-    color: var(--primary) !important;
+  .navbar a.active,
+  .navbar a.nav-link-active {
+    background: var(--primary-subtle);
+    border-color: var(--primary);
+    color: var(--primary);
   }
 
   .navbar .nav-login-btn {
     margin-left: 0;
-    margin-top: 14px;
-    padding: 12px;
-    width: 100%;
+    margin-top: 10px;
+    padding: 14px;
     text-align: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    width: 100%;
   }
 }
 
