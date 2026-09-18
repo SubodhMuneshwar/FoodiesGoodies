@@ -56,14 +56,23 @@ document.addEventListener('DOMContentLoaded', () => {
         currentSearchQuery = query;
         nextPaginationCursor = null;
 
-        // Show loading state
-        resultsList.innerHTML = `
-            <div class="search-status-message" role="status" aria-live="polite">
-                <div class="search-spinner" aria-hidden="true"></div>
-                <h3>Connecting to Culinary Recipe Cloud...</h3>
-                <p>Retrieving authentic recipes, ingredients, and nutrition data for "<strong>${escapeHTML(query)}</strong>"</p>
-            </div>
+        // Show 6 skeleton placeholder cards
+        const skeletonCardHtml = `
+            <article class="recipe-card skeleton-card" aria-hidden="true">
+                <div class="card-media-wrapper skeleton-block skeleton-image"></div>
+                <div class="card-body">
+                    <div class="skeleton-block skeleton-text" style="width: 35%; height: 12px; margin-bottom: 10px;"></div>
+                    <div class="skeleton-block skeleton-text" style="width: 85%; height: 22px; margin-bottom: 12px;"></div>
+                    <div class="skeleton-block skeleton-text" style="width: 60%; height: 14px; margin-bottom: 14px;"></div>
+                    <div class="skeleton-block skeleton-text" style="width: 45%; height: 16px; margin-bottom: 18px;"></div>
+                    <div style="display:flex;gap:8px;margin-top:14px;">
+                        <div class="skeleton-block skeleton-btn" style="flex:1;height:36px;"></div>
+                        <div class="skeleton-block skeleton-btn" style="flex:1;height:36px;"></div>
+                    </div>
+                </div>
+            </article>
         `;
+        resultsList.innerHTML = Array(6).fill(skeletonCardHtml).join('');
 
         const apiUrl = `${apiBasePath}?q=${encodeURIComponent(query)}`;
 

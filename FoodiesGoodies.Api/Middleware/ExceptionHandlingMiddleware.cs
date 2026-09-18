@@ -26,6 +26,11 @@ public class ExceptionHandlingMiddleware
             _logger.LogWarning(ex, "Client validation error: {Message}", ex.Message);
             await HandleExceptionAsync(context, HttpStatusCode.BadRequest, ex.Message);
         }
+        catch (InvalidOperationException ex) when (ex.Message.Contains("Recipe service", StringComparison.OrdinalIgnoreCase) || ex.Message.Contains("Edamam", StringComparison.OrdinalIgnoreCase))
+        {
+            _logger.LogError(ex, "Upstream recipe service error: {Message}", ex.Message);
+            await HandleExceptionAsync(context, HttpStatusCode.BadGateway, ex.Message);
+        }
         catch (InvalidOperationException ex)
         {
             _logger.LogWarning(ex, "Invalid operation requested: {Message}", ex.Message);

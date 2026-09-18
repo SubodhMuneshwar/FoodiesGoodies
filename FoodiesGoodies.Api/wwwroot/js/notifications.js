@@ -124,13 +124,23 @@ const Notifications = {
             }
         ];
 
+        const escapeHTML = (str) => {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        };
+
         const listEl = drawer.querySelector('#notif-items-list');
         listEl.innerHTML = notifs.map(n => `
             <div style="display:flex; gap:10px; align-items:flex-start; padding:8px; background:rgba(255,255,255,0.04); border-radius:var(--radius-sm);">
                 <img src="${n.from_avatar}" style="width:34px; height:34px; border-radius:50%; object-fit:cover; border:1px solid var(--primary-gold); flex-shrink:0;">
                 <div style="display:flex; flex-direction:column; font-size:0.85rem; line-height:1.4;">
-                    <span style="color:#ffffff;"><strong>${n.from_user}</strong> ${n.message}</span>
-                    <span style="color:var(--text-dim); font-size:0.75rem; margin-top:2px;">${n.time_ago || 'recently'}</span>
+                    <span style="color:#ffffff;"><strong>${escapeHTML(n.from_user)}</strong> ${escapeHTML(n.message)}</span>
+                    <span style="color:var(--text-dim); font-size:0.75rem; margin-top:2px;">${escapeHTML(n.time_ago || 'recently')}</span>
                 </div>
             </div>
         `).join('');

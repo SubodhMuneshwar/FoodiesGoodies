@@ -3,7 +3,7 @@
 .env.*
 !.env.example
 *.log
-data/
+/data/
 
 # OS and IDE files
 .DS_Store

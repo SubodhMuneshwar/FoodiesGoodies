@@ -24,12 +24,6 @@ public class ContactService : IContactService
         var cleanEmail = request.Email?.Trim() ?? string.Empty;
         var cleanSubject = request.Subject?.Trim() ?? string.Empty;
         var cleanMessage = request.Message?.Trim() ?? string.Empty;
-
-        if (cleanName.Length < 2 || cleanEmail.Length < 5 || cleanSubject.Length < 2 || cleanMessage.Length < 5)
-        {
-            return ApiResponse.Fail("Please provide valid information for all required fields.");
-        }
-
         _logger.LogInformation("Contact inquiry received from '{Email}' with subject '{Subject}'", cleanEmail, cleanSubject);
 
         if (string.IsNullOrWhiteSpace(_options.Host) || string.IsNullOrWhiteSpace(_options.AdminEmail))

@@ -14,10 +14,10 @@ public class ContactRequest
     public string Email { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Please enter a message subject.")]
-    [StringLength(200, MinimumLength = 2, ErrorMessage = "Subject must be between 2 and 200 characters.")]
+    [StringLength(150, MinimumLength = 3, ErrorMessage = "Subject must be between 3 and 150 characters.")]
     public string Subject { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Please enter your message.")]
-    [StringLength(3000, MinimumLength = 5, ErrorMessage = "Message must be between 5 and 3000 characters.")]
+    [StringLength(3000, MinimumLength = 10, ErrorMessage = "Message must be between 10 and 3000 characters.")]
     public string Message { get; set; } = string.Empty;
 }

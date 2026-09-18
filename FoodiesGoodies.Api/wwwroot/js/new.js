@@ -180,5 +180,26 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Password visibility toggles
+    document.querySelectorAll('.btn-pwd-toggle').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const inpbox = btn.closest('.inpbox');
+            const input = inpbox ? inpbox.querySelector('input') : null;
+            const icon = btn.querySelector('ion-icon');
+            if (!input) return;
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                if (icon) icon.setAttribute('name', 'eye-off-outline');
+                btn.setAttribute('aria-label', 'Hide password');
+            } else {
+                input.type = 'password';
+                if (icon) icon.setAttribute('name', 'eye-outline');
+                btn.setAttribute('aria-label', 'Show password');
+            }
+        });
+    });
 });
 

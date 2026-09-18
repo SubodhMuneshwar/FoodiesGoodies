@@ -92,7 +92,13 @@ public class AuthController : ControllerBase
             user.UserName!,
             request.Password,
             isPersistent: request.RememberMe,
-            lockoutOnFailure: false);
+            lockoutOnFailure: true);
+
+        if (signInResult.IsLockedOut)
+        {
+            _logger.LogWarning("Account locked out due to multiple failed login attempts: {Email}", cleanEmail);
+            return StatusCode(StatusCodes.Status423Locked, ApiResponse<UserProfileDto?>.Fail("Account locked out due to multiple failed login attempts. Please try again in 15 minutes."));
+        }
 
         if (!signInResult.Succeeded)
         {

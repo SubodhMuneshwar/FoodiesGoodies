@@ -450,6 +450,43 @@ body {
   to { transform: rotate(360deg); }
 }
 
+/* Skeleton Loading State */
+@keyframes skeletonPulse {
+  0% {
+    background-color: rgba(255, 255, 255, 0.04);
+  }
+  50% {
+    background-color: rgba(255, 255, 255, 0.12);
+  }
+  100% {
+    background-color: rgba(255, 255, 255, 0.04);
+  }
+}
+
+.recipe-card.skeleton-card {
+  pointer-events: none;
+  border-color: rgba(255, 255, 255, 0.08);
+  background: var(--bg-card, #1c1a17);
+}
+
+.skeleton-block {
+  animation: skeletonPulse 1.5s ease-in-out infinite;
+  border-radius: var(--radius-sm, 6px);
+}
+
+.skeleton-image {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+}
+
+.skeleton-text {
+  border-radius: 4px;
+}
+
+.skeleton-btn {
+  border-radius: var(--radius-sm, 8px);
+}
+
 @media (max-width: 650px) {
   .search-page-container {
     width: 94%;

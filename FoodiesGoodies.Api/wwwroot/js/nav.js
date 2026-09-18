@@ -188,6 +188,27 @@ document.addEventListener('DOMContentLoaded', () => {
         header.appendChild(toggleBtn);
     }
 
+    // Focus trap handler for mobile drawer
+    function trapNavFocus(e) {
+        if (!navbar.classList.contains('nav-open') || e.key !== 'Tab') return;
+        const focusables = navbar.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])');
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+
+        if (e.shiftKey) {
+            if (document.activeElement === first || !navbar.contains(document.activeElement)) {
+                e.preventDefault();
+                last.focus();
+            }
+        } else {
+            if (document.activeElement === last || !navbar.contains(document.activeElement)) {
+                e.preventDefault();
+                first.focus();
+            }
+        }
+    }
+
     // Toggle menu state
     function toggleMenu(open) {
         const isCurrentlyOpen = navbar.classList.contains('nav-open');
@@ -199,12 +220,17 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleBtn.classList.add('is-active');
             toggleBtn.setAttribute('aria-expanded', 'true');
             document.body.classList.add('mobile-nav-active');
+            document.addEventListener('keydown', trapNavFocus);
+            const firstFocusable = navbar.querySelector('a[href], button:not([disabled])');
+            if (firstFocusable) firstFocusable.focus();
         } else {
             navbar.classList.remove('nav-open');
             backdrop.classList.remove('active');
             toggleBtn.classList.remove('is-active');
             toggleBtn.setAttribute('aria-expanded', 'false');
             document.body.classList.remove('mobile-nav-active');
+            document.removeEventListener('keydown', trapNavFocus);
+            toggleBtn.focus();
         }
     }
 
@@ -230,7 +256,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && navbar.classList.contains('nav-open')) {
             toggleMenu(false);
-            toggleBtn.focus();
         }
     });
 
@@ -240,4 +265,40 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleMenu(false);
         }
     });
+
+    // Floating Scroll-to-Top Button
+    (function initScrollToTop() {
+        const scrollBtn = document.createElement('button');
+        scrollBtn.id = 'scroll-to-top-btn';
+        scrollBtn.className = 'scroll-to-top-btn';
+        scrollBtn.setAttribute('aria-label', 'Scroll to top of page');
+        scrollBtn.title = 'Back to top';
+        scrollBtn.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+        `;
+        document.body.appendChild(scrollBtn);
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) {
+                scrollBtn.classList.add('visible');
+            } else {
+                scrollBtn.classList.remove('visible');
+            }
+        }, { passive: true });
+
+        scrollBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    })();
+
+    // Dynamic footer copyright year
+    (function initFooterCopyright() {
+        const currentYear = new Date().getFullYear();
+        const yearRange = currentYear > 2025 ? `2025\u2013${currentYear}` : '2025';
+        document.querySelectorAll('.footer-bottom p').forEach(el => {
+            el.innerHTML = el.innerHTML.replace(/(&copy;|©)\s*2025(-\d{4}|–\d{4})?/g, `&copy; ${yearRange}`);
+        });
+    })();
 });

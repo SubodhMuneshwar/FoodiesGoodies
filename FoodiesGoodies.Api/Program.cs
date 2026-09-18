@@ -26,7 +26,7 @@ builder.Services.AddDbContext<FoodiesGoodiesDbContext>(options =>
     });
 });
 
-// 2. ASP.NET Core Identity & Cookie Authentication (Hardened Password Policy)
+// 2. ASP.NET Core Identity & Cookie Authentication (Hardened Password Policy & Lockout)
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
@@ -36,6 +36,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.Password.RequiredLength = 8;
     options.User.RequireUniqueEmail = true;
     options.SignIn.RequireConfirmedAccount = false;
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
 })
 .AddEntityFrameworkStores<FoodiesGoodiesDbContext>()
 .AddDefaultTokenProviders();
@@ -73,7 +75,19 @@ builder.Services.ConfigureApplicationCookie(options =>
     };
 });
 
-// 3. Typed HttpClient for Edamam Recipe Cloud
+// 3. CORS Policy
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://localhost:5258", "https://localhost:7258", "http://127.0.0.1:5258")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
+// 4. Typed HttpClient for Edamam Recipe Cloud
 builder.Services.Configure<EdamamOptions>(builder.Configuration.GetSection(EdamamOptions.SectionName));
 builder.Services.AddHttpClient<IRecipeService, RecipeService>(client =>
 {
@@ -81,12 +95,12 @@ builder.Services.AddHttpClient<IRecipeService, RecipeService>(client =>
     client.DefaultRequestHeaders.Add("User-Agent", "FoodiesGoodies-Api/1.0");
 });
 
-// 4. Application Services
+// 5. Application Services
 builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection(SmtpOptions.SectionName));
 builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<IDemoUserService, DemoUserService>();
 
-// 5. FluentValidation & Uniform API Response Formatting
+// 6. FluentValidation & Uniform API Response Formatting
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
@@ -101,7 +115,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     };
 });
 
-// 6. MVC Controllers & Swagger
+// 7. MVC Controllers & Swagger
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -117,10 +131,17 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// 6. Global Exception Handling Middleware
+// Startup validation check for CursorSigningKey
+var cursorSigningKey = builder.Configuration["Edamam:CursorSigningKey"];
+if (string.IsNullOrWhiteSpace(cursorSigningKey) || cursorSigningKey.Length < 32)
+{
+    app.Logger.LogWarning("Security Warning: Edamam:CursorSigningKey is empty or shorter than 32 characters. Configure via User Secrets or environment variables.");
+}
+
+// 8. Global Exception Handling Middleware
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-// 7. Swagger Documentation in Development
+// 9. Swagger Documentation in Development
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -130,13 +151,15 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-// 8. Static Frontend Serving (from wwwroot)
+// 10. Static Frontend Serving (from wwwroot)
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
+// 11. CORS & Routing
+app.UseCors();
 app.UseRouting();
 
-// 9. Authentication & Authorization
+// 12. Authentication & Authorization
 app.UseAuthentication();
 app.UseAuthorization();
 

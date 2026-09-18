@@ -58,9 +58,7 @@
                 <!-- LOGIN FORM -->
                 <div class="formlogin Login">
                     <h2>Welcome Back</h2>
-                    <form action="/api/auth/login" method="POST">
-                        <input type="hidden" name="action" value="login">
-
+                    <form>
                         <div class="inpbox">
                             <span class="icon1" aria-hidden="true"><ion-icon name="mail"></ion-icon></span>
                             <input type="email" required id="login-email" name="email" placeholder=" " autocomplete="email">
@@ -68,7 +66,9 @@
                         </div>
 
                         <div class="inpbox">
-                            <span class="icon1" aria-hidden="true"><ion-icon name="lock-closed"></ion-icon></span>
+                            <button type="button" class="btn-pwd-toggle" aria-label="Toggle password visibility">
+                                <ion-icon name="eye-outline"></ion-icon>
+                            </button>
                             <input type="password" required id="login-password" name="password" placeholder=" " autocomplete="current-password">
                             <label for="login-password">Password</label>
                         </div>
@@ -92,9 +92,7 @@
                 <!-- REGISTRATION FORM -->
                 <div class="formlogin Register">
                     <h2>Join Foodies</h2>
-                    <form action="/api/auth/register" method="POST">
-                        <input type="hidden" name="action" value="register">
-
+                    <form>
                         <div class="inpbox">
                             <span class="icon1" aria-hidden="true"><ion-icon name="person"></ion-icon></span>
                             <input type="text" required id="reg-username" name="username" placeholder=" " autocomplete="name">
@@ -108,9 +106,11 @@
                         </div>
 
                         <div class="inpbox">
-                            <span class="icon1" aria-hidden="true"><ion-icon name="lock-closed"></ion-icon></span>
-                            <input type="password" required id="reg-password" name="password" placeholder=" " minlength="6" autocomplete="new-password">
-                            <label for="reg-password">Password (min 6 chars)</label>
+                            <button type="button" class="btn-pwd-toggle" aria-label="Toggle password visibility">
+                                <ion-icon name="eye-outline"></ion-icon>
+                            </button>
+                            <input type="password" required id="reg-password" name="password" placeholder=" " minlength="8" autocomplete="new-password">
+                            <label for="reg-password">Password (min 8 chars)</label>
                         </div>
 
                         <div class="forgotpass">
