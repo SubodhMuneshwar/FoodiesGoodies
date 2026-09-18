@@ -372,3 +372,20 @@ body {
     display: none;
   }
 }
+
+@media (max-width: 480px) {
+  .auth-page-container {
+    margin: calc(var(--header-height) + 20px) auto 40px;
+    width: 94%;
+  }
+  .wrapper {
+    padding: 24px 18px;
+    min-height: 480px;
+  }
+  .forgotpass {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+

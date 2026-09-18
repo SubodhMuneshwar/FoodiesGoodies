@@ -13,34 +13,38 @@ const Notifications = {
     },
 
     createBellIcon() {
-        const nav = document.querySelector('.navbar');
-        if (!nav || nav.querySelector('.notif-nav-btn')) return;
+        const header = document.querySelector('header.header') || document.querySelector('header');
+        if (!header || document.querySelector('.notif-nav-btn')) return;
 
-        const notifBtn = document.createElement('button');
-        notifBtn.type = 'button';
+        const isPagesDir = window.location.pathname.includes('/pages/');
+        const notifUrl = isPagesDir ? 'notifications.html' : 'pages/notifications.html';
+
+        const notifBtn = document.createElement('a');
+        notifBtn.href = notifUrl;
         notifBtn.className = 'notif-nav-btn';
-        notifBtn.setAttribute('aria-label', 'Notifications');
+        notifBtn.setAttribute('aria-label', 'Kitchen Notifications');
         notifBtn.title = 'Kitchen Notifications';
         notifBtn.innerHTML = `
-            <span class="bell-wrap" style="position:relative; display:inline-flex; align-items:center;">
-                <ion-icon name="notifications-outline" style="font-size:22px; color:var(--text-primary);"></ion-icon>
-                <span class="notif-badge" style="display:none; position:absolute; top:-6px; right:-8px; background:#ef4444; color:#fff; font-size:10px; font-weight:800; padding:2px 6px; border-radius:10px; min-width:16px; text-align:center;">0</span>
+            <span class="bell-wrap" style="position:relative; display:inline-flex; align-items:center; justify-content:center;">
+                <ion-icon name="notifications-outline"></ion-icon>
+                <span class="notif-badge" style="display:none;">0</span>
             </span>
         `;
-        notifBtn.style.cssText = 'background:transparent; border:none; cursor:pointer; padding:6px 10px; display:inline-flex; align-items:center;';
 
-        const loginBtn = nav.querySelector('.nav-login-btn');
-        if (loginBtn) {
-            nav.insertBefore(notifBtn, loginBtn);
+        const actionsWrap = header.querySelector('.header-actions-wrap');
+        if (actionsWrap) {
+            const themeBtn = actionsWrap.querySelector('.theme-toggle-btn');
+            if (themeBtn) {
+                actionsWrap.insertBefore(notifBtn, themeBtn);
+            } else {
+                actionsWrap.prepend(notifBtn);
+            }
         } else {
-            nav.appendChild(notifBtn);
+            const nav = header.querySelector('.navbar');
+            if (nav) nav.appendChild(notifBtn);
         }
 
         this.badgeEl = notifBtn.querySelector('.notif-badge');
-        notifBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.toggleDrawer();
-        });
     },
 
     // No notifications backend exists — display local demo count.

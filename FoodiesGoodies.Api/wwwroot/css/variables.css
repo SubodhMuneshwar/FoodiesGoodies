@@ -40,6 +40,25 @@
   --border-strong: rgba(28, 25, 23, 0.16);
   --card-border: var(--border-subtle);
 
+  /* Form & Input Controls */
+  --input-bg: var(--bg-surface);
+  --input-border: var(--border-strong);
+  --input-focus: var(--primary);
+  --input-color: var(--text-primary);
+  --input-placeholder: var(--text-muted);
+
+  /* Semantic Feedback & Status */
+  --success: #2A9D8F;
+  --success-subtle: rgba(42, 157, 143, 0.10);
+  --warning: #E76F51;
+  --warning-subtle: rgba(231, 111, 81, 0.10);
+  --danger: #9B2226;
+  --danger-subtle: rgba(155, 34, 38, 0.10);
+
+  /* Header & Navigation */
+  --header-bg: rgba(253, 250, 246, 0.94);
+  --header-border: var(--border-subtle);
+
   /* Solid Surfaces for previously glassmorphic cards */
   --glass-bg: #FFFFFF;
   --glass-bg-card: #FFFFFF;
@@ -73,9 +92,9 @@
   /* Radii — Restrained, Modern, Soft */
   --radius-xs: 4px;
   --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 18px;
-  --radius-xl: 24px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
   --radius-full: 9999px;
   --radius-pill: 9999px;
 
@@ -113,6 +132,15 @@
   --border-strong: rgba(28, 25, 23, 0.16);
   --card-border: var(--border-subtle);
 
+  --input-bg: #FFFFFF;
+  --input-border: rgba(28, 25, 23, 0.16);
+  --input-focus: #C2703A;
+  --input-color: #1C1917;
+  --input-placeholder: #78716C;
+
+  --header-bg: rgba(253, 250, 246, 0.94);
+  --header-border: var(--border-subtle);
+
   --glass-bg: #FFFFFF;
   --glass-bg-card: #FFFFFF;
   --glass-bg-modal: #FFFFFF;
@@ -127,9 +155,9 @@
 /* Warm Stone Dark Mode */
 [data-theme="dark"] {
   --bg-canvas: #1C1917;            /* Warm Stone 900 */
-  --bg-surface: #2A2624;           /* Warm Stone 800 */
-  --bg-surface-elevated: #383330;  /* Warm Stone 700 */
-  --bg-surface-hover: #443E3A;
+  --bg-surface: #262320;           /* Warm Stone 800 */
+  --bg-surface-elevated: #322E2B;  /* Warm Stone 700 */
+  --bg-surface-hover: #3E3935;
 
   --text-primary: #F5F5F4;         /* Stone 100 */
   --text-secondary: #D6D3D1;       /* Stone 300 */
@@ -145,9 +173,18 @@
   --border-strong: rgba(255, 255, 255, 0.16);
   --card-border: var(--border-subtle);
 
-  --glass-bg: #2A2624;
-  --glass-bg-card: #2A2624;
-  --glass-bg-modal: #2A2624;
+  --input-bg: #262320;
+  --input-border: rgba(255, 255, 255, 0.14);
+  --input-focus: #D97706;
+  --input-color: #F5F5F4;
+  --input-placeholder: #78716C;
+
+  --header-bg: rgba(28, 25, 23, 0.94);
+  --header-border: var(--border-subtle);
+
+  --glass-bg: #262320;
+  --glass-bg-card: #262320;
+  --glass-bg-modal: #262320;
   --glass-border: rgba(255, 255, 255, 0.08);
   --glass-border-hover: rgba(217, 119, 6, 0.35);
 

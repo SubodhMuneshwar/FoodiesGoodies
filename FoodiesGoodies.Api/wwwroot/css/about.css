@@ -179,3 +179,44 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* --------------------------------------------------------------------------
+   Legal & Policy Document Styles (privacy.html, terms.html)
+   -------------------------------------------------------------------------- */
+.legal-content {
+  text-align: left;
+}
+
+.legal-content h2 {
+  margin-top: 36px;
+  font-size: 1.45rem;
+  text-align: left;
+  font-family: var(--font-heading);
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.legal-content p,
+.legal-content ul {
+  margin-bottom: 16px;
+  font-size: 1.02rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.legal-content ul {
+  padding-left: 24px;
+}
+
+.legal-content li {
+  margin-bottom: 8px;
+}
+
+.last-updated {
+  font-size: 0.92rem;
+  color: var(--primary);
+  margin-bottom: 24px;
+  font-style: italic;
+  font-weight: 500;
+}
+

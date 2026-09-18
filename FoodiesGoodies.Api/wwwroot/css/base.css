@@ -79,26 +79,34 @@ header {
   top: 0;
   left: 0;
   width: 100%;
-  padding: 0 36px;
+  padding: 0 clamp(18px, 3vw, 40px);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid var(--border-subtle);
-  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--header-border);
+  background-color: var(--header-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   z-index: 1000;
   transition: background-color var(--transition-normal), box-shadow var(--transition-normal);
 }
 
+header.header--scrolled {
+  box-shadow: var(--shadow-sm);
+}
+
 .logo {
   color: var(--text-primary);
-  font-size: 24px;
+  font-size: 22px;
   font-family: var(--font-heading);
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: -0.5px;
   text-decoration: none;
   user-select: none;
   transition: color var(--transition-normal);
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .logo:hover,
@@ -109,7 +117,7 @@ header {
 .navbar {
   display: flex;
   align-items: center;
-  gap: clamp(12px, 1.5vw, 24px);
+  gap: clamp(10px, 1.4vw, 22px);
   flex-wrap: nowrap;
 }
 
@@ -120,17 +128,19 @@ header {
   color: var(--text-secondary);
   text-decoration: none;
   font-weight: 500;
-  padding: 6px 0;
-  transition: color var(--transition-normal);
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  transition: all var(--transition-fast);
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   white-space: nowrap;
 }
 
 .navbar a:hover,
 .navbar a:focus {
   color: var(--primary);
+  background-color: var(--primary-subtle);
 }
 
 /* Active Navigation Item */
@@ -138,12 +148,19 @@ header {
 .navbar a.nav-link-active {
   color: var(--primary);
   font-weight: 600;
+  background-color: var(--primary-subtle);
+}
+
+/* Header Action Tools Cluster */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 /* Login Button - Minimalist Outline Style */
 .nav-login-btn,
 .navbar .nav-login-btn {
-  margin-left: 10px;
   padding: 8px 20px;
   background-color: transparent;
   color: var(--text-primary) !important;
@@ -152,8 +169,11 @@ header {
   border-radius: var(--radius-pill);
   border: 1px solid var(--border-strong);
   text-decoration: none;
-  transition: all var(--transition-normal);
+  transition: all var(--transition-fast);
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .nav-login-btn:hover,
@@ -176,7 +196,7 @@ header {
    -------------------------------------------------------------------------- */
 footer,
 footer.footer-mpa {
-  background-color: var(--bg-canvas);
+  background-color: var(--bg-surface);
   border-top: 1px solid var(--border-subtle);
   color: var(--text-muted);
   font-size: 14px;
@@ -215,7 +235,7 @@ footer.footer-mpa {
 }
 
 .footer-col h4 {
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 16px;
@@ -246,7 +266,7 @@ footer.footer-mpa {
 
 .footer-social-links {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   margin-top: 14px;
 }
 
@@ -257,7 +277,7 @@ footer.footer-mpa {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: var(--bg-surface);
+  background: var(--bg-surface-elevated);
   border: 1px solid var(--border-subtle);
   color: var(--text-muted);
   font-size: 1.1rem;
@@ -320,31 +340,40 @@ footer.footer-mpa {
 }
 
 /* --------------------------------------------------------------------------
-   Responsive Mobile Navigation
+   Responsive Mobile Navigation Toggle Button
    -------------------------------------------------------------------------- */
 .nav-toggle {
   display: none;
   flex-direction: column;
-  justify-content: space-around;
-  width: 30px;
-  height: 24px;
-  background: transparent;
-  border: none;
+  justify-content: center;
+  gap: 5px;
+  width: 38px;
+  height: 38px;
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  padding: 0;
-  z-index: 1001;
+  padding: 6px;
+  z-index: 10006;
+  transition: all var(--transition-fast);
+}
+
+.nav-toggle:hover {
+  background: var(--primary-subtle);
+  border-color: var(--primary);
 }
 
 .nav-toggle .hamburger-bar {
-  width: 100%;
+  width: 20px;
   height: 2px;
   background-color: var(--text-primary);
   border-radius: 2px;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
+  pointer-events: none;
 }
 
 .nav-toggle.is-active .hamburger-bar:nth-child(1) {
-  transform: translateY(8px) rotate(45deg);
+  transform: translateY(7px) rotate(45deg);
   background-color: var(--primary);
 }
 
@@ -353,76 +382,31 @@ footer.footer-mpa {
 }
 
 .nav-toggle.is-active .hamburger-bar:nth-child(3) {
-  transform: translateY(-8px) rotate(-45deg);
+  transform: translateY(-7px) rotate(-45deg);
   background-color: var(--primary);
 }
 
-@media (max-width: 1140px) {
-  header.header, header {
-    padding: 0 18px;
-  }
-
-  .logo {
-    font-size: 20px;
-  }
-
+@media (min-width: 993px) {
   .nav-toggle {
-    display: flex;
+    display: none !important;
   }
+}
 
-  .navbar {
-    position: fixed;
-    top: var(--header-height);
-    left: 0;
-    width: 100%;
-    height: calc(100vh - var(--header-height));
-    background: var(--bg-surface);
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-start;
-    padding: 28px 24px 40px;
-    transform: translateY(-110%);
-    opacity: 0;
-    visibility: hidden;
-    transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s;
-    border-bottom: 2px solid var(--primary);
-  }
-
-  .navbar.nav-open {
-    transform: translateY(0);
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .navbar a.nav-link,
-  .navbar a {
-    font-size: 1.1rem;
-    padding: 14px 18px;
-    border-radius: var(--radius-sm);
-    background: var(--bg-surface-elevated);
-    border: 1px solid var(--border-subtle);
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .navbar a.active,
-  .navbar a.nav-link-active {
-    background: var(--primary-subtle);
-    border-color: var(--primary);
-    color: var(--primary);
-  }
-
-  .navbar .nav-login-btn {
-    margin-left: 0;
-    margin-top: 10px;
-    padding: 14px;
-    text-align: center;
-    justify-content: center;
-    font-size: 1.1rem;
-    width: 100%;
+@media (max-width: 992px) {
+  .nav-toggle {
+    display: flex !important;
   }
 }
 
 body.mobile-nav-active {
-  overflow: hidden;
+  overflow: hidden !important;
+  touch-action: none;
 }
+
+body.mobile-nav-active header.header,
+body.mobile-nav-active header {
+  z-index: 10020 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+

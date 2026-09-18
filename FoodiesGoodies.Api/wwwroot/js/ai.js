@@ -165,40 +165,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Render Results
         resultsContainer.innerHTML = `
-            <div class="results-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
-                <h2 style="margin:0; font-size:1.6rem; color:#fff;">Your AI Nutrition Blueprint</h2>
-                <span class="goal-tag" style="background:rgba(210,168,28,0.15); border:1px solid var(--primary-gold); color:var(--primary-gold); padding:4px 14px; border-radius:20px; font-weight:700; font-size:0.85rem;">${goalLabel}</span>
+            <div class="results-header">
+                <h2 style="margin:0; font-size:1.6rem; color:var(--text-primary);">Your AI Nutrition Blueprint</h2>
+                <span class="goal-tag">${goalLabel}</span>
             </div>
 
             <!-- Macros Metrics Dashboard -->
             <div class="macro-dashboard">
                 <div class="macro-box">
                     <div class="macro-label">Daily Calories</div>
-                    <div class="macro-val">${targetCalories}</div>
-                    <div class="macro-unit">kcal / day</div>
+                    <div class="macro-value">${targetCalories}</div>
+                    <div class="macro-unit" style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">kcal / day</div>
                 </div>
                 <div class="macro-box">
                     <div class="macro-label">Protein</div>
-                    <div class="macro-val">${proteinGrams}g</div>
-                    <div class="macro-unit">${Math.round(proteinRatio * 100)}% energy</div>
+                    <div class="macro-value">${proteinGrams}g</div>
+                    <div class="macro-unit" style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">${Math.round(proteinRatio * 100)}% energy</div>
                 </div>
                 <div class="macro-box">
                     <div class="macro-label">Carbohydrates</div>
-                    <div class="macro-val">${carbGrams}g</div>
-                    <div class="macro-unit">${Math.round(carbRatio * 100)}% energy</div>
+                    <div class="macro-value">${carbGrams}g</div>
+                    <div class="macro-unit" style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">${Math.round(carbRatio * 100)}% energy</div>
                 </div>
                 <div class="macro-box">
                     <div class="macro-label">Healthy Fats</div>
-                    <div class="macro-val">${fatGrams}g</div>
-                    <div class="macro-unit">${Math.round(fatRatio * 100)}% energy</div>
+                    <div class="macro-value">${fatGrams}g</div>
+                    <div class="macro-unit" style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">${Math.round(fatRatio * 100)}% energy</div>
                 </div>
             </div>
 
             <!-- Meals Timeline (Day 1 Sample) -->
             <div class="meals-container">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                    <h3 style="color:#ffffff; font-size:1.15rem; margin:0;">Today's Curated Meals (Day 1)</h3>
-                    <span style="color:#94a3b8; font-size:0.85rem;">1-Day Free Preview</span>
+                    <h3 style="color:var(--text-primary); font-size:1.15rem; margin:0; font-family:var(--font-heading);">Today's Curated Meals</h3>
+                    <span style="color:var(--text-muted); font-size:0.85rem; font-weight:600;">Personalized Preview</span>
                 </div>
                 <div class="meal-item">
                     <h4><span>🌅 Breakfast</span> <span class="meal-cals">~${Math.round(targetCalories * 0.25)} kcal</span></h4>
@@ -219,9 +219,9 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <!-- AI Dietician Insights -->
-            <div class="dietician-tips-box" style="margin-top:20px; background:rgba(210,168,28,0.08); border:1px solid rgba(210,168,28,0.25); border-radius:10px; padding:16px; display:flex; gap:12px; align-items:flex-start;">
-                <ion-icon name="sparkles" style="color:var(--primary-gold); font-size:1.5rem; flex-shrink:0;" aria-hidden="true"></ion-icon>
-                <p style="color:#e2e8f0; font-size:0.92rem; line-height:1.5; margin:0;">
+            <div class="dietician-tips-box">
+                <ion-icon name="sparkles" aria-hidden="true"></ion-icon>
+                <p>
                     <strong>Dietician Hydration Target:</strong> Maintain hydration of at least <strong>${waterLiters} Liters (${waterOz} fl oz)</strong> of water daily. Pair these whole ingredients with your favorite Foodies Goodies recipes to maintain balanced metabolic vitality.
                 </p>
             </div>
@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
 
             <!-- Footer Medical Compliance Statement -->
-            <div style="margin-top:20px; text-align:center; font-size:0.78rem; color:#64748b; line-height:1.4;">
+            <div style="margin-top:20px; text-align:center; font-size:0.78rem; color:var(--text-muted); line-height:1.4;">
                 ⚕️ <em>Nutritional projections are computed via the Mifflin-St Jeor basal metabolic equation and macronutrient standard distribution guidelines. For therapeutic nutrition, pregnancy, or medical treatment, always seek individualized care from a licensed healthcare provider.</em>
             </div>
         `;

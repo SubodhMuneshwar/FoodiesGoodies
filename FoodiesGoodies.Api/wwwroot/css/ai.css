@@ -287,11 +287,268 @@ body {
   color: var(--text-secondary);
 }
 
+/* Unit Measurement Toggle */
+.unit-toggle-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 20px;
+}
+
+.unit-toggle-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.unit-toggle-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-unit-toggle {
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-unit-toggle:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.btn-unit-toggle.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #FFFFFF;
+}
+
+/* Meals Container */
+.meals-container {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.meal-item {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  padding: 16px 18px;
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-fast);
+}
+
+.meal-item:hover {
+  border-color: rgba(194, 112, 58, 0.35);
+}
+
+.meal-item h4 {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.meal-item h4 .meal-cals {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--primary);
+  background: var(--primary-subtle);
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+}
+
+.meal-item p {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Dietician Tips Box */
+.dietician-tips-box {
+  margin-top: 20px;
+  background: var(--primary-subtle);
+  border: 1px solid rgba(194, 112, 58, 0.25);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.dietician-tips-box ion-icon {
+  color: var(--primary);
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.dietician-tips-box p {
+  color: var(--text-primary);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Pro Paywall Card */
+.pro-paywall-card {
+  margin-top: 28px;
+  background: var(--bg-surface-elevated);
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  padding: clamp(20px, 3vw, 28px);
+}
+
+.pro-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.pro-badge {
+  background: var(--primary);
+  color: #FFFFFF;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pro-price {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.pro-price span {
+  font-weight: 800;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+}
+
+.pro-paywall-card h3 {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.pro-subtext {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+
+.pro-perks-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.pro-perk-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.pro-perk-item ion-icon {
+  color: var(--success);
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.pro-actions-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-upgrade-pro {
+  flex: 1;
+  min-width: 220px;
+  padding: 12px 20px;
+  background: var(--primary);
+  color: #FFFFFF;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color var(--transition-fast);
+}
+
+.btn-upgrade-pro:hover {
+  background: var(--primary-hover);
+}
+
+.btn-pdf-print {
+  padding: 12px 20px;
+  background: transparent;
+  color: var(--text-primary);
+  font-weight: 600;
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all var(--transition-fast);
+}
+
+.btn-pdf-print:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
 @media (max-width: 900px) {
   .ai-grid {
     grid-template-columns: 1fr;
   }
   .macro-dashboard {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .pro-perks-grid {
+    grid-template-columns: 1fr;
+  }
+  .unit-toggle-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .unit-toggle-buttons {
+    width: 100%;
+  }
+  .btn-unit-toggle {
+    flex: 1;
+    text-align: center;
   }
 }

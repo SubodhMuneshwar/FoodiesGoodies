@@ -63,7 +63,7 @@
                 <div class="profile-names-wrap">
                     <h1 id="chef-name">Chef Gabriella Russo</h1>
                     <span class="handle" id="chef-handle">@gabriella_russo</span>
-                    <div class="chef-badges-row" style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;">
+                    <div class="chef-badges-row">
                         <span class="badge-pill-rank" id="profile-rank-badge">
                             <ion-icon name="trophy-outline"></ion-icon>
                             <span id="rank-text">Executive Chef</span>
@@ -259,18 +259,18 @@
                 const grid = document.getElementById('profile-grid-container');
                 if (tab === 'crew') {
                     grid.innerHTML = `
-                        <div class="crew-card" style="display:flex;align-items:center;gap:14px;background:rgba(255,255,255,0.04);padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.08);">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" style="width:48px;height:48px;border-radius:50%;object-fit:cover;">
-                            <div>
-                                <h4 style="color:#fff;margin:0 0 4px 0;">Chef Alex Morgan</h4>
-                                <span style="color:#d2a81c;font-size:0.85rem;">Head Baker &bull; In Kitchen</span>
+                        <div class="crew-card">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Chef Alex Morgan" class="crew-avatar">
+                            <div class="crew-info">
+                                <h4>Chef Alex Morgan</h4>
+                                <span>Head Baker &bull; In Kitchen</span>
                             </div>
                         </div>
-                        <div class="crew-card" style="display:flex;align-items:center;gap:14px;background:rgba(255,255,255,0.04);padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.08);">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" style="width:48px;height:48px;border-radius:50%;object-fit:cover;">
-                            <div>
-                                <h4 style="color:#fff;margin:0 0 4px 0;">Chef Marcus Vance</h4>
-                                <span style="color:#d2a81c;font-size:0.85rem;">Grill Master &bull; In Kitchen</span>
+                        <div class="crew-card">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="Chef Marcus Vance" class="crew-avatar">
+                            <div class="crew-info">
+                                <h4>Chef Marcus Vance</h4>
+                                <span>Grill Master &bull; In Kitchen</span>
                             </div>
                         </div>
                     `;

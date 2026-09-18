@@ -271,25 +271,112 @@ const Auth = {
         if (!loginBtn) return;
 
         const isPagesDir = window.location.pathname.includes('/pages/');
-        const dashboardPath = isPagesDir ? 'dashboard.html' : 'pages/dashboard.html';
+        const pfx = isPagesDir ? '' : 'pages/';
 
         if (user) {
-            loginBtn.href = dashboardPath;
-            const safeUsername = (user.username || 'Foodie').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const safeUsername = (user.username || 'Foodie Chef').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const safeHandle = (user.handle || '@foodie').replace(/</g, '&lt;').replace(/>/g, '&gt;');
             const safeAvatar = user.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80';
+
+            // Check if wrapper already exists
+            let wrapper = loginBtn.closest('.user-dropdown-wrapper');
+            if (!wrapper) {
+                wrapper = document.createElement('div');
+                wrapper.className = 'user-dropdown-wrapper';
+                loginBtn.parentNode.insertBefore(wrapper, loginBtn);
+                wrapper.appendChild(loginBtn);
+            }
+
+            loginBtn.removeAttribute('href');
+            loginBtn.setAttribute('role', 'button');
+            loginBtn.setAttribute('aria-haspopup', 'true');
+            loginBtn.setAttribute('aria-expanded', 'false');
+            loginBtn.className = 'nav-login-btn user-nav-badge logged-in';
             loginBtn.innerHTML = `
-                <span class="user-nav-badge" style="display:inline-flex; align-items:center; gap:8px;">
-                    <img src="${safeAvatar}" alt="${safeUsername}" style="width:24px; height:24px; border-radius:50%; object-fit:cover; border:1.5px solid #000;">
-                    <span>Dashboard</span>
-                </span>
+                <img src="${safeAvatar}" alt="${safeUsername}" class="user-nav-avatar">
+                <span>${safeUsername.split(' ')[0] || 'Chef'}</span>
+                <span class="user-nav-caret" aria-hidden="true">▼</span>
             `;
-            loginBtn.title = `Logged in as ${safeUsername}`;
-            loginBtn.classList.add('logged-in');
+
+            // Existing or new dropdown menu
+            let menu = wrapper.querySelector('.user-dropdown-menu');
+            if (!menu) {
+                menu = document.createElement('div');
+                menu.className = 'user-dropdown-menu';
+                wrapper.appendChild(menu);
+            }
+
+            menu.innerHTML = `
+                <div class="user-dropdown-header">
+                    <div class="user-name">${safeUsername}</div>
+                    <div class="user-handle">${safeHandle}</div>
+                </div>
+                <a href="${pfx}dashboard.html" class="user-dropdown-item">
+                    <ion-icon name="grid-outline"></ion-icon>
+                    <span>Social Kitchen Feed</span>
+                </a>
+                <a href="${pfx}profile.html" class="user-dropdown-item">
+                    <ion-icon name="person-circle-outline"></ion-icon>
+                    <span>My Chef Profile</span>
+                </a>
+                <a href="${pfx}create-recipe.html" class="user-dropdown-item">
+                    <ion-icon name="restaurant-outline"></ion-icon>
+                    <span>Share New Recipe</span>
+                </a>
+                <a href="${pfx}notifications.html" class="user-dropdown-item">
+                    <ion-icon name="notifications-outline"></ion-icon>
+                    <span>Kitchen Alerts</span>
+                </a>
+                <a href="${pfx}settings.html" class="user-dropdown-item">
+                    <ion-icon name="settings-outline"></ion-icon>
+                    <span>Account Settings</span>
+                </a>
+                <div class="user-dropdown-divider"></div>
+                <button type="button" class="user-dropdown-item item-logout" id="headerLogoutBtn">
+                    <ion-icon name="log-out-outline"></ion-icon>
+                    <span>Sign Out</span>
+                </button>
+            `;
+
+            // Toggle dropdown
+            loginBtn.onclick = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const isOpen = wrapper.classList.toggle('open');
+                loginBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            };
+
+            // Sign out handler
+            const logoutBtn = menu.querySelector('#headerLogoutBtn');
+            if (logoutBtn) {
+                logoutBtn.onclick = async (e) => {
+                    e.preventDefault();
+                    await Auth.logout();
+                };
+            }
+
+            // Close on outside click
+            document.addEventListener('click', (e) => {
+                if (!wrapper.contains(e.target)) {
+                    wrapper.classList.remove('open');
+                    loginBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
         } else {
-            const loginPath = isPagesDir ? 'login.html' : 'pages/login.html';
-            loginBtn.href = loginPath;
-            loginBtn.textContent = 'Login';
-            loginBtn.classList.remove('logged-in');
+            // Unauthenticated state
+            const wrapper = loginBtn.closest('.user-dropdown-wrapper');
+            if (wrapper && wrapper !== loginBtn) {
+                wrapper.parentNode.insertBefore(loginBtn, wrapper);
+                wrapper.remove();
+            }
+
+            loginBtn.href = `${pfx}login.html`;
+            loginBtn.className = 'nav-login-btn';
+            loginBtn.removeAttribute('role');
+            loginBtn.removeAttribute('aria-haspopup');
+            loginBtn.removeAttribute('aria-expanded');
+            loginBtn.innerHTML = 'Sign In';
+            loginBtn.onclick = null;
         }
     }
 };

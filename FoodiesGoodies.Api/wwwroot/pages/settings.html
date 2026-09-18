@@ -14,115 +14,6 @@
     <link rel="stylesheet" href="../css/global.css">
     <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="icon" type="image/png" href="../assets/images/fav.png">
-    <style>
-        .settings-container {
-            max-width: 760px;
-            width: 92%;
-            margin: calc(var(--header-height) + 36px) auto 70px;
-            background: var(--bg-surface);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-lg);
-            padding: clamp(24px, 4vw, 40px);
-            box-shadow: var(--shadow-sm);
-            animation: fadeInUp 0.5s ease-out;
-        }
-        .settings-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            border-bottom: 1px solid var(--border-subtle);
-            padding-bottom: 20px;
-            margin-bottom: 28px;
-        }
-        .settings-header ion-icon {
-            font-size: 2.2rem;
-            color: var(--primary);
-        }
-        .settings-header h1 {
-            font-family: var(--font-heading);
-            font-size: 1.8rem;
-            color: var(--text-primary);
-        }
-        .avatar-preview-row {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 24px;
-        }
-        .avatar-preview-img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--border-subtle);
-        }
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
-        .form-control {
-            padding: 12px 16px;
-            background: var(--bg-surface-elevated);
-            border: 1.5px solid var(--border-strong);
-            border-radius: var(--radius-sm);
-            color: var(--text-primary);
-            font-size: 0.95rem;
-            outline: none;
-            transition: border-color var(--transition-fast);
-        }
-        .form-control:focus {
-            border-color: var(--primary);
-        }
-        .toggle-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: var(--bg-surface-elevated);
-            padding: 14px 18px;
-            border-radius: var(--radius-sm);
-            margin-bottom: 24px;
-            border: 1px solid var(--border-subtle);
-        }
-        .toggle-row input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--primary);
-            cursor: pointer;
-        }
-        .toggle-row label {
-            cursor: pointer;
-            color: var(--text-primary);
-            font-size: 0.92rem;
-        }
-        .btn-save-settings {
-            background: var(--primary);
-            color: #FFFFFF;
-            font-weight: 600;
-            font-size: 1rem;
-            border: none;
-            padding: 13px 28px;
-            border-radius: var(--radius-pill);
-            cursor: pointer;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: background-color var(--transition-fast);
-        }
-        .btn-save-settings:hover {
-            background: var(--primary-hover);
-        }
-    </style>
 </head>
 <body>
     <a href="#settings-main" class="skip-link">Skip to settings form</a>
@@ -136,12 +27,7 @@
             <a class="nav-link aid" href="ai.html">AI Dietician</a>
             <a class="nav-link" href="about.html">About</a>
             <a class="nav-link" href="contact.html">Contact</a>
-            <a class="nav-login-btn" href="dashboard.html">
-                <span class="user-nav-badge">
-                    <img id="nav-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Profile">
-                    <span id="nav-user-name">Dashboard</span>
-                </span>
-            </a>
+            <a class="nav-login-btn" href="login.html">Sign In</a>
         </nav>
     </header>
 
@@ -150,7 +36,7 @@
             <ion-icon name="settings-outline"></ion-icon>
             <div>
                 <h1>Chef Profile &amp; Kitchen Settings</h1>
-                <p style="color:#94a3b8;">Manage your culinary identity and privacy preferences.</p>
+                <p class="settings-subtitle">Manage your culinary identity and privacy preferences.</p>
             </div>
         </div>
 
@@ -159,7 +45,7 @@
             <div class="avatar-preview-row">
                 <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80" alt="Avatar" class="avatar-preview-img" id="avatar-preview">
                 <div>
-                    <label style="font-weight:700;color:#fff;display:block;margin-bottom:6px;">Chef Avatar</label>
+                    <label class="form-label" style="font-weight:600;display:block;margin-bottom:6px;color:var(--text-secondary);font-size:0.85rem;text-transform:uppercase;letter-spacing:0.04em;">Chef Avatar</label>
                     <input type="file" id="avatar_file" accept="image/*" class="form-control" style="font-size:0.85rem;">
                 </div>
             </div>
@@ -171,7 +57,7 @@
             </div>
 
             <!-- Username & Email (Read-Only) -->
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div class="form-grid-2">
                 <div class="form-group">
                     <label for="settings-username">Username</label>
                     <input type="text" id="settings-username" class="form-control" value="Chef Foodie" disabled>
@@ -193,7 +79,7 @@
                 <input type="checkbox" id="is_private">
                 <label for="is_private">
                     <strong>Private Kitchen Mode (Requires Recipe Request)</strong><br>
-                    <span style="color:#94a3b8;font-size:0.85rem;">When enabled, sous chefs must send a Recipe Request for approval before following your kitchen.</span>
+                    <span style="color:var(--text-muted);font-size:0.85rem;">When enabled, sous chefs must send a Recipe Request for approval before following your kitchen.</span>
                 </label>
             </div>
 
