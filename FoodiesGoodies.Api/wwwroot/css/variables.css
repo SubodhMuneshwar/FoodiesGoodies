@@ -1,0 +1,99 @@
+/* ==========================================================================
+   FoodiesGoodies - variables.css
+   Unified Design Tokens, Curated Color Palette, Elevation, & Theme Engine
+   ========================================================================== */
+
+:root {
+  /* Brand Culinary Color Palette */
+  --primary: #d2a81c;
+  --primary-hover: #e5b720;
+  --primary-light: #f5cf53;
+  --primary-subtle: rgba(210, 168, 28, 0.15);
+
+  --secondary: #e76f51;
+  --secondary-hover: #f4a261;
+  --secondary-subtle: rgba(231, 111, 81, 0.15);
+
+  --accent-green: #2a9d8f;
+  --accent-green-subtle: rgba(42, 157, 143, 0.15);
+  --accent-red: #e63946;
+  --accent-red-subtle: rgba(230, 57, 70, 0.15);
+  --accent-purple: #9d4edd;
+  --accent-purple-subtle: rgba(157, 78, 221, 0.15);
+
+  /* Dark Theme (Default) */
+  --bg-canvas: #0c0d12;
+  --bg-surface: #141620;
+  --bg-surface-elevated: #1b1e2b;
+  --bg-surface-hover: #222638;
+
+  --glass-bg: rgba(20, 22, 32, 0.75);
+  --glass-bg-card: rgba(255, 255, 255, 0.05);
+  --glass-bg-modal: rgba(18, 20, 29, 0.90);
+  --glass-border: rgba(255, 255, 255, 0.10);
+  --glass-border-hover: rgba(210, 168, 28, 0.35);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.40);
+  --glass-blur: blur(16px);
+
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.18);
+
+  /* Typography */
+  --font-heading: 'march', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-body: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+  --font-accent: 'pizz', cursive, sans-serif;
+  --font-mono: 'Cascadia Code', Consolas, Monaco, monospace;
+
+  /* Spacing & Radii */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-pill: 9999px;
+
+  /* Micro-Interactions & Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 400ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Elevation */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.50);
+  --shadow-glow: 0 0 24px rgba(210, 168, 28, 0.25);
+}
+
+/* Light Theme Mode */
+[data-theme="light"] {
+  --bg-canvas: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #f1f5f9;
+  --bg-surface-hover: #e2e8f0;
+
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-bg-card: rgba(255, 255, 255, 0.85);
+  --glass-bg-modal: rgba(255, 255, 255, 0.96);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-border-hover: rgba(210, 168, 28, 0.45);
+  --glass-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  --glass-blur: blur(16px);
+
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --text-dim: #94a3b8;
+
+  --border-subtle: rgba(0, 0, 0, 0.07);
+  --border-strong: rgba(0, 0, 0, 0.16);
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 12px 35px rgba(0, 0, 0, 0.12);
+  --shadow-glow: 0 0 20px rgba(210, 168, 28, 0.30);
+}

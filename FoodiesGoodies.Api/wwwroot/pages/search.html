@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Recipes - Foodies Goodies</title>
     <meta name="description" content="Explore over 2.3 million recipes powered live by the Edamam Recipe API. Find ingredients, cooking instructions, and nutrition details.">
+    <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/global.css">
     <link rel="stylesheet" href="../css/search.css">
     <link rel="icon" type="image/png" href="../assets/images/fav.png">
 
@@ -82,6 +84,26 @@
                 <p>Type any recipe name above or click one of the popular search tags to pull live culinary data from the Edamam Recipe API.</p>
             </div>
         </section>
+
+        <!-- QUICK VIEW MODAL (Feature Polish) -->
+        <div id="quickViewModalBackdrop" class="quickview-modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="quickViewTitle">
+            <div class="quickview-modal">
+                <button type="button" class="quickview-close-btn" id="quickViewCloseBtn" aria-label="Close recipe quick view">&times;</button>
+                <div class="quickview-header-media">
+                    <img id="quickViewImage" src="" alt="" loading="lazy">
+                    <span class="quickview-media-badge" id="quickViewBadge">Culinary Recipe</span>
+                </div>
+                <div class="quickview-body">
+                    <h2 class="quickview-title" id="quickViewTitle"></h2>
+                    <div class="quickview-metrics" id="quickViewMetrics"></div>
+                    <h3 class="quickview-section-heading"><span>🛒</span> Basic Ingredients</h3>
+                    <ul class="quickview-ingredients-list" id="quickViewIngredients"></ul>
+                    <div class="quickview-footer-actions">
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="btn-primary-glass" id="quickViewExternalBtn">View Full Preparation &amp; Instructions ↗</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- FOOTER (Enterprise MPA Structure) -->

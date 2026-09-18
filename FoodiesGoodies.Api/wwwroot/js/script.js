@@ -151,14 +151,105 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    let currentHitsList = [];
+
+    /**
+     * Quick View Modal Handlers
+     */
+    function openQuickView(recipe) {
+        const modalBackdrop = document.getElementById('quickViewModalBackdrop');
+        if (!modalBackdrop) return;
+
+        const imgEl = document.getElementById('quickViewImage');
+        if (imgEl) {
+            imgEl.src = recipe.image || (recipe.images && recipe.images.REGULAR ? recipe.images.REGULAR.url : '../assets/images/blueberry.png');
+            imgEl.alt = recipe.label || 'Recipe preview';
+        }
+
+        const titleEl = document.getElementById('quickViewTitle');
+        if (titleEl) titleEl.textContent = recipe.label || 'Delicious Dish';
+
+        const badgeEl = document.getElementById('quickViewBadge');
+        if (badgeEl) {
+            const cuisine = Array.isArray(recipe.cuisineType) && recipe.cuisineType.length > 0
+                ? capitalize(recipe.cuisineType[0])
+                : (Array.isArray(recipe.mealType) ? capitalize(recipe.mealType[0]) : 'Specialty Recipe');
+            badgeEl.textContent = cuisine;
+        }
+
+        const calories = Math.round(recipe.calories || 0);
+        const servings = Math.max(1, Math.round(recipe.yield || 1));
+        const calsPerServing = Math.round(calories / servings);
+        const time = recipe.totalTime ? `${recipe.totalTime} mins` : '15-20 mins';
+
+        const metricsEl = document.getElementById('quickViewMetrics');
+        if (metricsEl) {
+            metricsEl.innerHTML = `
+                <div class="quickview-metric-pill"><span>Calories</span><strong>${calsPerServing} kcal</strong></div>
+                <div class="quickview-metric-pill"><span>Servings</span><strong>${servings} portions</strong></div>
+                <div class="quickview-metric-pill"><span>Prep/Cook</span><strong>${time}</strong></div>
+            `;
+        }
+
+        const ingredientsEl = document.getElementById('quickViewIngredients');
+        if (ingredientsEl) {
+            const lines = Array.isArray(recipe.ingredientLines) ? recipe.ingredientLines : [];
+            if (lines.length > 0) {
+                ingredientsEl.innerHTML = lines.map(line => `<li>${escapeHTML(line)}</li>`).join('');
+            } else {
+                ingredientsEl.innerHTML = '<li>Ingredients details available in full recipe.</li>';
+            }
+        }
+
+        const externalBtn = document.getElementById('quickViewExternalBtn');
+        if (externalBtn) {
+            externalBtn.href = recipe.url || '#';
+        }
+
+        modalBackdrop.classList.add('is-active');
+        modalBackdrop.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeQuickView() {
+        const modalBackdrop = document.getElementById('quickViewModalBackdrop');
+        if (!modalBackdrop) return;
+        modalBackdrop.classList.remove('is-active');
+        modalBackdrop.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+
+    // Modal Close Event Listeners
+    const modalCloseBtn = document.getElementById('quickViewCloseBtn');
+    if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeQuickView);
+
+    const modalBackdrop = document.getElementById('quickViewModalBackdrop');
+    if (modalBackdrop) {
+        modalBackdrop.addEventListener('click', (e) => {
+            if (e.target === modalBackdrop) closeQuickView();
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeQuickView();
+    });
+
     /**
      * Renders hits into the results grid
      */
     function renderRecipes(hits, append = false, totalCount = null) {
         let cardsHtml = '';
+        const startIndex = append ? currentHitsList.length : 0;
 
-        hits.forEach((item) => {
+        if (!append) {
+            currentHitsList = [];
+        }
+
+        hits.forEach((item, index) => {
             const recipe = item.recipe || item;
+            currentHitsList.push(recipe);
+            const globalIndex = startIndex + index;
+
             const label = escapeHTML(recipe.label || 'Delicious Dish');
             const imageUrl = escapeHTML(recipe.image || (recipe.images && recipe.images.REGULAR ? recipe.images.REGULAR.url : '../assets/images/blueberry.png'));
             const recipeUrl = escapeHTML(recipe.url || '#');
@@ -187,9 +278,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const ingredientLines = Array.isArray(recipe.ingredientLines) ? recipe.ingredientLines : [];
 
             cardsHtml += `
-            <article class="recipe-card" data-dish="${label}">
+            <article class="recipe-card card-hover-lift" data-dish="${label}">
                 <div class="card-media-wrapper">
-                    <img src="${imageUrl}" alt="${label}" loading="lazy" decoding="async" onerror="this.src='../assets/images/blueberry.png'">
+                    <img src="${imageUrl}" alt="${label}" class="aspect-16-9" loading="lazy" decoding="async" onerror="this.src='../assets/images/blueberry.png'">
                     <span class="cuisine-badge">${cuisine}</span>
                 </div>
 
@@ -215,27 +306,23 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     ` : ''}
 
-                    <!-- Ingredients List (collapsible) -->
-                    <details class="ingredients-accordion">
-                        <summary>Ingredients (${ingredientLines.length})</summary>
-                        <ul class="ingredients-list">
-                            ${ingredientLines.map(ing => `<li>${escapeHTML(ing)}</li>`).join('')}
-                        </ul>
-                    </details>
-
-                    <a href="${recipeUrl}" class="view-recipe-btn" target="_blank" rel="noopener noreferrer">
-                        View Full Recipe ↗
-                    </a>
+                    <!-- Action Buttons -->
+                    <div class="recipe-card-actions" style="display:flex;gap:8px;margin-top:14px;">
+                        <button type="button" class="btn-secondary-glass btn-trigger-quickview" data-index="${globalIndex}" style="flex:1;padding:8px 12px;font-size:0.85rem;justify-content:center;">
+                            👁️ Quick View
+                        </button>
+                        <a href="${recipeUrl}" class="btn-primary-glass" target="_blank" rel="noopener noreferrer" style="flex:1;padding:8px 12px;font-size:0.85rem;text-decoration:none;">
+                            Instructions ↗
+                        </a>
+                    </div>
                 </div>
             </article>
             `;
         });
 
         if (append) {
-            // Remove old load more container before appending
             const oldPagination = document.querySelector('.pagination-container');
             if (oldPagination) oldPagination.remove();
-
             resultsList.insertAdjacentHTML('beforeend', cardsHtml);
         } else {
             const headerBanner = `
@@ -247,6 +334,17 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             resultsList.innerHTML = headerBanner + `<div class="recipes-grid">${cardsHtml}</div>`;
         }
+
+        // Attach Quick View Click Listeners
+        resultsList.querySelectorAll('.btn-trigger-quickview').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const idx = parseInt(btn.getAttribute('data-index'), 10);
+                if (!isNaN(idx) && currentHitsList[idx]) {
+                    openQuickView(currentHitsList[idx]);
+                }
+            });
+        });
 
         // Add "Load More" button if pagination cursor exists
         if (nextPaginationCursor) {

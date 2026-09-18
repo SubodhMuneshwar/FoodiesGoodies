@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chef Gabriella Russo's Kitchen - Foodies Goodies</title>
     <meta name="description" content="View Chef Gabriella Russo's kitchen profile, published recipes, and sous chef community.">
+    <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/global.css">
     <link rel="stylesheet" href="../css/profile.css">
     <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="icon" type="image/png" href="../assets/images/fav.png">
@@ -30,25 +32,25 @@
 
     <main class="profile-layout-container" id="profile-content">
         <!-- Chef Banner & Avatar Card -->
-        <section class="chef-profile-card">
+        <section class="chef-profile-card glass-panel">
             <div class="profile-banner-wrap">
-                <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80" alt="Kitchen Banner" class="profile-cover-img" id="chef-cover-img">
+                <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80" alt="Kitchen Banner" class="profile-cover-img aspect-16-9" id="chef-cover-img" loading="lazy">
                 <div class="banner-overlay-gradient"></div>
             </div>
 
             <div class="profile-details-wrapper">
                 <div class="profile-avatar-row">
                     <div class="avatar-holder">
-                        <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=300&q=80" alt="Chef Avatar" class="profile-avatar-img" id="chef-avatar-img">
+                        <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=300&q=80" alt="Chef Avatar" class="profile-avatar-img aspect-1-1" id="chef-avatar-img" loading="lazy">
                         <span class="chef-rank-badge" id="chef-rank-badge">Executive Chef</span>
                     </div>
 
                     <div class="profile-actions-toolbar">
-                        <button type="button" class="btn-action-primary" id="btn-profile-fork" data-chef-id="chef_gabriella">
+                        <button type="button" class="btn-action-primary btn-hover-lift" id="btn-profile-fork" data-chef-id="chef_gabriella">
                             <ion-icon name="restaurant-outline"></ion-icon>
                             <span id="fork-btn-text">Fork This Chef</span>
                         </button>
-                        <button type="button" class="btn-action-secondary" id="btn-share-profile">
+                        <button type="button" class="btn-action-secondary btn-hover-lift" id="btn-share-profile">
                             <ion-icon name="share-social-outline"></ion-icon>
                             <span>Share</span>
                         </button>
@@ -58,6 +60,16 @@
                 <div class="profile-names-wrap">
                     <h1 id="chef-name">Chef Gabriella Russo</h1>
                     <span class="handle" id="chef-handle">@gabriella_russo</span>
+                    <div class="chef-badges-row" style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;">
+                        <span class="badge-pill-rank" id="profile-rank-badge">
+                            <ion-icon name="trophy-outline"></ion-icon>
+                            <span id="rank-text">Executive Chef</span>
+                        </span>
+                        <span class="badge-pill-dietary" id="profile-dietary-badge">
+                            <ion-icon name="leaf-outline"></ion-icon>
+                            <span id="dietary-text">Wood-Fired Italian &amp; Artisanal</span>
+                        </span>
+                    </div>
                 </div>
 
                 <p class="profile-bio-text" id="chef-bio">Executive Chef from Naples. Dedicated to authentic wood-fired pizzas, slow-cooked ragus, and fresh culinary storytelling.</p>
@@ -200,7 +212,34 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
-            const user = urlParams.get('user') || 'gabriella_russo';
+            const user = urlParams.get('user');
+
+            // Dynamically load active user session if viewing own profile without specific ?user= param
+            if (window.Auth) {
+                const currentUser = Auth.getCurrentUser();
+                if (!user && currentUser) {
+                    const displayName = currentUser.displayName || currentUser.username || 'Foodie Chef';
+                    const handle = currentUser.handle || ('@' + displayName.toLowerCase().replace(/\s+/g, '_'));
+                    const nameEl = document.getElementById('chef-name');
+                    const handleEl = document.getElementById('chef-handle');
+                    const avatarEl = document.getElementById('chef-avatar-img');
+                    const bioEl = document.getElementById('chef-bio');
+                    const rankBadgeEl = document.getElementById('chef-rank-badge');
+                    const rankTextEl = document.getElementById('rank-text');
+                    const dietaryTextEl = document.getElementById('dietary-text');
+
+                    if (nameEl) nameEl.textContent = displayName;
+                    if (handleEl) handleEl.textContent = handle;
+                    if (avatarEl && currentUser.avatar) avatarEl.src = currentUser.avatar;
+                    if (bioEl && currentUser.bio) bioEl.textContent = currentUser.bio;
+
+                    const rank = currentUser.rank || 'Home Cook';
+                    const dietary = currentUser.dietaryFocus || 'Culinary Adventurer';
+                    if (rankBadgeEl) rankBadgeEl.textContent = rank;
+                    if (rankTextEl) rankTextEl.textContent = rank;
+                    if (dietaryTextEl) dietaryTextEl.textContent = dietary;
+                }
+            }
 
             // Tab switching
             const tabs = document.querySelectorAll('.profile-tab-btn');

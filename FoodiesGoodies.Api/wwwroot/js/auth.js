@@ -142,24 +142,28 @@ const Auth = {
             });
 
             const data = await res.json().catch(() => ({}));
+            const user = data.data || data.user;
 
-            if (res.ok && data.success && data.user) {
-                this.setCurrentUser(data.user);
-                return { success: true, message: data.message || 'Login successful!', user: data.user };
+            if (res.ok && data.success && user) {
+                this.setCurrentUser(user);
+                const msg = data.message || 'Login successful! Welcome back.';
+                if (window.Toast) window.Toast.show('success', msg);
+                return { success: true, message: msg, user: user };
             }
 
-            // Server rejected login (wrong password, unknown user, validation error, etc.)
-            return { success: false, message: (data && data.message) || 'Invalid email or password.' };
+            // Server rejected login
+            const errMsg = (data && data.message) || 'Invalid email or password.';
+            if (window.Toast) window.Toast.show('error', errMsg);
+            return { success: false, message: errMsg };
         } catch (err) {
-            // Backend unreachable — do NOT fall back to localStorage authentication
             console.error('Login request failed (backend unreachable):', err);
-            return { success: false, message: 'Unable to reach the authentication server. Please try again.' };
+            const errNet = 'Unable to reach the authentication server. Please try again.';
+            if (window.Toast) window.Toast.show('error', errNet);
+            return { success: false, message: errNet };
         }
     },
 
     // Perform registration (ASP.NET Core Identity)
-    // Registration succeeds ONLY when the server returns a successful response.
-    // A failed or unreachable backend must NOT produce an authenticated state.
     async register(username, email, password) {
         const cleanName = (username || '').trim() || 'Foodie Chef';
         const cleanEmail = (email || '').trim().toLowerCase();
@@ -180,18 +184,24 @@ const Auth = {
             });
 
             const data = await res.json().catch(() => ({}));
+            const user = data.data || data.user;
 
-            if (res.ok && data.success && data.user) {
-                this.setCurrentUser(data.user);
-                return { success: true, message: data.message || 'Registration successful!', user: data.user };
+            if (res.ok && data.success && user) {
+                this.setCurrentUser(user);
+                const msg = data.message || 'Registration successful! Welcome to Foodies Goodies.';
+                if (window.Toast) window.Toast.show('success', msg);
+                return { success: true, message: msg, user: user };
             }
 
-            // Server rejected registration (duplicate email, validation failure, etc.)
-            return { success: false, message: (data && data.message) || 'Registration failed. Please try again.' };
+            // Server rejected registration
+            const errMsg = (data && data.message) || 'Registration failed. Please check your details.';
+            if (window.Toast) window.Toast.show('error', errMsg);
+            return { success: false, message: errMsg };
         } catch (e) {
-            // Backend unreachable — do NOT create a fake local account
             console.error('Registration request failed (backend unreachable):', e);
-            return { success: false, message: 'Unable to reach the registration server. Please try again.' };
+            const errNet = 'Unable to reach the registration server. Please try again.';
+            if (window.Toast) window.Toast.show('error', errNet);
+            return { success: false, message: errNet };
         }
     },
 
@@ -207,9 +217,12 @@ const Auth = {
                 }
             });
             const data = await res.json().catch(() => ({}));
-            if (res.ok && data.success && data.user) {
-                this.setCurrentUser(data.user);
-                return { success: true, message: data.message, user: data.user };
+            const user = data.data || data.user;
+            if (res.ok && data.success && user) {
+                this.setCurrentUser(user);
+                const msg = data.message || 'Welcome to the Demo Kitchen!';
+                if (window.Toast) window.Toast.show('success', msg);
+                return { success: true, message: msg, user: user };
             }
         } catch (e) {
             console.warn('Demo login API unavailable, falling back to local demo profile:', e);
@@ -217,6 +230,7 @@ const Auth = {
 
         // Offline / fallback demo profile
         this.setCurrentUser(this.DEFAULT_USER);
+        if (window.Toast) window.Toast.show('info', 'Offline Demo Kitchen Activated');
         return { success: true, message: 'Welcome to the Demo Kitchen!', user: this.DEFAULT_USER };
     },
 

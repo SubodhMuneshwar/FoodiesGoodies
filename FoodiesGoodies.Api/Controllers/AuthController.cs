@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using FoodiesGoodies.Api.DTOs;
 using FoodiesGoodies.Api.Models;
+using FoodiesGoodies.Api.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,15 +15,18 @@ public class AuthController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly IDemoUserService _demoUserService;
     private readonly ILogger<AuthController> _logger;
 
     public AuthController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
+        IDemoUserService demoUserService,
         ILogger<AuthController> logger)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _demoUserService = demoUserService;
         _logger = logger;
     }
 
@@ -32,19 +36,13 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
-        if (!ModelState.IsValid)
-        {
-            var errors = string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
-            return BadRequest(AuthResponse.Fail(errors));
-        }
-
         var cleanEmail = request.Email.Trim().ToLowerInvariant();
         var cleanUsername = request.Username.Trim();
 
         var existingUser = await _userManager.FindByEmailAsync(cleanEmail);
         if (existingUser != null)
         {
-            return Conflict(AuthResponse.Fail("An account with this email address already exists."));
+            return Conflict(ApiResponse<UserProfileDto?>.Fail("An account with this email address already exists."));
         }
 
         var user = new ApplicationUser
@@ -64,7 +62,7 @@ public class AuthController : ControllerBase
         {
             var errorDetails = string.Join(", ", result.Errors.Select(e => e.Description));
             _logger.LogWarning("Registration failed for {Email}: {Errors}", cleanEmail, errorDetails);
-            return BadRequest(AuthResponse.Fail($"Registration failed: {errorDetails}"));
+            return BadRequest(ApiResponse<UserProfileDto?>.Fail($"Registration failed: {errorDetails}"));
         }
 
         // Sign the user in immediately with authentication cookie
@@ -73,7 +71,7 @@ public class AuthController : ControllerBase
         _logger.LogInformation("New user registered and signed in: {Email}", cleanEmail);
 
         var profile = MapToProfileDto(user);
-        return Ok(AuthResponse.Ok(profile, "Registration successful! Welcome to Foodies Goodies."));
+        return Ok(ApiResponse<UserProfileDto>.Ok(profile, "Registration successful! Welcome to Foodies Goodies."));
     }
 
     /// <summary>
@@ -82,18 +80,12 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        if (!ModelState.IsValid)
-        {
-            var errors = string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
-            return BadRequest(AuthResponse.Fail(errors));
-        }
-
         var cleanEmail = request.Email.Trim().ToLowerInvariant();
         var user = await _userManager.FindByEmailAsync(cleanEmail);
         if (user == null)
         {
             _logger.LogWarning("Login attempt for non-existent user {Email}", cleanEmail);
-            return Unauthorized(AuthResponse.Fail("Invalid email or password."));
+            return Unauthorized(ApiResponse<UserProfileDto?>.Fail("Invalid email or password."));
         }
 
         var signInResult = await _signInManager.PasswordSignInAsync(
@@ -105,13 +97,13 @@ public class AuthController : ControllerBase
         if (!signInResult.Succeeded)
         {
             _logger.LogWarning("Invalid password attempt for {Email}", cleanEmail);
-            return Unauthorized(AuthResponse.Fail("Invalid email or password."));
+            return Unauthorized(ApiResponse<UserProfileDto?>.Fail("Invalid email or password."));
         }
 
         _logger.LogInformation("User logged in successfully: {Email}", cleanEmail);
 
         var profile = MapToProfileDto(user);
-        return Ok(AuthResponse.Ok(profile, "Welcome back to Foodies Goodies!"));
+        return Ok(ApiResponse<UserProfileDto>.Ok(profile, "Welcome back to Foodies Goodies!"));
     }
 
     /// <summary>
@@ -121,74 +113,11 @@ public class AuthController : ControllerBase
     [HttpPost("demo")]
     public async Task<IActionResult> DemoLogin()
     {
-        const string demoEmail = "demo@foodiesgoodies.local";
-        ApplicationUser? demoUser = null;
+        var (demoUser, profile) = await _demoUserService.GetOrProvisionDemoUserAsync();
+        await _demoUserService.SignInDemoUserAsync(HttpContext, demoUser);
 
-        try
-        {
-            demoUser = await _userManager.FindByEmailAsync(demoEmail);
-
-            if (demoUser == null)
-            {
-                demoUser = new ApplicationUser
-                {
-                    UserName = demoEmail,
-                    Email = demoEmail,
-                    DisplayName = "Demo Foodie",
-                    Rank = "Head Baker",
-                    DietaryFocus = "Mediterranean & Sourdough",
-                    Bio = "Passionate community baker and sourdough enthusiast exploring Foodies Goodies!",
-                    ProfilePic = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow
-                };
-
-                var createResult = await _userManager.CreateAsync(demoUser, "DemoFoodie2025!");
-                if (!createResult.Succeeded)
-                {
-                    _logger.LogWarning("Could not persist demo user to database: {Errors}", string.Join(", ", createResult.Errors.Select(e => e.Description)));
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogWarning("Database unreachable during demo login, using in-memory demo principal: {Message}", ex.Message);
-            demoUser = new ApplicationUser
-            {
-                Id = "demo_ephemeral_user",
-                UserName = demoEmail,
-                Email = demoEmail,
-                DisplayName = "Demo Foodie",
-                Rank = "Head Baker",
-                DietaryFocus = "Mediterranean & Sourdough",
-                Bio = "Passionate community baker and sourdough enthusiast exploring Foodies Goodies!",
-                ProfilePic = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            };
-        }
-
-        try
-        {
-            await _signInManager.SignInAsync(demoUser, isPersistent: true);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogWarning("SignInManager failed, issuing application cookie directly: {Message}", ex.Message);
-            var claims = new List<Claim>
-            {
-                new(ClaimTypes.NameIdentifier, demoUser.Id),
-                new(ClaimTypes.Name, demoUser.DisplayName ?? "Demo Foodie"),
-                new(ClaimTypes.Email, demoEmail)
-            };
-            var identity = new ClaimsIdentity(claims, IdentityConstants.ApplicationScheme);
-            var principal = new ClaimsPrincipal(identity);
-            await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme, principal, new AuthenticationProperties { IsPersistent = true });
-        }
-
-        _logger.LogInformation("Demo user logged in successfully: {Email}", demoEmail);
-        var profile = MapToProfileDto(demoUser);
-        return Ok(AuthResponse.Ok(profile, "Welcome to the Foodies Goodies interactive demo kitchen!"));
+        _logger.LogInformation("Demo user logged in successfully: {Email}", demoUser.Email);
+        return Ok(ApiResponse<UserProfileDto>.Ok(profile, "Welcome to the Foodies Goodies interactive demo kitchen!"));
     }
 
     /// <summary>

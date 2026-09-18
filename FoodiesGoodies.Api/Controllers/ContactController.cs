@@ -25,12 +25,6 @@ public class ContactController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SubmitInquiry([FromBody] ContactRequest request, CancellationToken cancellationToken)
     {
-        if (!ModelState.IsValid)
-        {
-            var errors = string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
-            return BadRequest(ApiResponse.Fail(errors));
-        }
-
         var result = await _contactService.SendInquiryAsync(request, cancellationToken);
         if (!result.Success)
         {

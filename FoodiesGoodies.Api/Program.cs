@@ -1,9 +1,13 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using FoodiesGoodies.Api.Configuration;
 using FoodiesGoodies.Api.Data;
+using FoodiesGoodies.Api.DTOs;
 using FoodiesGoodies.Api.Middleware;
 using FoodiesGoodies.Api.Models;
 using FoodiesGoodies.Api.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -11,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // 1. Database & EF Core
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? "server=localhost;port=3306;database=foodiesgoodies;user=root;password=";
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not configured in appsettings.json or environment.");
 
 builder.Services.AddDbContext<FoodiesGoodiesDbContext>(options =>
 {
@@ -22,14 +26,14 @@ builder.Services.AddDbContext<FoodiesGoodiesDbContext>(options =>
     });
 });
 
-// 2. ASP.NET Core Identity & Cookie Authentication
+// 2. ASP.NET Core Identity & Cookie Authentication (Hardened Password Policy)
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
-    options.Password.RequireDigit = false;
-    options.Password.RequireLowercase = false;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = false;
-    options.Password.RequiredLength = 6;
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequiredLength = 8;
     options.User.RequireUniqueEmail = true;
     options.SignIn.RequireConfirmedAccount = false;
 })
@@ -77,11 +81,27 @@ builder.Services.AddHttpClient<IRecipeService, RecipeService>(client =>
     client.DefaultRequestHeaders.Add("User-Agent", "FoodiesGoodies-Api/1.0");
 });
 
-// 4. Contact Service via MailKit SMTP
+// 4. Application Services
 builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection(SmtpOptions.SectionName));
 builder.Services.AddScoped<IContactService, ContactService>();
+builder.Services.AddScoped<IDemoUserService, DemoUserService>();
 
-// 5. MVC Controllers & Swagger
+// 5. FluentValidation & Uniform API Response Formatting
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var errors = string.Join("; ", context.ModelState.Values
+            .SelectMany(v => v.Errors)
+            .Select(e => e.ErrorMessage));
+        return new BadRequestObjectResult(ApiResponse.Fail(errors));
+    };
+});
+
+// 6. MVC Controllers & Swagger
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
