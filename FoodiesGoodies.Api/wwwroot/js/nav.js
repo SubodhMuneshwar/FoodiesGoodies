@@ -151,149 +151,386 @@ document.addEventListener('DOMContentLoaded', () => {
         header.appendChild(actionsWrap);
     }
 
-    // 3.2 Creative Culinary Kitchen Mode Switcher (Day Service 🍳 vs Night Bistro 🔥)
-    let themeToggleBtn = actionsWrap.querySelector('.theme-toggle-btn');
-    if (!themeToggleBtn) {
-        themeToggleBtn = document.createElement('button');
-        themeToggleBtn.type = 'button';
-        themeToggleBtn.className = 'theme-toggle-btn culinary-mode-switch';
-        themeToggleBtn.setAttribute('aria-label', 'Switch kitchen mode: Day Service or Night Bistro');
-        themeToggleBtn.innerHTML = `
-            <span class="culinary-track" aria-hidden="true">
-                <span class="culinary-station station-day">🍳</span>
-                <span class="culinary-station station-night">🔥</span>
-                <span class="culinary-slider">
-                    <span class="culinary-skillet">
-                        <span class="skillet-icon">🍳</span>
-                    </span>
-                </span>
-            </span>
-            <span class="culinary-badge-text">Day Service</span>
-        `;
+    // 3.2 Interactive Hanging Cord Theme Switcher (Umesh Nagare Style - Silent & Minimal)
+    // Remove any leftover legacy button in actionsWrap
+    const oldToggle = actionsWrap.querySelector('.theme-toggle-btn');
+    if (oldToggle) oldToggle.remove();
 
-        const lightQuotes = [
-            "🍳 Day Service Activated: Fresh morning prep & golden sunlight!",
-            "🥐 Brioche & Brunch Mode: Crisp daylight for precision cooking!",
-            "🥞 The stove is hot: Morning culinary service begins!",
-            "☕ Espresso & Sunrise: Welcome to the kitchen, Chef!"
-        ];
-        const darkQuotes = [
-            "🔥 Night Service Activated: Wood-fired hearth stoked & embers glowing!",
-            "🍷 Candlelit Bistro Mode: Cozy evening dining & bold vintage flavors!",
-            "🌙 Midnight Kitchen: Dim the lights & let the pot slow-simmer!",
-            "🍕 Wood-Fired Oven Lit: Artisanal evening service is now live!"
-        ];
+    // Initialize or retrieve canvas element
+    let cordCanvas = document.getElementById('cord-theme-switch');
+    if (!cordCanvas) {
+        cordCanvas = document.createElement('canvas');
+        cordCanvas.id = 'cord-theme-switch';
+        cordCanvas.setAttribute('role', 'button');
+        cordCanvas.setAttribute('aria-label', 'Pull cord to toggle theme');
+        cordCanvas.setAttribute('tabindex', '0');
+        document.body.appendChild(cordCanvas);
+    }
 
-        function playKitchenSizzle(isNight) {
-            try {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                if (!AudioContext) return;
-                const ctx = new AudioContext();
-                if (ctx.state === 'suspended') {
-                    ctx.resume();
+    class UmeshCordSwitch {
+        constructor(canvas) {
+            this.canvas = canvas;
+            this.ctx = canvas.getContext('2d');
+            this.dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+            // Shorter, compact canvas dimensions
+            this.width = 120;
+            this.height = 150;
+            this.canvas.width = this.width * this.dpr;
+            this.canvas.height = this.height * this.dpr;
+            this.ctx.scale(this.dpr, this.dpr);
+
+            // 8-node short chain anchored at (75, 0)
+            this.anchorX = 75;
+            this.anchorY = 0;
+            this.numNodes = 8;
+            this.restLen = 8; // 7 segments * 8px = 56px resting cord length
+            this.damping = 0.96;
+            this.gravity = 1.15;
+            this.constraintIters = 12;
+
+            // Restricted pull range
+            this.minPullThreshold = 74; // Must pull down past 74px to trigger toggle on release
+            this.maxPullY = 96;          // Hard limit: cord cannot stretch past 96px total
+
+            this.nodes = [];
+            for (let i = 0; i < this.numNodes; i++) {
+                this.nodes.push({
+                    x: this.anchorX,
+                    y: this.anchorY + i * this.restLen,
+                    oldX: this.anchorX,
+                    oldY: this.anchorY + i * this.restLen
+                });
+            }
+
+            this.isDragging = false;
+            this.hasPulledPastThreshold = false;
+            this.pointerX = this.anchorX;
+            this.pointerY = this.nodes[this.numNodes - 1].y;
+            this.startX = this.pointerX;
+            this.startY = this.pointerY;
+            this.startTime = 0;
+
+            this.isAnimating = false;
+            this.rafId = null;
+
+            this.initEvents();
+            this.startLoop();
+        }
+
+        getBottomNode() {
+            return this.nodes[this.numNodes - 1];
+        }
+
+        getKnobCenter() {
+            const bottom = this.getBottomNode();
+            const prev = this.nodes[this.numNodes - 2];
+            const angle = Math.atan2(bottom.y - prev.y, bottom.x - prev.x);
+            // Center of capsule is 15px along the tangent from the bottom node
+            return {
+                x: bottom.x + Math.cos(angle) * 15,
+                y: bottom.y + Math.sin(angle) * 15
+            };
+        }
+
+        initEvents() {
+            const canvas = this.canvas;
+
+            // Global pointer tracking: dynamically enable pointer events when hovering near the knob
+            window.addEventListener('pointermove', (e) => {
+                if (this.isDragging) return;
+                const rect = canvas.getBoundingClientRect();
+                const knob = this.getKnobCenter();
+                const screenKnobX = rect.left + knob.x;
+                const screenKnobY = rect.top + knob.y;
+                const dist = Math.hypot(e.clientX - screenKnobX, e.clientY - screenKnobY);
+
+                if (dist < 24) {
+                    canvas.style.pointerEvents = 'auto';
+                    canvas.style.cursor = 'grab';
+                } else {
+                    canvas.style.pointerEvents = 'none';
+
+                    // Subtle ambient cord sway when cursor passes closely
+                    if (dist < 45) {
+                        const mid = this.nodes[3];
+                        const screenMidX = rect.left + mid.x;
+                        const screenMidY = rect.top + mid.y;
+                        const midDist = Math.hypot(e.clientX - screenMidX, e.clientY - screenMidY);
+                        if (midDist < 30) {
+                            mid.x += (e.movementX || 0) * 0.12;
+                            this.wakeUp();
+                        }
+                    }
                 }
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = isNight ? 'triangle' : 'sine';
-                osc.frequency.setValueAtTime(isNight ? 300 : 540, ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(isNight ? 200 : 720, ctx.currentTime + 0.14);
-                gain.gain.setValueAtTime(0.04, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.14);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start();
-                osc.stop(ctx.currentTime + 0.15);
-            } catch (e) {}
-        }
+            });
 
-        function createCulinaryBurst(buttonEl, targetTheme) {
-            if (!buttonEl || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-            const rect = buttonEl.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
+            // Pointer down to grab knob
+            canvas.addEventListener('pointerdown', (e) => {
+                e.preventDefault();
+                const rect = canvas.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const clickY = e.clientY - rect.top;
+                const knob = this.getKnobCenter();
+                const dist = Math.hypot(clickX - knob.x, clickY - knob.y);
 
-            const items = targetTheme === 'dark'
-                ? ['🔥', '🍷', '🍕', '✨', '🌶️', '🥩']
-                : ['🍳', '🥞', '🥐', '✨', '🧈', '☕'];
+                if (dist < 28 || clickY > 45) {
+                    this.isDragging = true;
+                    this.hasPulledPastThreshold = false;
+                    canvas.setPointerCapture(e.pointerId);
+                    canvas.style.cursor = 'grabbing';
 
-            const count = 5;
-            for (let i = 0; i < count; i++) {
-                const particle = document.createElement('span');
-                particle.className = 'culinary-sizzle-particle';
-                particle.textContent = items[Math.floor(Math.random() * items.length)];
+                    this.startX = clickX;
+                    this.startY = clickY;
+                    this.startTime = Date.now();
 
-                const dx = (Math.random() - 0.5) * 80;
-                const dy = -(Math.random() * 45 + 35);
-                const rot = (Math.random() - 0.5) * 60;
-                const scale = 0.8 + Math.random() * 0.4;
-
-                particle.style.left = `${centerX + (Math.random() - 0.5) * 20}px`;
-                particle.style.top = `${centerY - 6}px`;
-                particle.style.setProperty('--drift-transform', `translate(${dx}px, ${dy}px) scale(${scale}) rotate(${rot}deg)`);
-
-                document.body.appendChild(particle);
-                setTimeout(() => particle.remove(), 750);
-            }
-        }
-
-        function createKitchenFlash(targetTheme) {
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-            const flash = document.createElement('div');
-            flash.className = `culinary-kitchen-flash ${targetTheme === 'dark' ? 'flash-dark' : 'flash-light'}`;
-            document.body.appendChild(flash);
-            setTimeout(() => flash.remove(), 460);
-        }
-
-        function updateCulinaryUI(theme, animated = false) {
-            const isDark = theme === 'dark';
-            const iconEl = themeToggleBtn.querySelector('.skillet-icon');
-            const textEl = themeToggleBtn.querySelector('.culinary-badge-text');
-
-            if (textEl) {
-                textEl.textContent = isDark ? 'Night Bistro' : 'Day Service';
-            }
-
-            themeToggleBtn.title = isDark
-                ? 'Switch to Day Service (Sunny Morning Prep)'
-                : 'Switch to Night Bistro (Wood-Fired Hearth)';
-
-            if (iconEl) {
-                iconEl.textContent = isDark ? '🔥' : '🍳';
-                if (animated) {
-                    iconEl.classList.remove('flipping');
-                    void iconEl.offsetWidth; // Trigger reflow
-                    iconEl.classList.add('flipping');
-                    setTimeout(() => iconEl.classList.remove('flipping'), 550);
+                    this.pointerX = Math.max(this.anchorX - 25, Math.min(this.anchorX + 25, clickX));
+                    this.pointerY = Math.max(20, Math.min(this.maxPullY, clickY));
+                    this.wakeUp();
                 }
-            }
+            });
+
+            // Pointer move during drag (limit pulling distance, DO NOT toggle theme here)
+            canvas.addEventListener('pointermove', (e) => {
+                if (!this.isDragging) return;
+                const rect = canvas.getBoundingClientRect();
+                const currentX = e.clientX - rect.left;
+                const currentY = e.clientY - rect.top;
+
+                // Restrict pull distance strictly
+                this.pointerX = Math.max(this.anchorX - 25, Math.min(this.anchorX + 25, currentX));
+                this.pointerY = Math.max(20, Math.min(this.maxPullY, currentY));
+
+                // Mark if pulled past threshold (theme only toggles upon release!)
+                if (this.pointerY >= this.minPullThreshold) {
+                    this.hasPulledPastThreshold = true;
+                }
+                this.wakeUp();
+            });
+
+            // Pointer release: THEME ONLY CHANGES HERE
+            const onPointerEnd = (e) => {
+                if (!this.isDragging) return;
+                try { canvas.releasePointerCapture(e.pointerId); } catch (_) {}
+                this.isDragging = false;
+                canvas.style.cursor = 'grab';
+
+                const elapsed = Date.now() - this.startTime;
+                const distMoved = Math.hypot(this.pointerX - this.startX, this.pointerY - this.startY);
+
+                // Change modes ONLY when the toggle wire is released
+                if (this.hasPulledPastThreshold || (elapsed < 350 && distMoved < 10)) {
+                    this.toggleTheme();
+                    // Subtle release bounce
+                    this.nodes[this.numNodes - 1].y += 18;
+                }
+
+                this.hasPulledPastThreshold = false;
+                this.wakeUp();
+            };
+
+            canvas.addEventListener('pointerup', onPointerEnd);
+            canvas.addEventListener('pointercancel', onPointerEnd);
+
+            // Keyboard accessibility (Enter / Space)
+            canvas.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.toggleTheme();
+                    this.nodes[this.numNodes - 1].y += 20;
+                    this.wakeUp();
+                }
+            });
         }
 
-        const initialTheme = document.documentElement.getAttribute('data-theme') || 'light';
-        updateCulinaryUI(initialTheme, false);
-
-        themeToggleBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
+        // Silent and minimal toggle (no sounds, no quotes/toasts)
+        toggleTheme() {
             const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
             const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
+
             document.documentElement.setAttribute('data-theme', nextTheme);
+            if (nextTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+
             try {
                 localStorage.setItem('foodies_theme', nextTheme);
             } catch (err) {}
+        }
 
-            updateCulinaryUI(nextTheme, true);
-            playKitchenSizzle(nextTheme === 'dark');
-            createCulinaryBurst(themeToggleBtn, nextTheme);
-            createKitchenFlash(nextTheme);
+        updatePhysics() {
+            const nodes = this.nodes;
 
-            if (window.Toast) {
-                const quotes = nextTheme === 'dark' ? darkQuotes : lightQuotes;
-                const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-                window.Toast.show('info', randomQuote);
+            // 1. Verlet position update for dynamic nodes
+            for (let i = 1; i < this.numNodes; i++) {
+                if (i === this.numNodes - 1 && this.isDragging) {
+                    nodes[i].oldX = nodes[i].x;
+                    nodes[i].oldY = nodes[i].y;
+                    nodes[i].x = this.pointerX;
+                    nodes[i].y = this.pointerY;
+                    continue;
+                }
+
+                const vx = (nodes[i].x - nodes[i].oldX) * this.damping;
+                const vy = (nodes[i].y - nodes[i].oldY) * this.damping + this.gravity;
+
+                nodes[i].oldX = nodes[i].x;
+                nodes[i].oldY = nodes[i].y;
+
+                nodes[i].x += vx;
+                nodes[i].y += vy;
             }
-        });
 
-        actionsWrap.appendChild(themeToggleBtn);
+            // 2. Relaxation constraints (maintain segment distance)
+            for (let iter = 0; iter < this.constraintIters; iter++) {
+                nodes[0].x = this.anchorX;
+                nodes[0].y = this.anchorY;
+
+                for (let i = 0; i < this.numNodes - 1; i++) {
+                    const n1 = nodes[i];
+                    const n2 = nodes[i + 1];
+
+                    const dx = n2.x - n1.x;
+                    const dy = n2.y - n1.y;
+                    const dist = Math.hypot(dx, dy) || 0.001;
+                    const diff = (dist - this.restLen) / dist;
+
+                    if (i === 0) {
+                        if (!(i + 1 === this.numNodes - 1 && this.isDragging)) {
+                            n2.x -= dx * diff;
+                            n2.y -= dy * diff;
+                        }
+                    } else if (i + 1 === this.numNodes - 1 && this.isDragging) {
+                        n1.x += dx * diff;
+                        n1.y += dy * diff;
+                    } else {
+                        n1.x += dx * diff * 0.5;
+                        n1.y += dy * diff * 0.5;
+                        n2.x -= dx * diff * 0.5;
+                        n2.y -= dy * diff * 0.5;
+                    }
+                }
+            }
+
+            // 3. Elastic restoring force when released beyond resting length
+            if (!this.isDragging) {
+                const bottom = nodes[this.numNodes - 1];
+                const totalDist = Math.hypot(bottom.x - this.anchorX, bottom.y - this.anchorY);
+                const maxRest = (this.numNodes - 1) * this.restLen;
+                if (totalDist > maxRest) {
+                    const pull = (totalDist - maxRest) * 0.28;
+                    const angle = Math.atan2(this.anchorY - bottom.y, this.anchorX - bottom.x);
+                    bottom.x += Math.cos(angle) * pull;
+                    bottom.y += Math.sin(angle) * pull;
+                }
+            }
+        }
+
+        draw() {
+            const ctx = this.ctx;
+            ctx.clearRect(0, 0, this.width, this.height);
+
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const nodes = this.nodes;
+
+            // 1. Draw smooth quadratic cord curve
+            ctx.beginPath();
+            ctx.moveTo(nodes[0].x, nodes[0].y);
+            for (let i = 1; i < this.numNodes - 1; i++) {
+                const midX = (nodes[i].x + nodes[i + 1].x) / 2;
+                const midY = (nodes[i].y + nodes[i + 1].y) / 2;
+                ctx.quadraticCurveTo(nodes[i].x, nodes[i].y, midX, midY);
+            }
+            ctx.lineTo(nodes[this.numNodes - 1].x, nodes[this.numNodes - 1].y);
+
+            // Cord styling: zinc/dark gray
+            ctx.strokeStyle = isDark ? '#52525b' : '#a1a1aa';
+            ctx.lineWidth = 1.8;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+
+            // Ceiling mount bead
+            ctx.beginPath();
+            ctx.arc(this.anchorX, 1.2, 2.2, 0, Math.PI * 2);
+            ctx.fillStyle = isDark ? '#71717a' : '#71717a';
+            ctx.fill();
+
+            // 2. Draw Capsule Knob at bottom node
+            const bottom = nodes[this.numNodes - 1];
+            const prev = nodes[this.numNodes - 2];
+            const angle = Math.atan2(bottom.y - prev.y, bottom.x - prev.x) - Math.PI / 2;
+
+            ctx.save();
+            ctx.translate(bottom.x, bottom.y);
+            ctx.rotate(angle);
+
+            // Capsule dimensions: 16px wide x 30px tall
+            const knobWidth = 16;
+            const knobHeight = 30;
+            const knobRadius = 8;
+
+            // Capsule shadow
+            ctx.shadowColor = isDark ? 'rgba(0, 0, 0, 0.45)' : 'rgba(0, 0, 0, 0.2)';
+            ctx.shadowBlur = 6;
+            ctx.shadowOffsetY = 2;
+
+            // Capsule Body: In Light mode -> dark pill; in Dark mode -> white pill
+            ctx.beginPath();
+            if (ctx.roundRect) {
+                ctx.roundRect(-knobWidth / 2, 0, knobWidth, knobHeight, knobRadius);
+            } else {
+                ctx.rect(-knobWidth / 2, 0, knobWidth, knobHeight);
+            }
+            ctx.fillStyle = isDark ? '#ffffff' : '#18181b';
+            ctx.fill();
+
+            ctx.shadowColor = 'transparent';
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = isDark ? 'rgba(0, 0, 0, 0.12)' : 'rgba(255, 255, 255, 0.15)';
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        checkMotion() {
+            let totalVelocity = 0;
+            for (let i = 1; i < this.numNodes; i++) {
+                totalVelocity += Math.hypot(this.nodes[i].x - this.nodes[i].oldX, this.nodes[i].y - this.nodes[i].oldY);
+            }
+            return totalVelocity;
+        }
+
+        loop() {
+            this.updatePhysics();
+            this.draw();
+
+            const motion = this.checkMotion();
+            if (motion < 0.04 && !this.isDragging) {
+                this.isAnimating = false;
+                this.rafId = null;
+            } else {
+                this.rafId = requestAnimationFrame(() => this.loop());
+            }
+        }
+
+        wakeUp() {
+            if (!this.isAnimating) {
+                this.isAnimating = true;
+                this.loop();
+            }
+        }
+
+        startLoop() {
+            this.isAnimating = true;
+            this.loop();
+        }
     }
+
+    // Instantiate UmeshCordSwitch once DOM is ready
+    window.__umeshCordSwitch = new UmeshCordSwitch(cordCanvas);
 
     // Header shadow on scroll
     window.addEventListener('scroll', () => {

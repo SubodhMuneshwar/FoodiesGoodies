@@ -201,19 +201,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span style="color:var(--text-muted); font-size:0.85rem; font-weight:600;">Personalized Preview</span>
                 </div>
                 <div class="meal-item">
-                    <h4><span>🌅 Breakfast</span> <span class="meal-cals">~${Math.round(targetCalories * 0.25)} kcal</span></h4>
+                    <h4><span>Breakfast</span> <span class="meal-cals">~${Math.round(targetCalories * 0.25)} kcal</span></h4>
                     <p>${mealPlans.breakfast}</p>
                 </div>
                 <div class="meal-item">
-                    <h4><span>☀️ Lunch</span> <span class="meal-cals">~${Math.round(targetCalories * 0.35)} kcal</span></h4>
+                    <h4><span>Lunch</span> <span class="meal-cals">~${Math.round(targetCalories * 0.35)} kcal</span></h4>
                     <p>${mealPlans.lunch}</p>
                 </div>
                 <div class="meal-item">
-                    <h4><span>🍎 Afternoon Fuel</span> <span class="meal-cals">~${Math.round(targetCalories * 0.15)} kcal</span></h4>
+                    <h4><span>Afternoon Fuel</span> <span class="meal-cals">~${Math.round(targetCalories * 0.15)} kcal</span></h4>
                     <p>${mealPlans.snack}</p>
                 </div>
                 <div class="meal-item">
-                    <h4><span>🌙 Dinner</span> <span class="meal-cals">~${Math.round(targetCalories * 0.25)} kcal</span></h4>
+                    <h4><span>Dinner</span> <span class="meal-cals">~${Math.round(targetCalories * 0.25)} kcal</span></h4>
                     <p>${mealPlans.dinner}</p>
                 </div>
             </div>

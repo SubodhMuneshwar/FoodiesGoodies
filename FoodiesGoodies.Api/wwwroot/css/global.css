@@ -122,202 +122,25 @@ img[loading="lazy"] {
 }
 
 /* --------------------------------------------------------------------------
-   4. Culinary Kitchen Mode Switcher (Day Service 🍳 vs Night Bistro 🔥)
+   4. Interactive Hanging Cord Theme Switcher (Umesh Nagare Style)
    -------------------------------------------------------------------------- */
-.theme-toggle-btn.culinary-mode-switch {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--bg-surface-elevated);
-  border: 1.5px solid var(--border-subtle);
-  padding: 3px 10px 3px 4px;
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  width: auto;
-  height: 38px;
-  box-shadow: var(--shadow-sm);
+#cord-theme-switch {
+  position: fixed;
+  top: 0;
+  right: 28px;
+  width: 120px;
+  height: 150px;
+  z-index: 10001;
+  pointer-events: none;
   user-select: none;
-  flex-shrink: 0;
-}
-
-.theme-toggle-btn.culinary-mode-switch:hover {
-  border-color: var(--primary);
-  background: var(--bg-surface);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
-}
-
-.culinary-track {
-  position: relative;
-  width: 56px;
-  height: 28px;
-  background: linear-gradient(135deg, rgba(194, 112, 58, 0.12) 0%, rgba(253, 250, 246, 0.95) 100%);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-pill);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 6px;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
-  transition: background 0.3s ease, border-color 0.3s ease;
-}
-
-[data-theme="dark"] .culinary-track {
-  background: linear-gradient(135deg, #262320 0%, #151311 100%);
-  border-color: rgba(194, 112, 58, 0.35);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
-}
-
-.culinary-station {
-  font-size: 0.8rem;
-  line-height: 1;
-  opacity: 0.4;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  pointer-events: none;
-}
-
-[data-theme="light"] .station-day {
-  opacity: 0.95;
-  transform: scale(1.1);
-}
-
-[data-theme="dark"] .station-night {
-  opacity: 0.95;
-  transform: scale(1.1);
-}
-
-.culinary-slider {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  transform: translateX(0px);
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  z-index: 2;
-}
-
-[data-theme="dark"] .culinary-slider {
-  transform: translateX(28px);
-}
-
-.culinary-skillet {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #FDE68A 0%, #F59E0B 100%);
-  box-shadow: 0 2px 5px rgba(245, 158, 11, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
-}
-
-[data-theme="dark"] .culinary-skillet {
-  background: linear-gradient(135deg, #C2703A 0%, #9B2226 100%);
-  box-shadow: 0 0 10px rgba(194, 112, 58, 0.6), 0 2px 5px rgba(0, 0, 0, 0.5);
-}
-
-.skillet-icon {
-  font-size: 0.74rem;
-  line-height: 1;
-  display: inline-block;
-  transform-origin: center center;
-}
-
-.skillet-icon.flipping {
-  animation: chefPanFlip 0.55s cubic-bezier(0.2, 0.8, 0.3, 1.2) forwards;
-}
-
-@keyframes chefPanFlip {
-  0% {
-    transform: translateY(0) rotate(0deg) scale(1);
-  }
-  40% {
-    transform: translateY(-16px) rotate(180deg) scale(1.35);
-  }
-  80% {
-    transform: translateY(2px) rotate(360deg) scale(0.92);
-  }
-  100% {
-    transform: translateY(0) rotate(360deg) scale(1);
-  }
-}
-
-.culinary-badge-text {
-  font-family: var(--font-body);
-  font-size: 0.76rem;
-  font-weight: 700;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding-right: 4px;
-  white-space: nowrap;
+  -webkit-user-select: none;
+  touch-action: none;
 }
 
 @media (max-width: 768px) {
-  .culinary-badge-text {
-    display: none;
+  #cord-theme-switch {
+    right: 14px;
   }
-  .theme-toggle-btn.culinary-mode-switch {
-    padding: 3px;
-    height: 36px;
-  }
-}
-
-/* Culinary Sizzle Spark Particles */
-.culinary-sizzle-particle {
-  position: fixed;
-  pointer-events: none;
-  z-index: 999999;
-  font-size: 1.15rem;
-  animation: sizzleFloatUp 0.75s ease-out forwards;
-}
-
-@keyframes sizzleFloatUp {
-  0% {
-    opacity: 1;
-    transform: translate(0, 0) scale(0.7) rotate(0deg);
-  }
-  50% {
-    opacity: 0.9;
-  }
-  100% {
-    opacity: 0;
-    transform: var(--drift-transform);
-  }
-}
-
-/* Kitchen Hearth Flash Effect */
-.culinary-kitchen-flash {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 99999;
-  opacity: 0;
-}
-
-.culinary-kitchen-flash.flash-dark {
-  background: radial-gradient(circle at top right, rgba(194, 112, 58, 0.16) 0%, rgba(28, 25, 23, 0.25) 60%, transparent 100%);
-  animation: kitchenFlashFade 0.45s ease-out forwards;
-}
-
-.culinary-kitchen-flash.flash-light {
-  background: radial-gradient(circle at top right, rgba(254, 243, 199, 0.3) 0%, rgba(253, 250, 246, 0.15) 60%, transparent 100%);
-  animation: kitchenFlashFade 0.45s ease-out forwards;
-}
-
-@keyframes kitchenFlashFade {
-  0% { opacity: 0; }
-  35% { opacity: 1; }
-  100% { opacity: 0; }
 }
 
 
