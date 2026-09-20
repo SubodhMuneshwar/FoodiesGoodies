@@ -1,8 +1,6 @@
 /**
  * FoodiesGoodies - Live Edamam Recipe Search Integration & Resilient Culinary Vault
- * Connects to the EDAMAM Recipe Search API v2 via ASP.NET Core server-side proxy.
- * Provides resilient, automatic fallback to the FoodiesGoodies Curated Culinary Vault
- * ensuring users never encounter 404 or connection failures on static servers or previews.
+ * Professional numbered pagination (responsive) — supports vault + live cursor API.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -13,9 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let nextPaginationCursor = null;
     let currentSearchQuery = '';
-    let currentHitsList = [];
+    let currentHitsList = []; // hits for CURRENT page only (for quick view indexing)
     let isVaultMode = false;
-    let vaultRemainingHits = [];
+    let vaultAllHits = []; // all vault matches for current query
+    let liveAllHits = [];  // accumulated live hits (buffered from API cursors)
+    let isFetchingPage = false;
+    let currentDataIsLive = true; // for banner badge
 
     if (!searchForm || !searchInput || !resultsList) {
         return;
@@ -472,39 +473,49 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     // =========================================================================
-    // 2. Candidate API Base URLs (Adaptive Endpoint Resolver)
+    // 2. Candidate API Base URLs & Edamam Direct Access Configuration
     // =========================================================================
+    const EDAMAM_DIRECT_CONFIG = {
+        appId: '7fa30af7',
+        appKey: '9c87101cffeb950238f6c49653050fd1',
+        userId: 'SubodhUM',
+        baseUrl: 'https://api.edamam.com/api/recipes/v2'
+    };
+
+    let totalHits = 0;
+    let currentPage = 1;
+    const PAGE_SIZE = 6;
+
     function getCandidateApiUrls(pathWithQuery) {
         const port = window.location.port;
-        const proto = window.location.protocol;
         const list = [];
 
-        // If on standard ASP.NET Core port (5258 or 7258)
-        if (port === '5258' || port === '7258') {
-            list.push(pathWithQuery);
-        } else if (proto === 'http:' || proto === 'https:') {
-            // Priority 1: Relative path on current server
-            list.push(pathWithQuery);
-            // Priority 2: Direct ASP.NET Core backend port
+        // Priority 1: Relative path on current server (standard when served by Kestrel)
+        list.push(pathWithQuery);
+
+        // Priority 2: Direct ASP.NET Core backend port if running on alternate host/port (e.g., Live Server)
+        if (port !== '5258') {
             list.push(`http://localhost:5258${pathWithQuery}`);
-            list.push(`https://localhost:7060${pathWithQuery}`);
-        } else {
-            // file: protocol or local webview
-            list.push(`http://localhost:5258${pathWithQuery}`);
+        }
+        if (port !== '7258') {
+            list.push(`https://localhost:7258${pathWithQuery}`);
         }
         return list;
     }
 
     /**
-     * Attempts to fetch from multiple candidate API endpoints with timeout
+     * Attempts to fetch recipes with adaptive fallback:
+     * 1. Tries ASP.NET Core proxy candidates with generous 12s timeout (averts premature client abort).
+     * 2. If proxy endpoints fail/offline, falls back to direct client-side Edamam v2 cloud API.
      */
-    async function fetchFromApiCandidates(pathWithQuery) {
+    async function fetchFromApiCandidates(pathWithQuery, query = null) {
         const candidates = getCandidateApiUrls(pathWithQuery);
 
+        // 1. Attempt ASP.NET Core Backend Proxy Endpoints
         for (const url of candidates) {
             try {
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 3500);
+                const timeoutId = setTimeout(() => controller.abort(), 12000);
 
                 const response = await fetch(url, {
                     headers: { 'Accept': 'application/json' },
@@ -515,14 +526,59 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (response.ok) {
                     const data = await response.json();
                     if (data && (Array.isArray(data.hits) || data.success !== false)) {
-                        return { ok: true, data, endpoint: url };
+                        console.info(`[RecipeSearch] Successfully loaded recipes from backend proxy: ${url}`);
+                        return { ok: true, data, endpoint: url, isDirectEdamam: false };
+                    }
+                } else {
+                    console.warn(`[RecipeSearch] Candidate ${url} returned HTTP ${response.status}`);
+                }
+            } catch (err) {
+                console.warn(`[RecipeSearch] Candidate ${url} failed or timed out:`, err.message || err);
+            }
+        }
+
+        // 2. Direct Edamam API Fallback (in case backend is offline or static hosting)
+        if (query) {
+            try {
+                console.info('[RecipeSearch] Local backend proxy unreachable, attempting direct Edamam cloud fallback...');
+                const directUrl = `${EDAMAM_DIRECT_CONFIG.baseUrl}?type=public&q=${encodeURIComponent(query)}&app_id=${EDAMAM_DIRECT_CONFIG.appId}&app_key=${EDAMAM_DIRECT_CONFIG.appKey}`;
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 12000);
+
+                const response = await fetch(directUrl, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Edamam-Account-User': EDAMAM_DIRECT_CONFIG.userId
+                    },
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data && Array.isArray(data.hits)) {
+                        console.info('[RecipeSearch] Successfully loaded recipes from direct Edamam Cloud API');
+                        const nextLink = data._links && data._links.next ? data._links.next.href : null;
+                        return {
+                            ok: true,
+                            data: {
+                                hits: data.hits,
+                                count: data.count || data.hits.length,
+                                from: data.from,
+                                to: data.to,
+                                nextCursor: nextLink
+                            },
+                            endpoint: 'Edamam Cloud Direct',
+                            isDirectEdamam: true
+                        };
                     }
                 }
             } catch (err) {
-                // Endpoint unreachable or timed out; try next candidate
+                console.warn('[RecipeSearch] Direct Edamam cloud fallback failed:', err.message || err);
             }
         }
-        return { ok: false };
+
+        return { ok: false, error: 'network_failure' };
     }
 
     /**
@@ -584,6 +640,60 @@ document.addEventListener('DOMContentLoaded', () => {
         return [];
     }
 
+    function attachFallbackButtons() {
+        resultsList.querySelectorAll('.fallback-suggest-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const term = btn.getAttribute('data-query');
+                searchInput.value = term;
+                executeSearch(term);
+            });
+        });
+    }
+
+    function renderEmptyState(query) {
+        resultsList.innerHTML = `
+            <div class="search-status-message">
+                <div class="edamam-logo-badge" style="margin-bottom: 16px;">
+                    <span style="font-size: 38px;"><ion-icon name="search-outline"></ion-icon></span>
+                </div>
+                <h3>No recipes found for "${escapeHTML(query)}"</h3>
+                <p>Try searching for popular culinary terms such as <em>Pizza, Pasta, Burgers, Donuts, Salads, Tacos, Vegan, Salmon, or Brownies</em>.</p>
+                <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 18px;">
+                    <button type="button" class="quick-tag fallback-suggest-btn" data-query="Pizza">Try Pizza</button>
+                    <button type="button" class="quick-tag fallback-suggest-btn" data-query="Pasta">Try Pasta</button>
+                    <button type="button" class="quick-tag fallback-suggest-btn" data-query="Tacos">Try Tacos</button>
+                    <button type="button" class="quick-tag fallback-suggest-btn" data-query="Brownies">Try Brownies</button>
+                </div>
+            </div>
+        `;
+        attachFallbackButtons();
+    }
+
+    function renderConnectionErrorState(query) {
+        resultsList.innerHTML = `
+            <div class="search-status-message">
+                <div class="edamam-logo-badge" style="margin-bottom: 16px; color: var(--color-accent, #e67e22);">
+                    <span style="font-size: 38px;"><ion-icon name="cloud-offline-outline"></ion-icon></span>
+                </div>
+                <h3>Connection to Recipe Cloud Interrupted</h3>
+                <p>We were unable to reach the Edamam culinary service or local backend server for "<strong>${escapeHTML(query)}</strong>". Please check your network connection and retry.</p>
+                <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 18px;">
+                    <button type="button" class="btn-primary" id="retrySearchBtn" style="padding: 10px 20px; font-weight: 600; cursor: pointer;">
+                        <ion-icon name="refresh-outline" style="vertical-align: middle; margin-right: 6px;"></ion-icon> Retry Search
+                    </button>
+                    <button type="button" class="quick-tag fallback-suggest-btn" data-query="Pizza">Browse Pizza</button>
+                    <button type="button" class="quick-tag fallback-suggest-btn" data-query="Pasta">Browse Pasta</button>
+                    <button type="button" class="quick-tag fallback-suggest-btn" data-query="Brownies">Browse Brownies</button>
+                </div>
+            </div>
+        `;
+        const retryBtn = document.getElementById('retrySearchBtn');
+        if (retryBtn) {
+            retryBtn.addEventListener('click', () => executeSearch(query));
+        }
+        attachFallbackButtons();
+    }
+
     // Handle form submit
     searchForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -615,18 +725,134 @@ document.addEventListener('DOMContentLoaded', () => {
         executeSearch(initialQuery.trim());
     }
 
-    /**
-     * Executes recipe search with dual strategy:
-     * 1. Try Live ASP.NET Core Edamam proxy endpoints.
-     * 2. If endpoint returns 404/502/network failure, seamlessly activate Curated Culinary Vault.
-     */
+    // =========================================================================
+    // 3. Professional Pagination — Core Helpers
+    // =========================================================================
+    function getTotalPages() {
+        if (totalHits <= 0) return 1;
+        return Math.ceil(totalHits / PAGE_SIZE);
+    }
+
+    function getPaginationWindow(current, total) {
+        // Professional window: for small totals show all pages, else show 1, ellipsis, neighbors, ellipsis, last
+        if (total <= 7) {
+            return Array.from({ length: total }, (_, i) => i + 1);
+        }
+        const delta = 1; // pages around current (keeps pill count minimal & editorial)
+        const range = [];
+        const rangeWithDots = [];
+        let last = null;
+
+        for (let i = 1; i <= total; i++) {
+            if (i === 1 || i === total || (i >= current - delta && i <= current + delta)) {
+                range.push(i);
+            }
+        }
+
+        for (const num of range) {
+            if (last !== null) {
+                if (num - last === 2) {
+                    rangeWithDots.push(last + 1);
+                } else if (num - last !== 1) {
+                    rangeWithDots.push('ellipsis');
+                }
+            }
+            rangeWithDots.push(num);
+            last = num;
+        }
+        return rangeWithDots;
+    }
+
+    function scrollToResultsTop() {
+        const headerOffset = 84;
+        const top = resultsList.getBoundingClientRect().top + window.scrollY - headerOffset;
+        window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    }
+
+    function buildPaginationHTML() {
+        const totalPages = getTotalPages();
+        if (totalPages <= 1) return '';
+
+        const isFirst = currentPage === 1;
+        const isLast = currentPage === totalPages;
+        const windowPages = getPaginationWindow(currentPage, totalPages);
+
+        // Disable logic: also disable if fetching
+        const disabledAttr = isFetchingPage ? ' disabled' : '';
+
+        let html = '';
+
+        // Previous button
+        html += `<button type="button" class="pagination-btn pagination-prev" data-page="${currentPage - 1}" ${isFirst || isFetchingPage ? 'disabled' : ''} aria-label="Go to previous page">
+            <span aria-hidden="true">‹</span>
+            <span class="pagination-label-long">Previous</span>
+            <span class="pagination-label-short">Prev</span>
+        </button>`;
+
+        // Page numbers
+        windowPages.forEach(item => {
+            if (item === 'ellipsis') {
+                html += `<span class="pagination-ellipsis" aria-hidden="true">…</span>`;
+            } else {
+                const isActive = item === currentPage;
+                html += `<button type="button" class="pagination-page-btn${isActive ? ' is-active' : ''}" data-page="${item}" ${isActive ? 'aria-current="page"' : ''}${isFetchingPage ? ' disabled' : ''} aria-label="Go to page ${item}">${item}</button>`;
+            }
+        });
+
+        // Next button
+        html += `<button type="button" class="pagination-btn pagination-next" data-page="${currentPage + 1}" ${isLast || isFetchingPage ? 'disabled' : ''} aria-label="Go to next page">
+            <span class="pagination-label-long">Next</span>
+            <span class="pagination-label-short">Next</span>
+            <span aria-hidden="true">›</span>
+        </button>`;
+
+        return `<nav class="pagination" aria-label="Recipe results pagination">${html}</nav>`;
+    }
+
+    function renderPaginationWrapper() {
+        const totalPages = getTotalPages();
+        const startItem = totalHits === 0 ? 0 : (currentPage - 1) * PAGE_SIZE + 1;
+        const endItem = Math.min(currentPage * PAGE_SIZE, totalHits);
+        const sourceLabel = isVaultMode ? 'Curated Culinary Vault' : 'Edamam Recipe Cloud';
+        const moreNote = (!isVaultMode && nextPaginationCursor) ? ' · more available' : '';
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'pagination-wrapper';
+        wrapper.setAttribute('role', 'navigation');
+        wrapper.setAttribute('aria-label', 'Pagination');
+
+        const infoHtml = totalPages <= 1
+            ? `<div class="pagination-info"><span class="pagination-range">${totalHits}</span> recipe${totalHits !== 1 ? 's' : ''} found in <strong>${sourceLabel}</strong> for "<strong>${escapeHTML(currentSearchQuery)}</strong>"</div>`
+            : `<div class="pagination-info">Showing <span class="pagination-range">${startItem}–${endItem}</span> of <strong>${totalHits}</strong> recipes · Page <strong>${currentPage}</strong> of <strong>${totalPages}</strong> · <span style="color:var(--text-muted)">${sourceLabel}${moreNote}</span></div>`;
+
+        wrapper.innerHTML = `${infoHtml}${buildPaginationHTML()}`;
+
+        // Attach listeners
+        wrapper.querySelectorAll('[data-page]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const target = parseInt(btn.getAttribute('data-page'), 10);
+                if (!isNaN(target)) goToPage(target);
+            });
+        });
+
+        return wrapper;
+    }
+
+    // =========================================================================
+    // 4. Search Execution — Now with buffered pagination
+    // =========================================================================
     async function executeSearch(query) {
         currentSearchQuery = query;
+        currentPage = 1;
+        totalHits = 0;
         nextPaginationCursor = null;
         isVaultMode = false;
-        vaultRemainingHits = [];
+        vaultAllHits = [];
+        liveAllHits = [];
+        currentDataIsLive = true;
+        isFetchingPage = false;
 
-        // Show 6 skeleton placeholder cards
+        // Show skeletons matching PAGE_SIZE (6)
         const skeletonCardHtml = `
             <article class="recipe-card skeleton-card" aria-hidden="true">
                 <div class="card-media-wrapper skeleton-block skeleton-image"></div>
@@ -642,106 +868,351 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </article>
         `;
-        resultsList.innerHTML = Array(6).fill(skeletonCardHtml).join('');
+        resultsList.innerHTML = `<div class="recipes-grid">${Array(PAGE_SIZE).fill(skeletonCardHtml).join('')}</div>`;
 
         // Attempt API candidate endpoints
         const apiPath = `/api/recipes?q=${encodeURIComponent(query)}`;
-        const apiResult = await fetchFromApiCandidates(apiPath);
+        const apiResult = await fetchFromApiCandidates(apiPath, query);
 
         if (apiResult.ok && apiResult.data) {
             const data = apiResult.data;
             nextPaginationCursor = data.nextCursor || null;
+            totalHits = data.count || (data.hits ? data.hits.length : 0);
 
             if (data.hits && data.hits.length > 0) {
-                renderRecipes(data.hits, false, data.count || data.hits.length, true);
+                // Buffer all hits
+                liveAllHits = [...data.hits];
+                // If API returned fewer hits than count, pagination will fetch more on demand
+                currentDataIsLive = true;
+                renderCurrentPage(1, false);
+                return;
+            } else {
+                renderEmptyState(query);
                 return;
             }
         }
 
-        // Seamless Fallback to Curated Culinary Vault
+        // Seamless Fallback to Curated Culinary Vault if network/backend failed
         const vaultMatches = searchCuratedVault(query);
 
         if (vaultMatches && vaultMatches.length > 0) {
             isVaultMode = true;
-            const pageSize = 6;
-            const initialSlice = vaultMatches.slice(0, pageSize);
-            vaultRemainingHits = vaultMatches.slice(pageSize);
-
-            renderRecipes(initialSlice, false, vaultMatches.length, false);
+            currentDataIsLive = false;
+            // Wrap vault recipes as {recipe: ...} to keep uniform shape? Vault items are direct recipe objects.
+            // We'll store as vault objects and handle mapping in render.
+            vaultAllHits = vaultMatches;
+            totalHits = vaultAllHits.length;
+            nextPaginationCursor = null;
+            renderCurrentPage(1, false);
             return;
         }
 
-        // True Empty State (query had zero matches anywhere)
-        resultsList.innerHTML = `
-            <div class="search-status-message">
-                <div class="edamam-logo-badge" style="margin-bottom: 16px;">
-                    <span style="font-size: 38px;"><ion-icon name="search-outline"></ion-icon></span>
+        // True connection / offline failure state
+        renderConnectionErrorState(query);
+    }
+
+    /**
+     * Ensure live buffer has enough items to display target page.
+     * Fetches sequential API pages until buffer sufficient or no more cursor.
+     */
+    async function ensureLiveBufferForPage(targetPage) {
+        if (isVaultMode) return true;
+        const required = targetPage * PAGE_SIZE;
+        while (liveAllHits.length < required && nextPaginationCursor && !isFetchingPage) {
+            // Fetch next API chunk
+            const fetched = await fetchNextApiChunk();
+            if (!fetched) break;
+        }
+        return liveAllHits.length >= (targetPage - 1) * PAGE_SIZE + 1;
+    }
+
+    async function fetchNextApiChunk() {
+        if (!nextPaginationCursor || isFetchingPage) return false;
+        isFetchingPage = true;
+        // Show loading state on pagination if exists (both top and bottom)
+        const wrappers = document.querySelectorAll('.pagination-wrapper');
+        wrappers.forEach(w => w.querySelectorAll('button').forEach(b => b.disabled = true));
+
+        try {
+            let data = null;
+
+            if (nextPaginationCursor.startsWith('http://') || nextPaginationCursor.startsWith('https://')) {
+                // Direct Edamam next page link
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 12000);
+                const response = await fetch(nextPaginationCursor, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Edamam-Account-User': EDAMAM_DIRECT_CONFIG.userId
+                    },
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+
+                if (response.ok) {
+                    const raw = await response.json();
+                    const nextLink = raw._links && raw._links.next ? raw._links.next.href : null;
+                    data = {
+                        hits: raw.hits || [],
+                        count: raw.count || totalHits,
+                        nextCursor: nextLink
+                    };
+                }
+            } else {
+                // Backend proxy cursor endpoint
+                const nextPath = `/api/recipes/next?cursor=${encodeURIComponent(nextPaginationCursor)}`;
+                const apiResult = await fetchFromApiCandidates(nextPath, null);
+                if (apiResult.ok && apiResult.data) {
+                    data = apiResult.data;
+                }
+            }
+
+            if (data && Array.isArray(data.hits) && data.hits.length > 0) {
+                liveAllHits.push(...data.hits);
+                nextPaginationCursor = data.nextCursor || null;
+                // Update totalHits if count provided and larger
+                if (data.count && data.count > totalHits) totalHits = data.count;
+                return true;
+            } else {
+                nextPaginationCursor = null;
+                return false;
+            }
+        } catch (err) {
+            console.error('Failed to fetch next API chunk:', err);
+            return false;
+        } finally {
+            isFetchingPage = false;
+        }
+    }
+
+    async function goToPage(targetPage) {
+        const totalPages = getTotalPages();
+        if (targetPage < 1 || targetPage > totalPages || targetPage === currentPage || isFetchingPage) return;
+
+        // If vault, simple slice
+        if (isVaultMode) {
+            renderCurrentPage(targetPage, true);
+            return;
+        }
+
+        // Live mode: ensure buffer
+        const requiredStart = (targetPage - 1) * PAGE_SIZE;
+        if (liveAllHits.length <= requiredStart && nextPaginationCursor) {
+            // Need to fetch — show loading skeletons in pagination area (both top and bottom)
+            const wrappers = document.querySelectorAll('.pagination-wrapper');
+            wrappers.forEach(wrapper => {
+                wrapper.innerHTML = `<div class="pagination-info" style="opacity:0.7">Loading page ${targetPage}…</div>`;
+            });
+            // Fetch until enough
+            await ensureLiveBufferForPage(targetPage);
+        }
+
+        // Re-check after fetching
+        if (liveAllHits.length > requiredStart || targetPage <= Math.ceil(liveAllHits.length / PAGE_SIZE)) {
+            renderCurrentPage(targetPage, true);
+        } else {
+            // If still not enough and no more cursor, cap totalHits to actually available
+            totalHits = liveAllHits.length;
+            renderCurrentPage(Math.min(targetPage, getTotalPages()), true);
+        }
+    }
+
+    // =========================================================================
+    // 5. Rendering — Paginated grid + pagination controls
+    // =========================================================================
+    function renderCurrentPage(pageNum, shouldScroll = true) {
+        currentPage = pageNum;
+        const start = (pageNum - 1) * PAGE_SIZE;
+        const end = start + PAGE_SIZE;
+        let pageHits = [];
+
+        if (isVaultMode) {
+            pageHits = vaultAllHits.slice(start, end);
+        } else {
+            pageHits = liveAllHits.slice(start, end);
+        }
+
+        // If live and page slice empty but we have cursor, fetch then retry
+        if (!isVaultMode && pageHits.length === 0 && nextPaginationCursor) {
+            ensureLiveBufferForPage(pageNum).then(() => {
+                const retrySlice = liveAllHits.slice(start, end);
+                if (retrySlice.length > 0) renderCurrentPage(pageNum, shouldScroll);
+            });
+            return;
+        }
+
+        // Build cards HTML
+        let cardsHtml = '';
+        currentHitsList = []; // reset for this page
+
+        pageHits.forEach((item, idx) => {
+            const recipe = item.recipe || item; // live hits have .recipe, vault are direct
+            currentHitsList.push(recipe);
+
+            const label = escapeHTML(recipe.label || 'Delicious Dish');
+            const imageUrl = escapeHTML(recipe.image || (recipe.images && recipe.images.REGULAR ? recipe.images.REGULAR.url : '../assets/images/pizza1.png'));
+            const recipeUrl = escapeHTML(recipe.url || '#');
+            const source = escapeHTML(recipe.source || 'Foodies Goodies Kitchen');
+            const calories = Math.round(recipe.calories || 0);
+            const servings = Math.max(1, Math.round(recipe.yield || 1));
+            const calsPerServing = Math.round(calories / servings);
+            const cookingTime = recipe.totalTime ? `${recipe.totalTime} mins` : '20 mins';
+
+            const cuisine = Array.isArray(recipe.cuisineType) && recipe.cuisineType.length > 0
+                ? capitalize(recipe.cuisineType[0])
+                : (Array.isArray(recipe.mealType) ? capitalize(recipe.mealType[0]) : 'Specialty');
+
+            const badges = [];
+            if (Array.isArray(recipe.dietLabels)) {
+                recipe.dietLabels.slice(0, 2).forEach(d => badges.push(d));
+            }
+            if (Array.isArray(recipe.healthLabels)) {
+                recipe.healthLabels.filter(h => ['Vegetarian', 'Vegan', 'Gluten-Free', 'Keto-Friendly', 'Dairy-Free', 'Nut-Free', 'High-Protein'].includes(h)).slice(0, 2).forEach(h => {
+                    if (!badges.includes(h)) badges.push(h);
+                });
+            }
+
+            cardsHtml += `
+            <article class="recipe-card card-hover-lift" data-dish="${label}">
+                <div class="card-media-wrapper">
+                    <img src="${imageUrl}" alt="${label}" class="aspect-16-9" loading="lazy" decoding="async" onerror="this.src='../assets/images/pizza1.png'">
+                    <span class="cuisine-badge">${cuisine}</span>
                 </div>
-                <h3>No recipes found for "${escapeHTML(query)}"</h3>
-                <p>Try searching for popular culinary terms such as <em>Pizza, Pasta, Burgers, Donuts, Salads, Tacos, Vegan, Salmon, or Brownies</em>.</p>
-                <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 18px;">
-                    <button type="button" class="quick-tag fallback-suggest-btn" data-query="Pizza">Try Pizza</button>
-                    <button type="button" class="quick-tag fallback-suggest-btn" data-query="Pasta">Try Pasta</button>
-                    <button type="button" class="quick-tag fallback-suggest-btn" data-query="Tacos">Try Tacos</button>
-                    <button type="button" class="quick-tag fallback-suggest-btn" data-query="Brownies">Try Brownies</button>
+                <div class="card-body">
+                    <div class="recipe-publisher">By ${source}</div>
+                    <h3 class="recipe-title" title="${label}">${label}</h3>
+                    <div class="recipe-metrics">
+                        <span class="metric-item" title="Calories per serving">
+                            🔥 <strong>${calsPerServing}</strong> kcal/srv
+                        </span>
+                        <span class="metric-item" title="Servings">
+                            🍽️ <strong>${servings}</strong> ${servings === 1 ? 'portion' : 'portions'}
+                        </span>
+                        <span class="metric-item" title="Prep & Cook Time">⏱️ <strong>${cookingTime}</strong></span>
+                    </div>
+                    ${badges.length > 0 ? `
+                        <div class="dietary-tags">
+                            ${badges.map(b => `<span class="badge-tag">${escapeHTML(b)}</span>`).join('')}
+                        </div>
+                    ` : ''}
+                    <div class="recipe-card-actions" style="display:flex;gap:8px;margin-top:14px;">
+                        <button type="button" class="btn-secondary-glass btn-trigger-quickview" data-index="${idx}" style="flex:1;padding:8px 12px;font-size:0.85rem;justify-content:center;cursor:pointer;">
+                            👁️ Quick View
+                        </button>
+                        <a href="${recipeUrl}" class="btn-primary-glass" target="_blank" rel="noopener noreferrer" style="flex:1;padding:8px 12px;font-size:0.85rem;text-decoration:none;text-align:center;display:flex;align-items:center;justify-content:center;">
+                            Instructions ↗
+                        </a>
+                    </div>
+                </div>
+            </article>
+            `;
+        });
+
+        // Meta banner (above grid)
+        const sourceBadgeText = isVaultMode ? 'Curated Culinary Vault' : 'Edamam Recipe Cloud';
+        const startItem = totalHits === 0 ? 0 : start + 1;
+        const endItem = Math.min(end, totalHits);
+        const headerBanner = `
+            <div class="search-results-meta">
+                <div class="results-count-text">
+                    Showing <strong>${startItem}–${endItem}</strong> of <strong>${totalHits}</strong> recipes from <strong>${sourceBadgeText}</strong> for "<strong>${escapeHTML(currentSearchQuery)}</strong>"
                 </div>
             </div>
         `;
 
-        resultsList.querySelectorAll('.fallback-suggest-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const term = btn.getAttribute('data-query');
-                searchInput.value = term;
-                executeSearch(term);
+        resultsList.innerHTML = headerBanner + `<div class="recipes-grid">${cardsHtml}</div>`;
+
+        // Attach Quick View
+        resultsList.querySelectorAll('.btn-trigger-quickview').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const idx = parseInt(btn.getAttribute('data-index'), 10);
+                if (!isNaN(idx) && currentHitsList[idx]) {
+                    openQuickView(currentHitsList[idx]);
+                }
             });
         });
+
+        // Append pagination controls — professional dual placement (top + bottom) for easy navigation
+        if (totalHits > PAGE_SIZE) {
+            const topWrapper = renderPaginationWrapper();
+            topWrapper.classList.add('pagination-wrapper--top');
+            const bottomWrapper = renderPaginationWrapper();
+            bottomWrapper.classList.add('pagination-wrapper--bottom');
+
+            // Insert top pagination immediately after the results meta header (above grid)
+            const headerEl = resultsList.querySelector('.search-results-meta');
+            if (headerEl) {
+                headerEl.insertAdjacentElement('afterend', topWrapper);
+            } else {
+                resultsList.prepend(topWrapper);
+            }
+            // Bottom pagination after the grid
+            resultsList.appendChild(bottomWrapper);
+        } else if (totalHits > 0) {
+            // Single page info only (no controls needed) — keep single bottom info to avoid duplication
+            const singleInfo = document.createElement('div');
+            singleInfo.className = 'pagination-wrapper pagination-wrapper--bottom';
+            singleInfo.innerHTML = `<div class="pagination-info">${totalHits} recipe${totalHits !== 1 ? 's' : ''} found in <strong>${sourceBadgeText}</strong></div>`;
+            resultsList.appendChild(singleInfo);
+        }
+
+        // SEO JSON-LD
+        try {
+            const oldScript = document.querySelector('#recipe-json-ld');
+            if (oldScript) oldScript.remove();
+            const schemaItems = pageHits.map(item => {
+                const r = item.recipe || item;
+                return {
+                    "@context": "https://schema.org",
+                    "@type": "Recipe",
+                    "name": r.label || "Delicious Dish",
+                    "image": [r.image || (r.images && r.images.REGULAR ? r.images.REGULAR.url : "")],
+                    "author": { "@type": "Person", "name": r.source || "Foodies Goodies" },
+                    "recipeYield": `${Math.max(1, Math.round(r.yield || 1))} servings`,
+                    "nutrition": { "@type": "NutritionInformation", "calories": `${Math.round(r.calories || 0)} calories` },
+                    "recipeIngredient": Array.isArray(r.ingredientLines) ? r.ingredientLines : []
+                };
+            });
+            const scriptTag = document.createElement('script');
+            scriptTag.id = 'recipe-json-ld';
+            scriptTag.type = 'application/ld+json';
+            scriptTag.textContent = JSON.stringify(schemaItems);
+            document.head.appendChild(scriptTag);
+        } catch (schemaErr) {
+            console.warn('Could not inject recipe JSON-LD:', schemaErr);
+        }
+
+        if (shouldScroll) {
+            // Defer scroll to next frame so grid has rendered
+            requestAnimationFrame(() => scrollToResultsTop());
+        }
     }
 
     /**
-     * Load next page of recipes from opaque cursor endpoint or remaining vault hits
+     * Legacy renderRecipes shim — kept for backward compatibility if any external call uses it.
+     * Now delegates to paginated renderer.
      */
-    async function loadMoreRecipes() {
-        const loadMoreBtn = document.querySelector('#loadMoreBtn');
-        if (loadMoreBtn) {
-            loadMoreBtn.disabled = true;
-            loadMoreBtn.textContent = 'Loading More Delicious Recipes...';
-        }
-
-        if (isVaultMode) {
-            // Load more from local vault
-            if (vaultRemainingHits && vaultRemainingHits.length > 0) {
-                const nextBatch = vaultRemainingHits.splice(0, 6);
-                renderRecipes(nextBatch, true, null, false);
-            } else if (loadMoreBtn) {
-                loadMoreBtn.remove();
+    function renderRecipes(hits, append = false, totalCount = null, isLive = true) {
+        // If append is true, we're in legacy load-more path — just ignore and rerender current page
+        if (!append) {
+            if (isLive) {
+                liveAllHits = [...hits];
+                totalHits = totalCount || hits.length;
+                isVaultMode = false;
+                currentDataIsLive = true;
+            } else {
+                // Vault initial
+                // hits here is already sliced; but we have full vault in vaultAllHits
+                // No-op because executeSearch already set vaultAllHits; this path only for compatibility
             }
-            return;
-        }
-
-        if (!nextPaginationCursor) return;
-
-        try {
-            const nextPath = `/api/recipes/next?cursor=${encodeURIComponent(nextPaginationCursor)}`;
-            const apiResult = await fetchFromApiCandidates(nextPath);
-
-            if (apiResult.ok && apiResult.data) {
-                const data = apiResult.data;
-                nextPaginationCursor = data.nextCursor || null;
-
-                if (data.hits && data.hits.length > 0) {
-                    renderRecipes(data.hits, true, null, true);
-                    return;
-                }
-            }
-
-            if (loadMoreBtn) {
-                loadMoreBtn.textContent = 'All available recipes loaded';
-                setTimeout(() => loadMoreBtn.remove(), 2000);
-            }
-        } catch (err) {
-            console.error('Failed to load more recipes:', err);
-            if (loadMoreBtn) {
-                loadMoreBtn.textContent = 'Unable to load more';
+            renderCurrentPage(1, false);
+        } else {
+            // Legacy append: treat as buffering more hits then stay on current page
+            if (!isVaultMode && Array.isArray(hits)) {
+                liveAllHits.push(...hits);
+                totalHits = totalCount || totalHits;
+                renderCurrentPage(currentPage, false);
             }
         }
     }
@@ -816,184 +1287,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalCloseBtn = document.getElementById('quickViewCloseBtn');
     if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeQuickView);
 
-    const modalBackdrop = document.getElementById('quickViewModalBackdrop');
-    if (modalBackdrop) {
-        modalBackdrop.addEventListener('click', (e) => {
-            if (e.target === modalBackdrop) closeQuickView();
+    const modalBackdropEl = document.getElementById('quickViewModalBackdrop');
+    if (modalBackdropEl) {
+        modalBackdropEl.addEventListener('click', (e) => {
+            if (e.target === modalBackdropEl) closeQuickView();
         });
     }
 
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeQuickView();
     });
-
-    /**
-     * Renders hits into the results grid
-     */
-    function renderRecipes(hits, append = false, totalCount = null, isLive = true) {
-        let cardsHtml = '';
-        const startIndex = append ? currentHitsList.length : 0;
-
-        if (!append) {
-            currentHitsList = [];
-        }
-
-        hits.forEach((item, index) => {
-            const recipe = item.recipe || item;
-            currentHitsList.push(recipe);
-            const globalIndex = startIndex + index;
-
-            const label = escapeHTML(recipe.label || 'Delicious Dish');
-            const imageUrl = escapeHTML(recipe.image || (recipe.images && recipe.images.REGULAR ? recipe.images.REGULAR.url : '../assets/images/pizza1.png'));
-            const recipeUrl = escapeHTML(recipe.url || '#');
-            const source = escapeHTML(recipe.source || 'Foodies Goodies Kitchen');
-            const calories = Math.round(recipe.calories || 0);
-            const servings = Math.max(1, Math.round(recipe.yield || 1));
-            const calsPerServing = Math.round(calories / servings);
-            const cookingTime = recipe.totalTime ? `${recipe.totalTime} mins` : '20 mins';
-
-            // Cuisine & Meal type
-            const cuisine = Array.isArray(recipe.cuisineType) && recipe.cuisineType.length > 0 
-                ? capitalize(recipe.cuisineType[0]) 
-                : (Array.isArray(recipe.mealType) ? capitalize(recipe.mealType[0]) : 'Specialty');
-
-            // Diet & Health badges (up to 3)
-            const badges = [];
-            if (Array.isArray(recipe.dietLabels)) {
-                recipe.dietLabels.slice(0, 2).forEach(d => badges.push(d));
-            }
-            if (Array.isArray(recipe.healthLabels)) {
-                recipe.healthLabels.filter(h => ['Vegetarian', 'Vegan', 'Gluten-Free', 'Keto-Friendly', 'Dairy-Free', 'Nut-Free', 'High-Protein'].includes(h)).slice(0, 2).forEach(h => {
-                    if (!badges.includes(h)) badges.push(h);
-                });
-            }
-
-            cardsHtml += `
-            <article class="recipe-card card-hover-lift" data-dish="${label}">
-                <div class="card-media-wrapper">
-                    <img src="${imageUrl}" alt="${label}" class="aspect-16-9" loading="lazy" decoding="async" onerror="this.src='../assets/images/pizza1.png'">
-                    <span class="cuisine-badge">${cuisine}</span>
-                </div>
-
-                <div class="card-body">
-                    <div class="recipe-publisher">By ${source}</div>
-                    <h3 class="recipe-title" title="${label}">${label}</h3>
-
-                    <!-- Quick Metrics -->
-                    <div class="recipe-metrics">
-                        <span class="metric-item" title="Calories per serving">
-                            🔥 <strong>${calsPerServing}</strong> kcal/srv
-                        </span>
-                        <span class="metric-item" title="Servings">
-                            🍽️ <strong>${servings}</strong> ${servings === 1 ? 'portion' : 'portions'}
-                        </span>
-                        <span class="metric-item" title="Prep & Cook Time">⏱️ <strong>${cookingTime}</strong></span>
-                    </div>
-
-                    <!-- Dietary Tags -->
-                    ${badges.length > 0 ? `
-                        <div class="dietary-tags">
-                            ${badges.map(b => `<span class="badge-tag">${escapeHTML(b)}</span>`).join('')}
-                        </div>
-                    ` : ''}
-
-                    <!-- Action Buttons -->
-                    <div class="recipe-card-actions" style="display:flex;gap:8px;margin-top:14px;">
-                        <button type="button" class="btn-secondary-glass btn-trigger-quickview" data-index="${globalIndex}" style="flex:1;padding:8px 12px;font-size:0.85rem;justify-content:center;cursor:pointer;">
-                            👁️ Quick View
-                        </button>
-                        <a href="${recipeUrl}" class="btn-primary-glass" target="_blank" rel="noopener noreferrer" style="flex:1;padding:8px 12px;font-size:0.85rem;text-decoration:none;text-align:center;display:flex;align-items:center;justify-content:center;">
-                            Instructions ↗
-                        </a>
-                    </div>
-                </div>
-            </article>
-            `;
-        });
-
-        if (append) {
-            const oldPagination = document.querySelector('.pagination-container');
-            if (oldPagination) oldPagination.remove();
-            resultsList.insertAdjacentHTML('beforeend', cardsHtml);
-        } else {
-            const sourceBadgeText = isLive ? 'Edamam Recipe Cloud' : 'Curated Culinary Vault';
-            const countNote = totalCount ? ` (${totalCount} recipes)` : '';
-            const headerBanner = `
-                <div class="search-results-meta">
-                    <div class="results-count-text">
-                        Showing recipes from <strong>${sourceBadgeText}</strong> for "<strong>${escapeHTML(currentSearchQuery)}</strong>"${countNote}
-                    </div>
-                </div>
-            `;
-            resultsList.innerHTML = headerBanner + `<div class="recipes-grid">${cardsHtml}</div>`;
-        }
-
-        // Attach Quick View Click Listeners
-        resultsList.querySelectorAll('.btn-trigger-quickview').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const idx = parseInt(btn.getAttribute('data-index'), 10);
-                if (!isNaN(idx) && currentHitsList[idx]) {
-                    openQuickView(currentHitsList[idx]);
-                }
-            });
-        });
-
-        // Add "Load More" button if pagination cursor exists OR if vault has more hits
-        const hasMore = nextPaginationCursor || (isVaultMode && vaultRemainingHits && vaultRemainingHits.length > 0);
-        if (hasMore) {
-            const oldPagination = document.querySelector('.pagination-container');
-            if (oldPagination) oldPagination.remove();
-
-            const paginationContainer = document.createElement('div');
-            paginationContainer.className = 'pagination-container';
-            paginationContainer.innerHTML = `
-                <button type="button" id="loadMoreBtn" class="search-btn load-more-btn">
-                    Load More Recipes ↷
-                </button>
-            `;
-            resultsList.appendChild(paginationContainer);
-
-            const btn = document.querySelector('#loadMoreBtn');
-            if (btn) {
-                btn.addEventListener('click', loadMoreRecipes);
-            }
-        }
-
-        // Inject schema.org JSON-LD Structured Data for SEO
-        try {
-            const oldScript = document.querySelector('#recipe-json-ld');
-            if (oldScript) oldScript.remove();
-
-            const schemaItems = hits.map(item => {
-                const r = item.recipe || item;
-                return {
-                    "@context": "https://schema.org",
-                    "@type": "Recipe",
-                    "name": r.label || "Delicious Dish",
-                    "image": [r.image || (r.images && r.images.REGULAR ? r.images.REGULAR.url : "")],
-                    "author": {
-                        "@type": "Person",
-                        "name": r.source || "Foodies Goodies"
-                    },
-                    "recipeYield": `${Math.max(1, Math.round(r.yield || 1))} servings`,
-                    "nutrition": {
-                        "@type": "NutritionInformation",
-                        "calories": `${Math.round(r.calories || 0)} calories`
-                    },
-                    "recipeIngredient": Array.isArray(r.ingredientLines) ? r.ingredientLines : []
-                };
-            });
-
-            const scriptTag = document.createElement('script');
-            scriptTag.id = 'recipe-json-ld';
-            scriptTag.type = 'application/ld+json';
-            scriptTag.textContent = JSON.stringify(schemaItems);
-            document.head.appendChild(scriptTag);
-        } catch (schemaErr) {
-            console.warn('Could not inject recipe JSON-LD:', schemaErr);
-        }
-    }
 
     function capitalize(str) {
         if (!str) return '';

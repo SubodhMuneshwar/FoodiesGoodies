@@ -1,11 +1,13 @@
 using FoodiesGoodies.Api.DTOs;
 using FoodiesGoodies.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoodiesGoodies.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[AllowAnonymous]
 public class RecipesController : ControllerBase
 {
     private readonly IRecipeService _recipeService;

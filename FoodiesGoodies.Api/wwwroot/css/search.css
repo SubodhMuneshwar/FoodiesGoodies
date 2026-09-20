@@ -213,6 +213,26 @@ body {
   gap: 30px;
 }
 
+@media (max-width: 768px) {
+  .recipes-grid {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .recipes-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+  .recipes-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 22px;
+  }
+}
+
 .recipe-card {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
@@ -418,8 +438,153 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   Pagination (Load More)
+   Professional Pagination — Numbered, Accessible & Fully Responsive
+   Editorial pill-style pagination with prev/next, active states, ellipsis
    -------------------------------------------------------------------------- */
+.pagination-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  margin: 44px 0 12px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border-subtle);
+  animation: fadeIn 0.35s ease-out;
+}
+
+/* Top pagination sits between header meta and grid — no top border, compact spacing */
+.pagination-wrapper--top {
+  margin: 0 0 28px;
+  padding-top: 0;
+  padding-bottom: 18px;
+  border-top: none;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* Bottom pagination retains editorial divider above it */
+.pagination-wrapper--bottom {
+  margin: 44px 0 12px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: none;
+}
+
+.pagination-info {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.pagination-info strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.pagination-info .pagination-range {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pagination-btn,
+.pagination-page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 14px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  line-height: 1;
+  color: var(--text-secondary);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.pagination-btn {
+  gap: 6px;
+  padding: 0 16px;
+}
+
+.pagination-btn:hover:not(:disabled),
+.pagination-page-btn:hover:not(:disabled):not(.is-active) {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-subtle);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.pagination-btn:active:not(:disabled),
+.pagination-page-btn:active:not(:disabled):not(.is-active) {
+  transform: translateY(0);
+}
+
+.pagination-btn:disabled,
+.pagination-page-btn:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+  pointer-events: none;
+  box-shadow: none;
+}
+
+.pagination-page-btn.is-active,
+.pagination-page-btn[aria-current="page"] {
+  background: var(--primary);
+  color: #FFFFFF;
+  border-color: var(--primary);
+  box-shadow: 0 2px 10px rgba(194, 112, 58, 0.30);
+  cursor: default;
+}
+
+.pagination-page-btn.is-active:hover {
+  background: var(--primary);
+  color: #FFFFFF;
+  transform: none;
+}
+
+.pagination-ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 40px;
+  padding: 0 4px;
+  color: var(--text-dim);
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  user-select: none;
+}
+
+/* Pagination — Focus visibility */
+.pagination-btn:focus-visible,
+.pagination-page-btn:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Keep Load-More legacy hidden but not breaking old JS */
 .load-more-container {
   display: flex;
   justify-content: center;
@@ -442,6 +607,114 @@ body {
   border-color: var(--primary);
   color: var(--primary);
   background: var(--bg-surface-elevated);
+}
+
+/* --------------------------------------------------------------------------
+   Pagination — Responsive Breakpoints
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .pagination-wrapper {
+    gap: 14px;
+    margin: 32px 0 8px;
+    padding-top: 20px;
+  }
+
+  .pagination-wrapper--top {
+    margin: 0 0 20px;
+    padding-top: 0;
+    padding-bottom: 16px;
+  }
+
+  .pagination-wrapper--bottom {
+    margin: 32px 0 8px;
+  }
+
+  .pagination-info {
+    font-size: 0.82rem;
+    padding: 0 12px;
+  }
+
+  .pagination {
+    gap: 5px;
+  }
+
+  .pagination-btn,
+  .pagination-page-btn {
+    min-width: 36px;
+    height: 36px;
+    padding: 0 11px;
+    font-size: 0.84rem;
+  }
+
+  .pagination-btn {
+    padding: 0 13px;
+  }
+
+  /* Hide text labels on very small screens — icon only for Prev/Next */
+  .pagination-btn .pagination-label {
+    display: inline;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination-wrapper {
+    margin: 28px -4px 8px;
+  }
+
+  .pagination-wrapper--top {
+    margin: 0 -4px 18px;
+    padding-bottom: 14px;
+  }
+
+  .pagination-wrapper--bottom {
+    margin: 28px -4px 8px;
+  }
+
+  .pagination {
+    gap: 4px;
+  }
+
+  .pagination-btn,
+  .pagination-page-btn {
+    min-width: 34px;
+    height: 34px;
+    font-size: 0.82rem;
+  }
+
+  .pagination-btn {
+    padding: 0 10px;
+  }
+
+  .pagination-btn .pagination-label-long {
+    display: none;
+  }
+
+  .pagination-btn .pagination-label-short {
+    display: inline;
+  }
+
+  .pagination-ellipsis {
+    min-width: 22px;
+    height: 34px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Desktop: show long labels, hide short */
+@media (min-width: 481px) {
+  .pagination-btn .pagination-label-short {
+    display: none;
+  }
+  .pagination-btn .pagination-label-long {
+    display: inline;
+  }
+}
+
+/* Compact mobile pagination variant — hide far page numbers, keep window */
+@media (max-width: 380px) {
+  .pagination-page-btn.pagination-hide-mobile {
+    display: none;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -493,10 +766,39 @@ body {
 }
 
 .skeleton-media::after,
-.skeleton-line::after {
+.skeleton-line::after,
+.skeleton-block::after {
   content: '';
   position: absolute;
   inset: 0;
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
   animation: shimmer 1.5s infinite;
+}
+
+/* JS uses skeleton-block variants — map to design tokens */
+.skeleton-block {
+  background: var(--bg-surface-elevated);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-block.skeleton-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 0;
+}
+
+.skeleton-block.skeleton-text {
+  border-radius: 4px;
+}
+
+.skeleton-block.skeleton-btn {
+  border-radius: var(--radius-pill);
+}
+
+@media (max-width: 600px) {
+  .skeleton-card {
+    height: 360px;
+  }
 }

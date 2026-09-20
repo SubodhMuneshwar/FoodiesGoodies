@@ -6,6 +6,8 @@ using FoodiesGoodies.Api.DTOs;
 using FoodiesGoodies.Api.Middleware;
 using FoodiesGoodies.Api.Models;
 using FoodiesGoodies.Api.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -75,6 +77,28 @@ builder.Services.ConfigureApplicationCookie(options =>
     };
 });
 
+builder.Services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, options =>
+{
+    var existingValidator = options.Events.OnValidatePrincipal;
+    options.Events.OnValidatePrincipal = async context =>
+    {
+        try
+        {
+            if (existingValidator != null)
+            {
+                await existingValidator(context);
+            }
+        }
+        catch (Exception ex)
+        {
+            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+            logger.LogWarning(ex, "Database connection failed during SecurityStamp validation. Gracefully treating request as anonymous.");
+            context.RejectPrincipal();
+            await context.HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+        }
+    };
+});
+
 // 3. CORS Policy
 builder.Services.AddCors(options =>
 {
@@ -100,7 +124,7 @@ builder.Services.AddCors(options =>
 builder.Services.Configure<EdamamOptions>(builder.Configuration.GetSection(EdamamOptions.SectionName));
 builder.Services.AddHttpClient<IRecipeService, RecipeService>(client =>
 {
-    client.Timeout = TimeSpan.FromSeconds(10);
+    client.Timeout = TimeSpan.FromSeconds(25);
     client.DefaultRequestHeaders.Add("User-Agent", "FoodiesGoodies-Api/1.0");
 });
 
