@@ -225,6 +225,35 @@ img[loading="lazy"] {
   .drawer-backdrop {
     display: none !important;
   }
+
+  /* Keep the navigation elements on the navbar perfectly center-aligned to the web page */
+  header.header nav.navbar,
+  .header .navbar,
+  nav.navbar {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: clamp(10px, 1.4vw, 22px) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    pointer-events: auto !important;
+    z-index: 1001 !important;
+  }
+
+  /* Dedicated clearance so Sign In, User Profile, and Notifications never overlap the cord switch */
+  .header-actions-wrap {
+    margin-left: auto !important;
+    margin-right: 96px !important;
+  }
 }
 
 /* Hide drawer top bar on desktop */
@@ -270,6 +299,7 @@ img[loading="lazy"] {
     align-items: center !important;
     gap: 8px !important;
     margin-left: auto !important;
+    margin-right: 0 !important;
     z-index: 10005 !important;
   }
 
@@ -462,6 +492,13 @@ img[loading="lazy"] {
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  margin-left: auto;
+  z-index: 1002;
+}
+
+.header-actions-wrap .nav-login-btn {
+  margin: 0;
+  display: inline-flex;
 }
 
 .notif-nav-btn {

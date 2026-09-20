@@ -673,6 +673,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const activeTheme = document.documentElement.getAttribute('data-theme') || localStorage.getItem('foodies_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     applyTheme(activeTheme);
 
+    // 3.5 Dynamic Header Layout Sync (centers navbar elements to the web page on desktop)
+    function syncHeaderLayout() {
+        if (!navbar || !actionsWrap) return;
+        const isMobile = window.innerWidth <= 992;
+
+        const authTarget = navbar.querySelector('.user-dropdown-wrapper') ||
+                           navbar.querySelector('.nav-login-btn') ||
+                           actionsWrap.querySelector('.user-dropdown-wrapper') ||
+                           actionsWrap.querySelector('.nav-login-btn');
+
+        if (!authTarget) return;
+
+        if (isMobile) {
+            // Mobile: keep inside slide-out drawer so user can access login/profile from menu
+            if (authTarget.parentElement !== navbar) {
+                navbar.appendChild(authTarget);
+            }
+        } else {
+            // Desktop: keep in actionsWrap on the right side of header,
+            // so navbar navigation elements remain perfectly center-aligned to the web page
+            if (authTarget.parentElement !== actionsWrap) {
+                const firstMobileControl = actionsWrap.querySelector('.mobile-theme-toggle, .nav-toggle');
+                if (firstMobileControl) {
+                    actionsWrap.insertBefore(authTarget, firstMobileControl);
+                } else {
+                    actionsWrap.appendChild(authTarget);
+                }
+            }
+        }
+    }
+
+    syncHeaderLayout();
+    window.addEventListener('resize', syncHeaderLayout, { passive: true });
+    window.addEventListener('foodies:auth-badge-rendered', syncHeaderLayout);
+
     // Always ensure close button click is bound
     const closeBtn = navbar.querySelector('.drawer-close-btn');
     if (closeBtn) {

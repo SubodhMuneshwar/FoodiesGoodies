@@ -378,6 +378,10 @@ const Auth = {
             loginBtn.innerHTML = 'Sign In';
             loginBtn.onclick = null;
         }
+
+        try {
+            window.dispatchEvent(new CustomEvent('foodies:auth-badge-rendered', { detail: { user } }));
+        } catch (_) {}
     }
 };
 
