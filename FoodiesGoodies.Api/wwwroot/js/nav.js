@@ -140,7 +140,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!header) return;
 
-    // 3.1 Setup Header Actions Cluster
+    // 3.1 Global Theme Switcher & UI Sync
+    function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        try {
+            localStorage.setItem('foodies_theme', theme);
+        } catch (_) {}
+
+        // Update all responsive minimal theme toggle buttons across the page
+        document.querySelectorAll('.mobile-theme-toggle').forEach(btn => {
+            btn.setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+            btn.setAttribute('title', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+            const icon = btn.querySelector('ion-icon');
+            if (icon) {
+                icon.setAttribute('name', theme === 'dark' ? 'sunny-outline' : 'moon-outline');
+            }
+        });
+
+        window.dispatchEvent(new CustomEvent('foodies:theme-change', { detail: { theme } }));
+    }
+
+    function toggleTheme() {
+        const current = document.documentElement.getAttribute('data-theme') || 'light';
+        const next = current === 'light' ? 'dark' : 'light';
+        applyTheme(next);
+    }
+
+    // 3.2 Setup Header Actions Cluster
     let actionsWrap = header.querySelector('.header-actions-wrap');
     if (!actionsWrap) {
         actionsWrap = document.createElement('div');
@@ -151,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
         header.appendChild(actionsWrap);
     }
 
-    // 3.2 Interactive Hanging Cord Theme Switcher (Umesh Nagare Style - Silent & Minimal)
+    // 3.3 Desktop Interactive Hanging Cord Theme Switcher (Umesh Nagare Style)
     // Remove any leftover legacy button in actionsWrap
     const oldToggle = actionsWrap.querySelector('.theme-toggle-btn');
     if (oldToggle) oldToggle.remove();
@@ -236,7 +268,18 @@ document.addEventListener('DOMContentLoaded', () => {
         initEvents() {
             const canvas = this.canvas;
 
-            // Global pointer tracking: dynamically enable pointer events when hovering near the knob
+            // Helper to test if a pointer position is near the cord knob (generous touch hit area)
+            const isNearKnob = (clientX, clientY) => {
+                const rect = canvas.getBoundingClientRect();
+                const knob = this.getKnobCenter();
+                const screenKnobX = rect.left + knob.x;
+                const screenKnobY = rect.top + knob.y;
+                const dist = Math.hypot(clientX - screenKnobX, clientY - screenKnobY);
+                // 34px radius around knob or along the hanging segment
+                return dist < 34 || (Math.abs(clientX - screenKnobX) < 26 && clientY >= rect.top && clientY <= screenKnobY + 22);
+            };
+
+            // Global hover / proximity cursor & ambient sway for mouse
             window.addEventListener('pointermove', (e) => {
                 if (this.isDragging) return;
                 const rect = canvas.getBoundingClientRect();
@@ -245,53 +288,63 @@ document.addEventListener('DOMContentLoaded', () => {
                 const screenKnobY = rect.top + knob.y;
                 const dist = Math.hypot(e.clientX - screenKnobX, e.clientY - screenKnobY);
 
-                if (dist < 24) {
+                if (dist < 30) {
                     canvas.style.pointerEvents = 'auto';
                     canvas.style.cursor = 'grab';
                 } else {
                     canvas.style.pointerEvents = 'none';
 
                     // Subtle ambient cord sway when cursor passes closely
-                    if (dist < 45) {
+                    if (dist < 50) {
                         const mid = this.nodes[3];
                         const screenMidX = rect.left + mid.x;
                         const screenMidY = rect.top + mid.y;
                         const midDist = Math.hypot(e.clientX - screenMidX, e.clientY - screenMidY);
-                        if (midDist < 30) {
+                        if (midDist < 35) {
                             mid.x += (e.movementX || 0) * 0.12;
                             this.wakeUp();
                         }
                     }
                 }
-            });
+            }, { passive: true });
 
-            // Pointer down to grab knob
-            canvas.addEventListener('pointerdown', (e) => {
-                e.preventDefault();
+            const startDrag = (e) => {
                 const rect = canvas.getBoundingClientRect();
                 const clickX = e.clientX - rect.left;
                 const clickY = e.clientY - rect.top;
-                const knob = this.getKnobCenter();
-                const dist = Math.hypot(clickX - knob.x, clickY - knob.y);
 
-                if (dist < 28 || clickY > 45) {
-                    this.isDragging = true;
-                    this.hasPulledPastThreshold = false;
-                    canvas.setPointerCapture(e.pointerId);
-                    canvas.style.cursor = 'grabbing';
+                this.isDragging = true;
+                this.hasPulledPastThreshold = false;
+                canvas.style.pointerEvents = 'auto';
+                canvas.style.cursor = 'grabbing';
 
-                    this.startX = clickX;
-                    this.startY = clickY;
-                    this.startTime = Date.now();
+                this.startX = clickX;
+                this.startY = clickY;
+                this.startTime = Date.now();
 
-                    this.pointerX = Math.max(this.anchorX - 25, Math.min(this.anchorX + 25, clickX));
-                    this.pointerY = Math.max(20, Math.min(this.maxPullY, clickY));
-                    this.wakeUp();
-                }
+                this.pointerX = Math.max(this.anchorX - 25, Math.min(this.anchorX + 25, clickX));
+                this.pointerY = Math.max(20, Math.min(this.maxPullY, clickY));
+                this.wakeUp();
+            };
+
+            // 1. Direct canvas pointerdown
+            canvas.addEventListener('pointerdown', (e) => {
+                e.preventDefault();
+                startDrag(e);
+                try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
             });
 
-            // Pointer move during drag (limit pulling distance, DO NOT toggle theme here)
-            canvas.addEventListener('pointermove', (e) => {
+            // 2. Global window pointerdown (Crucial for mobile touch screens where hover does not precede touch)
+            window.addEventListener('pointerdown', (e) => {
+                if (this.isDragging) return;
+                if (isNearKnob(e.clientX, e.clientY)) {
+                    e.preventDefault();
+                    startDrag(e);
+                }
+            }, { passive: false });
+
+            // Universal drag tracking on window
+            window.addEventListener('pointermove', (e) => {
                 if (!this.isDragging) return;
                 const rect = canvas.getBoundingClientRect();
                 const currentX = e.clientX - rect.left;
@@ -308,10 +361,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.wakeUp();
             });
 
-            // Pointer release: THEME ONLY CHANGES HERE
-            const onPointerEnd = (e) => {
+            // Universal pointer release (Theme toggles strictly on release)
+            const onPointerEnd = () => {
                 if (!this.isDragging) return;
-                try { canvas.releasePointerCapture(e.pointerId); } catch (_) {}
                 this.isDragging = false;
                 canvas.style.cursor = 'grab';
 
@@ -319,9 +371,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const distMoved = Math.hypot(this.pointerX - this.startX, this.pointerY - this.startY);
 
                 // Change modes ONLY when the toggle wire is released
-                if (this.hasPulledPastThreshold || (elapsed < 350 && distMoved < 10)) {
+                if (this.hasPulledPastThreshold || (elapsed < 350 && distMoved < 12)) {
                     this.toggleTheme();
-                    // Subtle release bounce
+                    // Subtle release rebound bounce
                     this.nodes[this.numNodes - 1].y += 18;
                 }
 
@@ -329,8 +381,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.wakeUp();
             };
 
-            canvas.addEventListener('pointerup', onPointerEnd);
-            canvas.addEventListener('pointercancel', onPointerEnd);
+            window.addEventListener('pointerup', onPointerEnd);
+            window.addEventListener('pointercancel', onPointerEnd);
+
+            // Dynamic DPI resize listener for mobile orientation change & browser resize
+            window.addEventListener('resize', () => {
+                const newDpr = Math.min(window.devicePixelRatio || 1, 2);
+                if (newDpr !== this.dpr) {
+                    this.dpr = newDpr;
+                    this.canvas.width = this.width * this.dpr;
+                    this.canvas.height = this.height * this.dpr;
+                    this.ctx.scale(this.dpr, this.dpr);
+                }
+                this.wakeUp();
+            }, { passive: true });
 
             // Keyboard accessibility (Enter / Space)
             canvas.addEventListener('keydown', (e) => {
@@ -345,19 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Silent and minimal toggle (no sounds, no quotes/toasts)
         toggleTheme() {
-            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-            const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
-
-            document.documentElement.setAttribute('data-theme', nextTheme);
-            if (nextTheme === 'dark') {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
-
-            try {
-                localStorage.setItem('foodies_theme', nextTheme);
-            } catch (err) {}
+            toggleTheme();
         }
 
         updatePhysics() {
@@ -553,6 +605,23 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(backdrop);
     }
 
+    // 3.4 Minimal Responsive Theme Toggle Button (for mobile/tablet <= 992px)
+    let mobileToggle = actionsWrap.querySelector('.mobile-theme-toggle.header-theme-toggle');
+    if (!mobileToggle) {
+        mobileToggle = document.createElement('button');
+        mobileToggle.className = 'mobile-theme-toggle header-theme-toggle';
+        mobileToggle.type = 'button';
+        const curTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        mobileToggle.setAttribute('aria-label', curTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+        mobileToggle.setAttribute('title', curTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+        mobileToggle.innerHTML = `<ion-icon name="${curTheme === 'dark' ? 'sunny-outline' : 'moon-outline'}"></ion-icon>`;
+        mobileToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleTheme();
+        });
+        actionsWrap.appendChild(mobileToggle);
+    }
+
     // Create or ensure hamburger button exists in actions wrap
     let toggleBtn = actionsWrap.querySelector('.nav-toggle');
     if (!toggleBtn) {
@@ -574,17 +643,35 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!drawerHeader) {
         drawerHeader = document.createElement('div');
         drawerHeader.className = 'drawer-header-mobile';
+        const curTheme = document.documentElement.getAttribute('data-theme') || 'light';
         drawerHeader.innerHTML = `
             <div class="drawer-brand-wrap">
                 <span class="drawer-brand-title">Foodies Goodies</span>
                 <span class="drawer-brand-sub">Culinary Guide</span>
             </div>
-            <button type="button" class="drawer-close-btn" aria-label="Close mobile navigation">
-                <span aria-hidden="true">&times;</span>
-            </button>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <button type="button" class="mobile-theme-toggle drawer-theme-btn" aria-label="${curTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}" title="${curTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}" style="display: inline-flex !important;">
+                    <ion-icon name="${curTheme === 'dark' ? 'sunny-outline' : 'moon-outline'}"></ion-icon>
+                </button>
+                <button type="button" class="drawer-close-btn" aria-label="Close mobile navigation">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
         `;
         navbar.prepend(drawerHeader);
+
+        const drawerThemeBtn = drawerHeader.querySelector('.drawer-theme-btn');
+        if (drawerThemeBtn) {
+            drawerThemeBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleTheme();
+            });
+        }
     }
+
+    // Initialize/sync all mobile toggle buttons with the current theme
+    const activeTheme = document.documentElement.getAttribute('data-theme') || localStorage.getItem('foodies_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    applyTheme(activeTheme);
 
     // Always ensure close button click is bound
     const closeBtn = navbar.querySelector('.drawer-close-btn');
