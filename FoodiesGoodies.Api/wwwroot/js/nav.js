@@ -140,8 +140,71 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!header) return;
 
+    // 3.1.1 Architectural Centered Tubelight Fixture Setup & Synchronization
+    let lightingTransitionTimeout = null;
+
+    function setupNavbarTubelight() {
+        let tubelight = document.getElementById('navbar-tubelight');
+        if (!tubelight && header) {
+            tubelight = document.createElement('div');
+            tubelight.id = 'navbar-tubelight';
+            tubelight.className = 'navbar-tubelight';
+            tubelight.setAttribute('aria-hidden', 'true');
+            tubelight.innerHTML = `
+                <div class="tubelight-fixture">
+                    <div class="tubelight-wire tubelight-wire--left"></div>
+                    <div class="tubelight-wire tubelight-wire--right"></div>
+                    <div class="tubelight-housing">
+                        <div class="tubelight-cap tubelight-cap--left"></div>
+                        <div class="tubelight-tube">
+                            <div class="tubelight-filament"></div>
+                            <div class="tubelight-specular"></div>
+                        </div>
+                        <div class="tubelight-cap tubelight-cap--right"></div>
+                    </div>
+                </div>
+                <div class="tubelight-beam"></div>
+                <div class="tubelight-ambient-wash"></div>
+            `;
+            header.prepend(tubelight);
+        }
+
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        updateTubelight(currentTheme, false);
+    }
+
+    function updateTubelight(theme, isUserTriggered = false) {
+        const tubelight = document.getElementById('navbar-tubelight');
+        if (!tubelight) return;
+
+        if (isUserTriggered) {
+            document.documentElement.classList.add('theme-lighting-transition');
+            if (lightingTransitionTimeout) clearTimeout(lightingTransitionTimeout);
+            lightingTransitionTimeout = setTimeout(() => {
+                document.documentElement.classList.remove('theme-lighting-transition');
+                lightingTransitionTimeout = null;
+            }, 1150);
+        }
+
+        if (theme === 'light') {
+            tubelight.classList.remove('is-off');
+            if (isUserTriggered) {
+                tubelight.classList.add('is-igniting');
+                setTimeout(() => {
+                    tubelight.classList.remove('is-igniting');
+                    tubelight.classList.add('is-on');
+                }, 240);
+            } else {
+                tubelight.classList.add('is-on');
+            }
+        } else {
+            tubelight.classList.remove('is-on', 'is-igniting');
+            tubelight.classList.add('is-off');
+        }
+    }
+
     // 3.1 Global Theme Switcher & UI Sync
-    function applyTheme(theme) {
+    function applyTheme(theme, isUserTriggered = true) {
         document.documentElement.setAttribute('data-theme', theme);
         if (theme === 'dark') {
             document.documentElement.classList.add('dark');
@@ -152,6 +215,9 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             localStorage.setItem('foodies_theme', theme);
         } catch (_) {}
+
+        // Update tubelight illumination state
+        updateTubelight(theme, isUserTriggered);
 
         // Update all responsive minimal theme toggle buttons across the page
         document.querySelectorAll('.mobile-theme-toggle').forEach(btn => {
@@ -169,8 +235,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function toggleTheme() {
         const current = document.documentElement.getAttribute('data-theme') || 'light';
         const next = current === 'light' ? 'dark' : 'light';
-        applyTheme(next);
+        applyTheme(next, true);
     }
+
+    // Initialize tubelight on page mount
+    setupNavbarTubelight();
 
     // 3.2 Setup Header Actions Cluster
     let actionsWrap = header.querySelector('.header-actions-wrap');
