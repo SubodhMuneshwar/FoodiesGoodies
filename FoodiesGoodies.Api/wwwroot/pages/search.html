@@ -3,6 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        (function() {
+            try {
+                var t = localStorage.getItem('foodies_theme') || 'light';
+                document.documentElement.setAttribute('data-theme', t);
+                if (t === 'dark') document.documentElement.classList.add('dark');
+            } catch(e) {}
+        })();
+    </script>
     <title>Search Recipes - Foodies Goodies</title>
     <meta name="description" content="Explore over 2.3 million recipes powered live by the Edamam Recipe API. Find ingredients, cooking instructions, and nutrition details.">
     <link rel="icon" type="image/png" href="../assets/images/fav.png">
@@ -22,7 +31,7 @@
 
     <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/global.css?v=3.2">
+    <link rel="stylesheet" href="../css/global.css?v=4.1">
     <link rel="stylesheet" href="../css/search.css">
 </head>
 <body>
@@ -33,6 +42,8 @@
         <!-- Architectural Centered Tubelight Fixture -->
         <div id="navbar-tubelight" class="navbar-tubelight" aria-hidden="true">
             <div class="tubelight-fixture">
+                <div class="tubelight-rosette tubelight-rosette--left"></div>
+                <div class="tubelight-rosette tubelight-rosette--right"></div>
                 <div class="tubelight-wire tubelight-wire--left"></div>
                 <div class="tubelight-wire tubelight-wire--right"></div>
                 <div class="tubelight-housing">
@@ -181,7 +192,7 @@
         </div>
     </footer>
 
-    <script src="../js/nav.js?v=3.3"></script>
+    <script src="../js/nav.js?v=4.1"></script>
     <script src="../js/auth.js"></script>
     <script src="../js/script.js?v=3.6"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>

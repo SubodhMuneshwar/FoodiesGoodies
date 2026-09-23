@@ -3,6 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        (function() {
+            try {
+                var t = localStorage.getItem('foodies_theme') || 'light';
+                document.documentElement.setAttribute('data-theme', t);
+                if (t === 'dark') document.documentElement.classList.add('dark');
+            } catch(e) {}
+        })();
+    </script>
     <title>Chef Profile Settings - Foodies Goodies</title>
     <!-- Google Fonts: Playfair Display & Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,7 +20,7 @@
 
     <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/global.css?v=4.1">
     <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="icon" type="image/png" href="../assets/images/fav.png">
 </head>
@@ -20,6 +29,26 @@
 
     <!-- HEADER NAVBAR (Slim 64px Editorial Navigation) -->
     <header class="header">
+        <!-- Architectural Centered Tubelight Fixture -->
+        <div id="navbar-tubelight" class="navbar-tubelight" aria-hidden="true">
+            <div class="tubelight-fixture">
+                <div class="tubelight-rosette tubelight-rosette--left"></div>
+                <div class="tubelight-rosette tubelight-rosette--right"></div>
+                <div class="tubelight-wire tubelight-wire--left"></div>
+                <div class="tubelight-wire tubelight-wire--right"></div>
+                <div class="tubelight-housing">
+                    <div class="tubelight-cap tubelight-cap--left"></div>
+                    <div class="tubelight-tube">
+                        <div class="tubelight-filament"></div>
+                        <div class="tubelight-specular"></div>
+                    </div>
+                    <div class="tubelight-cap tubelight-cap--right"></div>
+                </div>
+            </div>
+            <div class="tubelight-beam"></div>
+            <div class="tubelight-ambient-wash"></div>
+        </div>
+
         <a href="../index.html" class="logo">Foodies Goodies</a>
         <nav class="navbar" aria-label="Main Navigation">
             <a class="nav-link" href="../index.html">Home</a>
@@ -143,7 +172,7 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="../js/nav.js"></script>
+    <script src="../js/nav.js?v=4.1"></script>
     <script src="../js/auth.js"></script>
     <script src="../js/notifications.js"></script>
     <script>

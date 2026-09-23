@@ -152,6 +152,8 @@ document.addEventListener('DOMContentLoaded', () => {
             tubelight.setAttribute('aria-hidden', 'true');
             tubelight.innerHTML = `
                 <div class="tubelight-fixture">
+                    <div class="tubelight-rosette tubelight-rosette--left"></div>
+                    <div class="tubelight-rosette tubelight-rosette--right"></div>
                     <div class="tubelight-wire tubelight-wire--left"></div>
                     <div class="tubelight-wire tubelight-wire--right"></div>
                     <div class="tubelight-housing">
@@ -183,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
             lightingTransitionTimeout = setTimeout(() => {
                 document.documentElement.classList.remove('theme-lighting-transition');
                 lightingTransitionTimeout = null;
-            }, 1150);
+            }, 1250);
         }
 
         if (theme === 'light') {
@@ -193,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => {
                     tubelight.classList.remove('is-igniting');
                     tubelight.classList.add('is-on');
-                }, 240);
+                }, 320);
             } else {
                 tubelight.classList.add('is-on');
             }
@@ -556,7 +558,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
             const nodes = this.nodes;
 
-            // 1. Draw smooth quadratic cord curve
+            // 1. Draw connecting brass thread along the spine
             ctx.beginPath();
             ctx.moveTo(nodes[0].x, nodes[0].y);
             for (let i = 1; i < this.numNodes - 1; i++) {
@@ -565,21 +567,50 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.quadraticCurveTo(nodes[i].x, nodes[i].y, midX, midY);
             }
             ctx.lineTo(nodes[this.numNodes - 1].x, nodes[this.numNodes - 1].y);
-
-            // Cord styling: zinc/dark gray
-            ctx.strokeStyle = isDark ? '#52525b' : '#a1a1aa';
-            ctx.lineWidth = 1.8;
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
+            ctx.strokeStyle = '#705018';
+            ctx.lineWidth = 1.0;
             ctx.stroke();
 
-            // Ceiling mount bead
+            // 2. Draw Antique Beaded Brass Pull Chain Links
+            for (let i = 0; i < this.numNodes - 1; i++) {
+                const n1 = nodes[i];
+                const n2 = nodes[i + 1];
+                const dx = n2.x - n1.x;
+                const dy = n2.y - n1.y;
+                const segLen = Math.hypot(dx, dy);
+                const steps = Math.max(1, Math.round(segLen / 7.2));
+
+                for (let s = 0; s < steps; s++) {
+                    const t = s / steps;
+                    const bx = n1.x + dx * t;
+                    const by = n1.y + dy * t;
+
+                    // Metallic spherical brass bead with specular highlight
+                    const beadGrad = ctx.createRadialGradient(bx - 0.7, by - 0.7, 0.4, bx, by, 2.4);
+                    beadGrad.addColorStop(0, '#FFF5D6');
+                    beadGrad.addColorStop(0.35, '#E5C068');
+                    beadGrad.addColorStop(0.75, '#A67C1E');
+                    beadGrad.addColorStop(1, '#4A3515');
+
+                    ctx.beginPath();
+                    ctx.arc(bx, by, 2.2, 0, Math.PI * 2);
+                    ctx.fillStyle = beadGrad;
+                    ctx.fill();
+                }
+            }
+
+            // 3. Antique Brass Ceiling Escutcheon Mount
+            const escutcheonGrad = ctx.createRadialGradient(this.anchorX, 1, 0.5, this.anchorX, 1, 5);
+            escutcheonGrad.addColorStop(0, '#F7E7A9');
+            escutcheonGrad.addColorStop(0.5, '#C5A059');
+            escutcheonGrad.addColorStop(1, '#3D2A0A');
+
             ctx.beginPath();
-            ctx.arc(this.anchorX, 1.2, 2.2, 0, Math.PI * 2);
-            ctx.fillStyle = isDark ? '#71717a' : '#71717a';
+            ctx.ellipse(this.anchorX, 1.2, 4.5, 2.2, 0, 0, Math.PI * 2);
+            ctx.fillStyle = escutcheonGrad;
             ctx.fill();
 
-            // 2. Draw Capsule Knob at bottom node
+            // 4. "Old Money" Heirloom Brass Acorn / Bell Pull Fob
             const bottom = nodes[this.numNodes - 1];
             const prev = nodes[this.numNodes - 2];
             const angle = Math.atan2(bottom.y - prev.y, bottom.x - prev.x) - Math.PI / 2;
@@ -588,30 +619,71 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.translate(bottom.x, bottom.y);
             ctx.rotate(angle);
 
-            // Capsule dimensions: 16px wide x 30px tall
-            const knobWidth = 16;
-            const knobHeight = 30;
-            const knobRadius = 8;
+            // Fob drop shadow
+            ctx.shadowColor = isDark ? 'rgba(0, 0, 0, 0.65)' : 'rgba(45, 30, 15, 0.35)';
+            ctx.shadowBlur = 7;
+            ctx.shadowOffsetY = 3;
 
-            // Capsule shadow
-            ctx.shadowColor = isDark ? 'rgba(0, 0, 0, 0.45)' : 'rgba(0, 0, 0, 0.2)';
-            ctx.shadowBlur = 6;
-            ctx.shadowOffsetY = 2;
+            // Rich 3D burnished antique brass gradient
+            const brassGrad = ctx.createLinearGradient(-8, 0, 8, 0);
+            brassGrad.addColorStop(0, '#3A2708');    // Deep patinated shadow
+            brassGrad.addColorStop(0.18, '#705018'); // Antique brass mid-tone
+            brassGrad.addColorStop(0.38, '#D4AF37'); // Rich golden body
+            brassGrad.addColorStop(0.54, '#FFF8DC'); // Bright specular reflection
+            brassGrad.addColorStop(0.72, '#D4AF37'); // Rich golden body
+            brassGrad.addColorStop(0.88, '#8C6D37'); // Soft reflected warmth
+            brassGrad.addColorStop(1, '#3A2708');    // Deep outer rim shadow
 
-            // Capsule Body: In Light mode -> dark pill; in Dark mode -> white pill
+            // Top Mounting Collar / Ferrule
             ctx.beginPath();
             if (ctx.roundRect) {
-                ctx.roundRect(-knobWidth / 2, 0, knobWidth, knobHeight, knobRadius);
+                ctx.roundRect(-4, 0, 8, 4, 1);
             } else {
-                ctx.rect(-knobWidth / 2, 0, knobWidth, knobHeight);
+                ctx.rect(-4, 0, 8, 4);
             }
-            ctx.fillStyle = isDark ? '#ffffff' : '#18181b';
+            ctx.fillStyle = brassGrad;
             ctx.fill();
 
+            // Main Acorn / Bell Body contour
+            ctx.beginPath();
+            ctx.moveTo(-3, 4);
+            ctx.bezierCurveTo(-3.5, 8, -7.5, 12, -7.5, 16.5);
+            ctx.bezierCurveTo(-7.5, 22, -4.5, 25.5, -2, 26.5);
+            ctx.lineTo(2, 26.5);
+            ctx.bezierCurveTo(4.5, 25.5, 7.5, 22, 7.5, 16.5);
+            ctx.bezierCurveTo(7.5, 12, 3.5, 8, 3, 4);
+            ctx.closePath();
+            ctx.fillStyle = brassGrad;
+            ctx.fill();
+
+            // Reset shadow for fine filigree details
             ctx.shadowColor = 'transparent';
+
+            // Engraved decorative knurling ring across waist
+            ctx.beginPath();
+            ctx.moveTo(-7.2, 16);
+            ctx.lineTo(7.2, 16);
+            ctx.strokeStyle = 'rgba(61, 42, 10, 0.65)';
             ctx.lineWidth = 1;
-            ctx.strokeStyle = isDark ? 'rgba(0, 0, 0, 0.12)' : 'rgba(255, 255, 255, 0.15)';
             ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(-7.2, 17.5);
+            ctx.lineTo(7.2, 17.5);
+            ctx.strokeStyle = 'rgba(255, 248, 220, 0.55)';
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+
+            // Bottom Finial Bead
+            const finialGrad = ctx.createRadialGradient(-0.8, 28, 0.5, 0, 29, 2.8);
+            finialGrad.addColorStop(0, '#FFF8DC');
+            finialGrad.addColorStop(0.4, '#D4AF37');
+            finialGrad.addColorStop(1, '#3D2A0A');
+
+            ctx.beginPath();
+            ctx.arc(0, 29.2, 2.6, 0, Math.PI * 2);
+            ctx.fillStyle = finialGrad;
+            ctx.fill();
 
             ctx.restore();
         }
