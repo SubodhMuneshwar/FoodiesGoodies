@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => {
                     tubelight.classList.remove('is-igniting');
                     tubelight.classList.add('is-on');
-                }, 320);
+                }, 540);
             } else {
                 tubelight.classList.add('is-on');
             }
