@@ -76,6 +76,9 @@
             <button type="button" class="quick-tag" data-query="Brownies">Brownies</button>
         </div>
 
+        <!-- Live Announcer for Screen Readers & Assisted Navigation -->
+        <div id="searchLiveAnnouncer" class="visually-hidden" aria-live="polite" aria-atomic="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;"></div>
+
         <!-- RESULTS CONTAINER -->
         <section id="results" aria-label="Recipe Search Results" aria-live="polite">
             <div class="search-status-message">
@@ -162,7 +165,7 @@
 
     <script src="../js/nav.js?v=3.2"></script>
     <script src="../js/auth.js"></script>
-    <script src="../js/script.js?v=3.5"></script>
+    <script src="../js/script.js?v=3.6"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>

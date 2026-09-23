@@ -482,9 +482,25 @@ document.addEventListener('DOMContentLoaded', () => {
         baseUrl: 'https://api.edamam.com/api/recipes/v2'
     };
 
+    const ALLOWED_PAGE_SIZES = [6, 12, 18, 24];
+    const DEFAULT_PAGE_SIZE = 6;
+
+    function getInitialPageSize() {
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+            const rawSize = urlParams.get('size') || urlParams.get('limit');
+            const urlSize = parseInt(rawSize, 10);
+            if (ALLOWED_PAGE_SIZES.includes(urlSize)) return urlSize;
+
+            const stored = parseInt(localStorage.getItem('foodies_recipe_page_size'), 10);
+            if (ALLOWED_PAGE_SIZES.includes(stored)) return stored;
+        } catch (_) {}
+        return DEFAULT_PAGE_SIZE;
+    }
+
+    let pageSize = getInitialPageSize();
     let totalHits = 0;
     let currentPage = 1;
-    const PAGE_SIZE = 6;
 
     function getCandidateApiUrls(pathWithQuery) {
         const port = window.location.port;
@@ -717,28 +733,113 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Auto-execute if query string is present in URL (e.g., from homepage search)
+    // =========================================================================
+    // 2.5 URL State & Keyboard Navigation Synchronization
+    // =========================================================================
+    function syncUrlState(replace = false) {
+        if (!currentSearchQuery) return;
+        try {
+            const url = new URL(window.location.href);
+            url.searchParams.set('q', currentSearchQuery);
+            if (currentPage > 1) {
+                url.searchParams.set('page', String(currentPage));
+            } else {
+                url.searchParams.delete('page');
+            }
+            if (pageSize !== DEFAULT_PAGE_SIZE) {
+                url.searchParams.set('size', String(pageSize));
+            } else {
+                url.searchParams.delete('size');
+            }
+            const stateObj = { q: currentSearchQuery, page: currentPage, size: pageSize };
+            if (replace) {
+                window.history.replaceState(stateObj, '', url.toString());
+            } else if (window.location.href !== url.toString()) {
+                window.history.pushState(stateObj, '', url.toString());
+            }
+        } catch (e) {
+            console.warn('Could not sync URL state:', e);
+        }
+    }
+
+    // Auto-execute if query string is present in URL (e.g., from homepage search or bookmark)
     const urlParams = new URLSearchParams(window.location.search);
     const initialQuery = urlParams.get('q');
+    const initialPage = parseInt(urlParams.get('page'), 10) || 1;
     if (initialQuery && initialQuery.trim()) {
         searchInput.value = initialQuery.trim();
-        executeSearch(initialQuery.trim());
+        executeSearch(initialQuery.trim(), initialPage, false);
     }
+
+    // Browser History Back/Forward Navigation Handler (Seamless SPA-like pagination)
+    window.addEventListener('popstate', () => {
+        const params = new URLSearchParams(window.location.search);
+        const q = params.get('q') || '';
+        const p = parseInt(params.get('page'), 10) || 1;
+        const rawSize = params.get('size') || params.get('limit');
+        const s = parseInt(rawSize, 10) || pageSize;
+
+        if (s !== pageSize && ALLOWED_PAGE_SIZES.includes(s)) {
+            pageSize = s;
+        }
+
+        if (q && q !== currentSearchQuery) {
+            searchInput.value = q;
+            executeSearch(q, p, false);
+        } else if (q && p !== currentPage) {
+            goToPage(p, false, true);
+        }
+    });
+
+    // Keyboard Shortcuts for Rapid Navigation (Alt + ArrowLeft/ArrowRight)
+    document.addEventListener('keydown', (e) => {
+        const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+        if (['input', 'textarea', 'select'].includes(activeTag)) return;
+
+        if (e.altKey && e.key === 'ArrowLeft') {
+            e.preventDefault();
+            if (currentPage > 1 && !isFetchingPage) goToPage(currentPage - 1, true, true);
+        } else if (e.altKey && e.key === 'ArrowRight') {
+            e.preventDefault();
+            const totalPages = getTotalPages();
+            if (currentPage < totalPages && !isFetchingPage) goToPage(currentPage + 1, true, true);
+        }
+    });
 
     // =========================================================================
     // 3. Professional Pagination — Core Helpers
     // =========================================================================
     function getTotalPages() {
         if (totalHits <= 0) return 1;
-        return Math.ceil(totalHits / PAGE_SIZE);
+        return Math.ceil(totalHits / pageSize);
+    }
+
+    function changePageSize(newSize) {
+        if (!ALLOWED_PAGE_SIZES.includes(newSize) || newSize === pageSize) return;
+        const previousSize = pageSize;
+        const firstVisibleIndex = (currentPage - 1) * previousSize;
+        pageSize = newSize;
+
+        // Keep all dropdown selectors on the page in sync
+        document.querySelectorAll('.pagination-size-select').forEach(sel => {
+            sel.value = String(newSize);
+        });
+
+        try {
+            localStorage.setItem('foodies_recipe_page_size', String(newSize));
+        } catch (_) {}
+
+        // Calculate target page to keep current first recipe in view
+        const targetPage = Math.floor(firstVisibleIndex / pageSize) + 1;
+        goToPage(targetPage, true, true);
     }
 
     function getPaginationWindow(current, total) {
-        // Professional window: for small totals show all pages, else show 1, ellipsis, neighbors, ellipsis, last
         if (total <= 7) {
             return Array.from({ length: total }, (_, i) => i + 1);
         }
-        const delta = 1; // pages around current (keeps pill count minimal & editorial)
+        const isMobile = window.innerWidth <= 640;
+        const delta = isMobile ? 1 : 2;
         const range = [];
         const rangeWithDots = [];
         let last = null;
@@ -767,6 +868,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const headerOffset = 84;
         const top = resultsList.getBoundingClientRect().top + window.scrollY - headerOffset;
         window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+
+        const announcer = document.getElementById('searchLiveAnnouncer');
+        if (announcer) {
+            announcer.textContent = `Page ${currentPage} of ${getTotalPages()} loaded. Displaying ${totalHits} recipes.`;
+        }
     }
 
     function buildPaginationHTML() {
@@ -777,16 +883,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const isLast = currentPage === totalPages;
         const windowPages = getPaginationWindow(currentPage, totalPages);
 
-        // Disable logic: also disable if fetching
-        const disabledAttr = isFetchingPage ? ' disabled' : '';
-
         let html = '';
 
+        // First button
+        html += `<button type="button" class="pagination-btn pagination-first" data-page="1" ${isFirst || isFetchingPage ? 'disabled' : ''} aria-label="Go to first page" title="First page (Page 1)">
+            <span class="pagination-symbol" aria-hidden="true">«</span>
+            <span class="pagination-label-long">First</span>
+        </button>`;
+
         // Previous button
-        html += `<button type="button" class="pagination-btn pagination-prev" data-page="${currentPage - 1}" ${isFirst || isFetchingPage ? 'disabled' : ''} aria-label="Go to previous page">
-            <span aria-hidden="true">‹</span>
-            <span class="pagination-label-long">Previous</span>
-            <span class="pagination-label-short">Prev</span>
+        html += `<button type="button" class="pagination-btn pagination-prev" data-page="${currentPage - 1}" ${isFirst || isFetchingPage ? 'disabled' : ''} aria-label="Go to previous page" title="Previous page (Page ${currentPage - 1})">
+            <span class="pagination-symbol" aria-hidden="true">‹</span>
+            <span class="pagination-label-long">Prev</span>
         </button>`;
 
         // Page numbers
@@ -795,55 +903,157 @@ document.addEventListener('DOMContentLoaded', () => {
                 html += `<span class="pagination-ellipsis" aria-hidden="true">…</span>`;
             } else {
                 const isActive = item === currentPage;
-                html += `<button type="button" class="pagination-page-btn${isActive ? ' is-active' : ''}" data-page="${item}" ${isActive ? 'aria-current="page"' : ''}${isFetchingPage ? ' disabled' : ''} aria-label="Go to page ${item}">${item}</button>`;
+                html += `<button type="button" class="pagination-page-btn${isActive ? ' is-active' : ''}" data-page="${item}" ${isActive ? 'aria-current="page"' : ''}${isFetchingPage ? ' disabled' : ''} aria-label="${isActive ? `Current page, page ${item}` : `Go to page ${item}`}">
+                    ${item}
+                </button>`;
             }
         });
 
         // Next button
-        html += `<button type="button" class="pagination-btn pagination-next" data-page="${currentPage + 1}" ${isLast || isFetchingPage ? 'disabled' : ''} aria-label="Go to next page">
+        html += `<button type="button" class="pagination-btn pagination-next" data-page="${currentPage + 1}" ${isLast || isFetchingPage ? 'disabled' : ''} aria-label="Go to next page" title="Next page (Page ${currentPage + 1})">
             <span class="pagination-label-long">Next</span>
-            <span class="pagination-label-short">Next</span>
-            <span aria-hidden="true">›</span>
+            <span class="pagination-symbol" aria-hidden="true">›</span>
+        </button>`;
+
+        // Last button
+        html += `<button type="button" class="pagination-btn pagination-last" data-page="${totalPages}" ${isLast || isFetchingPage ? 'disabled' : ''} aria-label="Go to last page" title="Last page (Page ${totalPages})">
+            <span class="pagination-label-long">Last</span>
+            <span class="pagination-symbol" aria-hidden="true">»</span>
         </button>`;
 
         return `<nav class="pagination" aria-label="Recipe results pagination">${html}</nav>`;
     }
 
-    function renderPaginationWrapper() {
+    function renderPaginationWrapper(placement = 'bottom') {
         const totalPages = getTotalPages();
-        const startItem = totalHits === 0 ? 0 : (currentPage - 1) * PAGE_SIZE + 1;
-        const endItem = Math.min(currentPage * PAGE_SIZE, totalHits);
+        const startItem = totalHits === 0 ? 0 : (currentPage - 1) * pageSize + 1;
+        const endItem = Math.min(currentPage * pageSize, totalHits);
         const sourceLabel = isVaultMode ? 'Curated Culinary Vault' : 'Edamam Recipe Cloud';
-        const moreNote = (!isVaultMode && nextPaginationCursor) ? ' · more available' : '';
+        const moreNote = (!isVaultMode && nextPaginationCursor) ? ' · live streaming' : '';
 
         const wrapper = document.createElement('div');
-        wrapper.className = 'pagination-wrapper';
+        wrapper.className = `pagination-wrapper pagination-wrapper--${placement}`;
         wrapper.setAttribute('role', 'navigation');
-        wrapper.setAttribute('aria-label', 'Pagination');
+        wrapper.setAttribute('aria-label', placement === 'top' ? 'Top Recipe Pagination' : 'Recipe Pagination Navigation');
 
-        const infoHtml = totalPages <= 1
-            ? `<div class="pagination-info"><span class="pagination-range">${totalHits}</span> recipe${totalHits !== 1 ? 's' : ''} found in <strong>${sourceLabel}</strong> for "<strong>${escapeHTML(currentSearchQuery)}</strong>"</div>`
-            : `<div class="pagination-info">Showing <span class="pagination-range">${startItem}–${endItem}</span> of <strong>${totalHits}</strong> recipes · Page <strong>${currentPage}</strong> of <strong>${totalPages}</strong> · <span style="color:var(--text-muted)">${sourceLabel}${moreNote}</span></div>`;
+        const isFirst = currentPage === 1;
+        const isLast = currentPage === totalPages;
 
-        wrapper.innerHTML = `${infoHtml}${buildPaginationHTML()}`;
+        if (placement === 'top') {
+            const infoHtml = totalPages <= 1
+                ? `<div class="pagination-info"><span class="pagination-range">${totalHits}</span> recipe${totalHits !== 1 ? 's' : ''} found in <strong>${sourceLabel}</strong> for "<strong>${escapeHTML(currentSearchQuery)}</strong>"</div>`
+                : `<div class="pagination-info">Showing <span class="pagination-range">${startItem}–${endItem}</span> of <strong>${totalHits}</strong> recipes · Page <strong>${currentPage}</strong> of <strong>${totalPages}</strong> <span class="pagination-source-pill">${sourceLabel}${moreNote}</span></div>`;
 
-        // Attach listeners
+            const topControls = totalPages > 1 ? `
+                <div class="pagination-top-controls">
+                    <div class="pagination-size-selector" title="Select recipes per page">
+                        <label for="pageSizeSelectTop" class="pagination-size-label">Per Page:</label>
+                        <div class="pagination-select-wrapper">
+                            <select id="pageSizeSelectTop" class="pagination-size-select" aria-label="Recipes per page">
+                                ${ALLOWED_PAGE_SIZES.map(s => `<option value="${s}" ${pageSize === s ? 'selected' : ''}>${s}</option>`).join('')}
+                            </select>
+                            <span class="select-chevron" aria-hidden="true">▾</span>
+                        </div>
+                    </div>
+                    <div class="pagination-quick-nav" aria-label="Quick page navigation">
+                        <button type="button" class="pagination-compact-btn" data-page="${currentPage - 1}" ${isFirst || isFetchingPage ? 'disabled' : ''} aria-label="Previous page" title="Previous page">‹</button>
+                        <span class="pagination-compact-indicator"><strong>${currentPage}</strong> / ${totalPages}</span>
+                        <button type="button" class="pagination-compact-btn" data-page="${currentPage + 1}" ${isLast || isFetchingPage ? 'disabled' : ''} aria-label="Next page" title="Next page">›</button>
+                    </div>
+                </div>
+            ` : `
+                <div class="pagination-top-controls">
+                    <div class="pagination-size-selector" title="Select recipes per page">
+                        <label for="pageSizeSelectTop" class="pagination-size-label">Per Page:</label>
+                        <div class="pagination-select-wrapper">
+                            <select id="pageSizeSelectTop" class="pagination-size-select" aria-label="Recipes per page">
+                                ${ALLOWED_PAGE_SIZES.map(s => `<option value="${s}" ${pageSize === s ? 'selected' : ''}>${s}</option>`).join('')}
+                            </select>
+                            <span class="select-chevron" aria-hidden="true">▾</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            wrapper.innerHTML = `<div class="pagination-top-bar">${infoHtml}${topControls}</div>`;
+        } else {
+            const infoHtml = totalPages <= 1
+                ? `<div class="pagination-info"><span class="pagination-range">${totalHits}</span> recipe${totalHits !== 1 ? 's' : ''} found in <strong>${sourceLabel}</strong> for "<strong>${escapeHTML(currentSearchQuery)}</strong>"</div>`
+                : `<div class="pagination-info">Showing <span class="pagination-range">${startItem}–${endItem}</span> of <strong>${totalHits}</strong> recipes · Page <strong>${currentPage}</strong> of <strong>${totalPages}</strong> · <span style="color:var(--text-muted)">${sourceLabel}${moreNote}</span></div>`;
+
+            const navHtml = buildPaginationHTML();
+
+            const toolsHtml = totalPages > 1 ? `
+                <div class="pagination-tools">
+                    <form class="pagination-jump-form" role="search" aria-label="Jump directly to a page">
+                        <label for="pageJumpInput" class="pagination-jump-label">Go to page:</label>
+                        <div class="pagination-jump-input-group">
+                            <input type="number" id="pageJumpInput" class="pagination-jump-input" min="1" max="${totalPages}" placeholder="${currentPage}" aria-label="Target page number (1 to ${totalPages})">
+                            <button type="submit" class="pagination-jump-btn" aria-label="Jump to entered page">Go</button>
+                        </div>
+                    </form>
+
+                    <div class="pagination-size-selector" title="Select recipes displayed per page">
+                        <label for="pageSizeSelectBottom" class="pagination-size-label">Per page:</label>
+                        <div class="pagination-select-wrapper">
+                            <select id="pageSizeSelectBottom" class="pagination-size-select" aria-label="Recipes per page">
+                                ${ALLOWED_PAGE_SIZES.map(s => `<option value="${s}" ${pageSize === s ? 'selected' : ''}>${s} recipes</option>`).join('')}
+                            </select>
+                            <span class="select-chevron" aria-hidden="true">▾</span>
+                        </div>
+                    </div>
+
+                    <div class="pagination-keyboard-hint" title="Use Alt + Left/Right Arrow keys on your keyboard to navigate pages">
+                        <kbd>Alt</kbd> + <kbd>←</kbd> / <kbd>→</kbd>
+                    </div>
+                </div>
+            ` : '';
+
+            wrapper.innerHTML = `${infoHtml}${navHtml}${toolsHtml}`;
+        }
+
+        // Attach page link click listeners
         wrapper.querySelectorAll('[data-page]').forEach(btn => {
             btn.addEventListener('click', () => {
                 const target = parseInt(btn.getAttribute('data-page'), 10);
-                if (!isNaN(target)) goToPage(target);
+                if (!isNaN(target)) goToPage(target, true, true);
             });
         });
+
+        // Attach page size dropdown listeners
+        wrapper.querySelectorAll('.pagination-size-select').forEach(select => {
+            select.addEventListener('change', (e) => {
+                const newSize = parseInt(e.target.value, 10);
+                if (!isNaN(newSize)) changePageSize(newSize);
+            });
+        });
+
+        // Attach jump to page listener
+        const jumpForm = wrapper.querySelector('.pagination-jump-form');
+        if (jumpForm) {
+            jumpForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const input = jumpForm.querySelector('.pagination-jump-input');
+                if (!input) return;
+                const target = parseInt(input.value.trim(), 10);
+                if (!isNaN(target) && target >= 1 && target <= totalPages) {
+                    goToPage(target, true, true);
+                } else {
+                    input.classList.add('is-invalid');
+                    setTimeout(() => input.classList.remove('is-invalid'), 1200);
+                }
+            });
+        }
 
         return wrapper;
     }
 
     // =========================================================================
-    // 4. Search Execution — Now with buffered pagination
+    // 4. Search Execution — Dynamic buffered pagination
     // =========================================================================
-    async function executeSearch(query) {
+    async function executeSearch(query, startPage = 1, updateUrl = true) {
         currentSearchQuery = query;
-        currentPage = 1;
+        currentPage = startPage;
         totalHits = 0;
         nextPaginationCursor = null;
         isVaultMode = false;
@@ -852,7 +1062,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentDataIsLive = true;
         isFetchingPage = false;
 
-        // Show skeletons matching PAGE_SIZE (6)
+        // Show skeletons matching pageSize
         const skeletonCardHtml = `
             <article class="recipe-card skeleton-card" aria-hidden="true">
                 <div class="card-media-wrapper skeleton-block skeleton-image"></div>
@@ -868,7 +1078,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </article>
         `;
-        resultsList.innerHTML = `<div class="recipes-grid">${Array(PAGE_SIZE).fill(skeletonCardHtml).join('')}</div>`;
+        resultsList.innerHTML = `<div class="recipes-grid">${Array(Math.min(pageSize, 12)).fill(skeletonCardHtml).join('')}</div>`;
 
         // Attempt API candidate endpoints
         const apiPath = `/api/recipes?q=${encodeURIComponent(query)}`;
@@ -882,12 +1092,18 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.hits && data.hits.length > 0) {
                 // Buffer all hits
                 liveAllHits = [...data.hits];
-                // If API returned fewer hits than count, pagination will fetch more on demand
                 currentDataIsLive = true;
-                renderCurrentPage(1, false);
+                if (startPage > 1) {
+                    await ensureLiveBufferForPage(startPage);
+                }
+                const maxPage = getTotalPages();
+                const validPage = Math.min(startPage, maxPage);
+                renderCurrentPage(validPage, false);
+                if (updateUrl) syncUrlState(false);
                 return;
             } else {
                 renderEmptyState(query);
+                if (updateUrl) syncUrlState(false);
                 return;
             }
         }
@@ -898,12 +1114,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (vaultMatches && vaultMatches.length > 0) {
             isVaultMode = true;
             currentDataIsLive = false;
-            // Wrap vault recipes as {recipe: ...} to keep uniform shape? Vault items are direct recipe objects.
-            // We'll store as vault objects and handle mapping in render.
             vaultAllHits = vaultMatches;
             totalHits = vaultAllHits.length;
             nextPaginationCursor = null;
-            renderCurrentPage(1, false);
+            const maxPage = getTotalPages();
+            const validPage = Math.min(startPage, maxPage);
+            renderCurrentPage(validPage, false);
+            if (updateUrl) syncUrlState(false);
             return;
         }
 
@@ -917,13 +1134,13 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     async function ensureLiveBufferForPage(targetPage) {
         if (isVaultMode) return true;
-        const required = targetPage * PAGE_SIZE;
+        const required = targetPage * pageSize;
         while (liveAllHits.length < required && nextPaginationCursor && !isFetchingPage) {
             // Fetch next API chunk
             const fetched = await fetchNextApiChunk();
             if (!fetched) break;
         }
-        return liveAllHits.length >= (targetPage - 1) * PAGE_SIZE + 1;
+        return liveAllHits.length >= (targetPage - 1) * pageSize + 1;
     }
 
     async function fetchNextApiChunk() {
@@ -985,35 +1202,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    async function goToPage(targetPage) {
+    async function goToPage(targetPage, updateUrl = true, shouldScroll = true) {
         const totalPages = getTotalPages();
-        if (targetPage < 1 || targetPage > totalPages || targetPage === currentPage || isFetchingPage) return;
+        if (targetPage < 1) targetPage = 1;
+        if (targetPage > totalPages) targetPage = totalPages;
+        if (targetPage === currentPage && !isFetchingPage) return;
 
         // If vault, simple slice
         if (isVaultMode) {
-            renderCurrentPage(targetPage, true);
+            renderCurrentPage(targetPage, shouldScroll);
+            if (updateUrl) syncUrlState(false);
             return;
         }
 
-        // Live mode: ensure buffer
-        const requiredStart = (targetPage - 1) * PAGE_SIZE;
-        if (liveAllHits.length <= requiredStart && nextPaginationCursor) {
-            // Need to fetch — show loading skeletons in pagination area (both top and bottom)
+        // Live mode: ensure buffer has enough hits for this full target page
+        const requiredEnd = targetPage * pageSize;
+        if (liveAllHits.length < requiredEnd && nextPaginationCursor) {
+            // Show loading state across all pagination wrappers
             const wrappers = document.querySelectorAll('.pagination-wrapper');
             wrappers.forEach(wrapper => {
-                wrapper.innerHTML = `<div class="pagination-info" style="opacity:0.7">Loading page ${targetPage}…</div>`;
+                wrapper.classList.add('is-loading');
+                const infoEl = wrapper.querySelector('.pagination-info');
+                if (infoEl) {
+                    infoEl.innerHTML = `<span class="pagination-loading-spinner" aria-hidden="true"></span> Fetching live recipes for page <strong>${targetPage}</strong>…`;
+                }
             });
-            // Fetch until enough
+
             await ensureLiveBufferForPage(targetPage);
         }
 
         // Re-check after fetching
-        if (liveAllHits.length > requiredStart || targetPage <= Math.ceil(liveAllHits.length / PAGE_SIZE)) {
-            renderCurrentPage(targetPage, true);
+        const requiredStart = (targetPage - 1) * pageSize;
+        if (liveAllHits.length > requiredStart || targetPage <= Math.ceil(liveAllHits.length / pageSize)) {
+            renderCurrentPage(targetPage, shouldScroll);
+            if (updateUrl) syncUrlState(false);
         } else {
             // If still not enough and no more cursor, cap totalHits to actually available
             totalHits = liveAllHits.length;
-            renderCurrentPage(Math.min(targetPage, getTotalPages()), true);
+            const validPage = Math.min(targetPage, getTotalPages());
+            renderCurrentPage(validPage, shouldScroll);
+            if (updateUrl) syncUrlState(false);
         }
     }
 
@@ -1022,8 +1250,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================================================
     function renderCurrentPage(pageNum, shouldScroll = true) {
         currentPage = pageNum;
-        const start = (pageNum - 1) * PAGE_SIZE;
-        const end = start + PAGE_SIZE;
+        const start = (pageNum - 1) * pageSize;
+        const end = start + pageSize;
         let pageHits = [];
 
         if (isVaultMode) {
@@ -1032,13 +1260,14 @@ document.addEventListener('DOMContentLoaded', () => {
             pageHits = liveAllHits.slice(start, end);
         }
 
-        // If live and page slice empty but we have cursor, fetch then retry
-        if (!isVaultMode && pageHits.length === 0 && nextPaginationCursor) {
+        // If live and page slice is empty, or smaller than pageSize but more cursor items exist, fetch then retry
+        const expectedCount = Math.min(pageSize, totalHits > 0 ? (totalHits - start) : pageSize);
+        if (!isVaultMode && pageHits.length < expectedCount && nextPaginationCursor) {
             ensureLiveBufferForPage(pageNum).then(() => {
                 const retrySlice = liveAllHits.slice(start, end);
-                if (retrySlice.length > 0) renderCurrentPage(pageNum, shouldScroll);
+                if (retrySlice.length > pageHits.length) renderCurrentPage(pageNum, shouldScroll);
             });
-            return;
+            if (pageHits.length === 0) return;
         }
 
         // Build cards HTML
@@ -1133,12 +1362,10 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Append pagination controls — professional dual placement (top + bottom) for easy navigation
-        if (totalHits > PAGE_SIZE) {
-            const topWrapper = renderPaginationWrapper();
-            topWrapper.classList.add('pagination-wrapper--top');
-            const bottomWrapper = renderPaginationWrapper();
-            bottomWrapper.classList.add('pagination-wrapper--bottom');
+        // Append pagination controls — dual placement (top toolbar + bottom navigation center)
+        if (totalHits > 0) {
+            const topWrapper = renderPaginationWrapper('top');
+            const bottomWrapper = renderPaginationWrapper('bottom');
 
             // Insert top pagination immediately after the results meta header (above grid)
             const headerEl = resultsList.querySelector('.search-results-meta');
@@ -1149,12 +1376,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             // Bottom pagination after the grid
             resultsList.appendChild(bottomWrapper);
-        } else if (totalHits > 0) {
-            // Single page info only (no controls needed) — keep single bottom info to avoid duplication
-            const singleInfo = document.createElement('div');
-            singleInfo.className = 'pagination-wrapper pagination-wrapper--bottom';
-            singleInfo.innerHTML = `<div class="pagination-info">${totalHits} recipe${totalHits !== 1 ? 's' : ''} found in <strong>${sourceBadgeText}</strong></div>`;
-            resultsList.appendChild(singleInfo);
         }
 
         // SEO JSON-LD
