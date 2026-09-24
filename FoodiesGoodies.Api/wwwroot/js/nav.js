@@ -238,6 +238,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const current = document.documentElement.getAttribute('data-theme') || 'light';
         const next = current === 'light' ? 'dark' : 'light';
         applyTheme(next, true);
+
+        const hint = document.getElementById('cord-discovery-hint');
+        if (hint) {
+            hint.classList.add('hidden');
+            sessionStorage.setItem('foodies_cord_hint_dismissed', 'true');
+        }
     }
 
     // Initialize tubelight on page mount
@@ -268,6 +274,43 @@ document.addEventListener('DOMContentLoaded', () => {
         cordCanvas.setAttribute('aria-label', 'Pull cord to toggle theme');
         cordCanvas.setAttribute('tabindex', '0');
         document.body.appendChild(cordCanvas);
+    }
+
+    // 3.3.1 Desktop Discovery Hint Tooltip
+    if (window.innerWidth > 992 && !sessionStorage.getItem('foodies_cord_hint_dismissed')) {
+        let hint = document.getElementById('cord-discovery-hint');
+        if (!hint) {
+            hint = document.createElement('div');
+            hint.id = 'cord-discovery-hint';
+            hint.className = 'cord-discovery-hint';
+            hint.innerHTML = '<span>💡</span> <span>Pull cord to toggle lights</span>';
+            hint.addEventListener('click', () => {
+                hint.classList.add('hidden');
+                sessionStorage.setItem('foodies_cord_hint_dismissed', 'true');
+            });
+            document.body.appendChild(hint);
+
+            // Auto-hide after 8 seconds
+            setTimeout(() => {
+                if (hint && !hint.classList.contains('hidden')) {
+                    hint.classList.add('hidden');
+                    setTimeout(() => hint.remove(), 500);
+                }
+            }, 8000);
+        }
+    }
+
+    // 3.3.2 Ensure Ambient Interactive Culinary Canvas is active
+    if (!document.getElementById('ambient-culinary-canvas')) {
+        const isSubfolder = window.location.pathname.includes('/pages/');
+        const scriptPath = isSubfolder ? '../js/ambient-bg.js?v=3.5' : 'js/ambient-bg.js?v=3.5';
+        const existingScript = document.querySelector('script[src*="ambient-bg.js"]');
+        if (!existingScript) {
+            const bgScript = document.createElement('script');
+            bgScript.src = scriptPath;
+            bgScript.defer = true;
+            document.head.appendChild(bgScript);
+        }
     }
 
     class UmeshCordSwitch {

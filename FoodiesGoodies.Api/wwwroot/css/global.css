@@ -146,6 +146,60 @@ img[loading="lazy"] {
   }
 }
 
+/* Cord Discovery Tooltip */
+.cord-discovery-hint {
+  position: fixed;
+  top: 92px;
+  right: 18px;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 10002;
+  pointer-events: auto;
+  cursor: pointer;
+  animation: hintFloat 3s ease-in-out infinite;
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.cord-discovery-hint::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 28px;
+  width: 10px;
+  height: 10px;
+  background: var(--bg-surface);
+  border-left: 1px solid var(--border-strong);
+  border-top: 1px solid var(--border-strong);
+  transform: rotate(45deg);
+}
+
+@keyframes hintFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.cord-discovery-hint.hidden {
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+}
+
+@media (max-width: 992px) {
+  .cord-discovery-hint {
+    display: none !important;
+  }
+}
+
 /* --------------------------------------------------------------------------
    4.2 Architectural Centered Navbar Tubelight Fixture & Gradual Radiance
    Old Money Vintage Heirloom Luminaire with Burnished Antique Brass Accents

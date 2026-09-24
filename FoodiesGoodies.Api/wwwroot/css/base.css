@@ -124,31 +124,34 @@ header.header--scrolled {
 .navbar a.nav-link,
 .navbar a {
   position: relative;
-  font-size: 14px;
-  color: var(--text-secondary);
+  font-size: 14.5px;
+  color: var(--text-primary);
   text-decoration: none;
-  font-weight: 500;
-  padding: 6px 12px;
+  font-weight: 600;
+  padding: 7px 14px;
   border-radius: var(--radius-pill);
   transition: all var(--transition-fast);
   display: inline-flex;
   align-items: center;
   gap: 6px;
   white-space: nowrap;
+  letter-spacing: -0.01em;
 }
 
 .navbar a:hover,
 .navbar a:focus {
   color: var(--primary);
   background-color: var(--primary-subtle);
+  transform: translateY(-1px);
 }
 
 /* Active Navigation Item */
 .navbar a.active,
 .navbar a.nav-link-active {
-  color: var(--primary);
-  font-weight: 600;
+  color: var(--primary) !important;
+  font-weight: 700;
   background-color: var(--primary-subtle);
+  box-shadow: 0 0 0 1px rgba(194, 112, 58, 0.22);
 }
 
 /* Header Action Tools Cluster */

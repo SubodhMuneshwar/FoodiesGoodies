@@ -31,8 +31,9 @@
 
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/global.css?v=4.2">
-    <link rel="stylesheet" href="css/style.css?v=4.0">
+    <link rel="stylesheet" href="css/global.css?v=5.0">
+    <link rel="stylesheet" href="css/style.css?v=5.0">
+    <script src="js/ambient-bg.js?v=3.5" defer></script>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -73,8 +74,19 @@
     <main id="main-content">
         <!-- HERO SECTION (Editorial, Minimal, High-Impact) -->
         <section class="minimal-hero" aria-label="Culinary Inspiration Hero">
-            <div class="hero-backdrop" style="background-image: url('assets/images/pizza2.png');"></div>
+            <div class="hero-backdrop" style="background-image: url('assets/images/todd-quackenbush-x5SRhkFajrA-unsplash.jpg');"></div>
             <div class="hero-overlay-scrim"></div>
+
+            <!-- Floating Decorative Glass Badges -->
+            <div class="hero-floating-chip chip-left" aria-hidden="true">
+                <span class="chip-pulse"></span>
+                <span><strong>2.3M+</strong> Curated Dishes</span>
+            </div>
+            <div class="hero-floating-chip chip-right" aria-hidden="true">
+                <span class="chip-star">★</span>
+                <span><strong>4.9/5</strong> Chef Endorsed</span>
+            </div>
+
             <div class="hero-content">
                 <span class="hero-eyebrow">Curated Culinary Journal &bull; Live Intelligence</span>
                 <h1 class="hero-heading">Discover Recipes That <em>Inspire</em> Your Kitchen.</h1>
@@ -88,7 +100,40 @@
                         <input type="text" id="home-search-input" name="q" placeholder="Search by dish or ingredients (e.g. Pasta, Tacos, Salmon, Pancakes)..." required autocomplete="off">
                         <button type="submit" class="hero-search-btn">Search Recipes</button>
                     </div>
+
+                    <!-- Interactive Quick Search Tags -->
+                    <div class="hero-quick-tags" aria-label="Popular Quick Searches">
+                        <span class="quick-tags-label">Trending Cravings:</span>
+                        <button type="button" class="hero-tag-btn" data-query="Truffle Pasta">🍝 Truffle Pasta</button>
+                        <button type="button" class="hero-tag-btn" data-query="Margherita Pizza">🍕 Artisan Pizza</button>
+                        <button type="button" class="hero-tag-btn" data-query="Ramen">🍜 Tokyo Ramen</button>
+                        <button type="button" class="hero-tag-btn" data-query="Avocado Bowl">🥑 Superfood Bowls</button>
+                        <button type="button" class="hero-tag-btn" data-query="Blueberry Donuts">🫐 French Bakery</button>
+                    </div>
                 </form>
+
+                <!-- Live Statistical Counter Ticker -->
+                <div class="hero-stats-bar">
+                    <div class="hero-stat-item">
+                        <span class="stat-number" data-target="2300000" data-suffix="+">2.3M+</span>
+                        <span class="stat-label">Chef Recipes</span>
+                    </div>
+                    <div class="hero-stat-divider"></div>
+                    <div class="hero-stat-item">
+                        <span class="stat-number" data-target="180" data-suffix="+">180+</span>
+                        <span class="stat-label">Cuisines</span>
+                    </div>
+                    <div class="hero-stat-divider"></div>
+                    <div class="hero-stat-item">
+                        <span class="stat-number" data-target="99" data-suffix="%">99.4%</span>
+                        <span class="stat-label">Diet Precision</span>
+                    </div>
+                    <div class="hero-stat-divider"></div>
+                    <div class="hero-stat-item">
+                        <span class="stat-number" data-target="50000" data-suffix="+">50K+</span>
+                        <span class="stat-label">Home Chefs</span>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -98,6 +143,11 @@
                 <div class="spotlight-media">
                     <img src="assets/images/pizza2.png" alt="Artisanal Wood-Fired Truffle Margherita Pizza" loading="lazy" decoding="async">
                     <span class="spotlight-badge">Signature Spotlight</span>
+                    <button type="button" class="btn-favorite-heart" data-recipe-id="spotlight-truffle-margherita" aria-label="Save to favorites" title="Save to favorites">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </button>
                 </div>
                 <div class="spotlight-content">
                     <div class="spotlight-rating" aria-label="Rating 4.9 out of 5 stars">
@@ -117,10 +167,22 @@
                         Slow-fermented 48-hour sourdough base, San Marzano plum tomato reduction, torn fresh buffalo mozzarella, aromatic sweet basil, and a finishing drizzle of cold-pressed white truffle oil.
                     </p>
 
-                    <div class="spotlight-metrics">
-                        <div class="spotlight-metric-item">Prep: <strong>25 mins</strong></div>
-                        <div class="spotlight-metric-item">Calories: <strong>420 kcal</strong></div>
-                        <div class="spotlight-metric-item">Protein: <strong>18g</strong></div>
+                    <!-- Interactive Macro Gauge Breakdown -->
+                    <div class="spotlight-macro-bars" aria-label="Macronutrient breakdown">
+                        <div class="macro-bar-header">
+                            <span>Nutritional Balance</span>
+                            <span class="macro-total">420 kcal total</span>
+                        </div>
+                        <div class="macro-progress-track">
+                            <div class="macro-seg macro-seg--protein" style="width: 24%;" title="Protein: 18g (24%)"></div>
+                            <div class="macro-seg macro-seg--carbs" style="width: 52%;" title="Carbs: 48g (52%)"></div>
+                            <div class="macro-seg macro-seg--fats" style="width: 24%;" title="Fats: 14g (24%)"></div>
+                        </div>
+                        <div class="macro-legend">
+                            <span class="leg-item"><i class="dot dot-protein"></i> Protein <strong>18g</strong></span>
+                            <span class="leg-item"><i class="dot dot-carbs"></i> Carbs <strong>48g</strong></span>
+                            <span class="leg-item"><i class="dot dot-fats"></i> Fats <strong>14g</strong></span>
+                        </div>
                     </div>
 
                     <div class="spotlight-actions">
@@ -156,10 +218,23 @@
             <!-- Recipe Grid -->
             <div class="trending-grid">
                 <!-- CARD 1 -->
-                <article class="trending-recipe-card" data-category="quick">
+                <article class="trending-recipe-card" data-category="quick"
+                    data-title="Crispy Pepperoni &amp; Hot Honey Pizza"
+                    data-image="assets/images/pizza1.png"
+                    data-cuisine="Italian"
+                    data-time="25 mins"
+                    data-calories="560 kcal"
+                    data-desc="Charred sourdough crust with artisan pepperoni cups and sweet chili hot honey glaze."
+                    data-ingredients="1 ball Artisan Pizza Dough|1 cup San Marzano Marinara Sauce|2 cups Mozzarella Cheese|4 oz Pepperoni Cups|2 tbsp Hot Honey Glaze|Fresh Basil Leaves"
+                    data-cook-url="pages/search.html?q=Pepperoni+Pizza">
                     <div class="trending-card-media">
                         <img src="assets/images/pizza1.png" alt="Crispy Pepperoni &amp; Hot Honey Pizza" loading="lazy" decoding="async">
                         <span class="trending-cuisine-badge">Italian</span>
+                        <button type="button" class="btn-favorite-heart" data-recipe-id="trend-pepperoni-pizza" aria-label="Save to favorites" title="Save to favorites">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
                     </div>
                     <div class="trending-card-body">
                         <div class="trending-metrics">
@@ -168,15 +243,31 @@
                         </div>
                         <h3 class="trending-card-title">Crispy Pepperoni &amp; Hot Honey Pizza</h3>
                         <p class="trending-desc">Charred sourdough crust with artisan pepperoni cups and sweet chili hot honey glaze.</p>
-                        <a href="pages/search.html?q=Pepperoni+Pizza" class="btn-card-cook">View Recipe &rarr;</a>
+                        <div class="trending-card-actions">
+                            <button type="button" class="btn-card-quickview">Quick View</button>
+                            <a href="pages/search.html?q=Pepperoni+Pizza" class="btn-card-cook">Cook &rarr;</a>
+                        </div>
                     </div>
                 </article>
 
                 <!-- CARD 2 -->
-                <article class="trending-recipe-card" data-category="bakery">
+                <article class="trending-recipe-card" data-category="bakery"
+                    data-title="Blueberry Lemon Glazed Donuts"
+                    data-image="assets/images/blueberry.png"
+                    data-cuisine="Bakery"
+                    data-time="30 mins"
+                    data-calories="280 kcal"
+                    data-desc="Baked organic whole wheat donuts infused with fresh berries and zesty citrus glaze."
+                    data-ingredients="2 cups Whole Wheat Pastry Flour|1 cup Fresh Blueberries|1/2 cup Organic Cane Sugar|1/4 cup Greek Yogurt|1 Lemon (zest and juice)|Powdered Sugar Glaze"
+                    data-cook-url="pages/search.html?q=Blueberry+Donuts">
                     <div class="trending-card-media">
                         <img src="assets/images/blueberry.png" alt="Artisanal Blueberry Lemon Glazed Donut" loading="lazy" decoding="async">
                         <span class="trending-cuisine-badge">Bakery</span>
+                        <button type="button" class="btn-favorite-heart" data-recipe-id="trend-blueberry-donuts" aria-label="Save to favorites" title="Save to favorites">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
                     </div>
                     <div class="trending-card-body">
                         <div class="trending-metrics">
@@ -185,15 +276,31 @@
                         </div>
                         <h3 class="trending-card-title">Blueberry Lemon Glazed Donuts</h3>
                         <p class="trending-desc">Baked organic whole wheat donuts infused with fresh berries and zesty citrus glaze.</p>
-                        <a href="pages/search.html?q=Blueberry+Donuts" class="btn-card-cook">View Recipe &rarr;</a>
+                        <div class="trending-card-actions">
+                            <button type="button" class="btn-card-quickview">Quick View</button>
+                            <a href="pages/search.html?q=Blueberry+Donuts" class="btn-card-cook">Cook &rarr;</a>
+                        </div>
                     </div>
                 </article>
 
                 <!-- CARD 3 -->
-                <article class="trending-recipe-card" data-category="quick healthy">
+                <article class="trending-recipe-card" data-category="quick healthy"
+                    data-title="Pan-Tossed Garlic Herb Pasta"
+                    data-image="assets/images/2.jpeg"
+                    data-cuisine="Mediterranean"
+                    data-time="20 mins"
+                    data-calories="390 kcal"
+                    data-desc="Al dente pasta tossed in cold-pressed extra virgin olive oil, burst cherry tomatoes, and basil."
+                    data-ingredients="400g Artisanal Spaghetti|4 cloves Thinly Sliced Garlic|1 pint Sweet Cherry Tomatoes|1/3 cup Extra Virgin Olive Oil|Fresh Basil &amp; Oregano|Shaved Aged Parmesan"
+                    data-cook-url="pages/search.html?q=Garlic+Tomato+Pasta">
                     <div class="trending-card-media">
                         <img src="assets/images/2.jpeg" alt="Pan-Tossed Garlic Herb Tomato Pasta" loading="lazy" decoding="async">
                         <span class="trending-cuisine-badge">Mediterranean</span>
+                        <button type="button" class="btn-favorite-heart" data-recipe-id="trend-garlic-pasta" aria-label="Save to favorites" title="Save to favorites">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
                     </div>
                     <div class="trending-card-body">
                         <div class="trending-metrics">
@@ -202,15 +309,31 @@
                         </div>
                         <h3 class="trending-card-title">Pan-Tossed Garlic Herb Pasta</h3>
                         <p class="trending-desc">Al dente pasta tossed in cold-pressed extra virgin olive oil, burst cherry tomatoes, and basil.</p>
-                        <a href="pages/search.html?q=Garlic+Tomato+Pasta" class="btn-card-cook">View Recipe &rarr;</a>
+                        <div class="trending-card-actions">
+                            <button type="button" class="btn-card-quickview">Quick View</button>
+                            <a href="pages/search.html?q=Garlic+Tomato+Pasta" class="btn-card-cook">Cook &rarr;</a>
+                        </div>
                     </div>
                 </article>
 
                 <!-- CARD 4 -->
-                <article class="trending-recipe-card" data-category="bakery">
+                <article class="trending-recipe-card" data-category="bakery"
+                    data-title="Golden Salted Caramel Donuts"
+                    data-image="assets/images/caramel.png"
+                    data-cuisine="Bakery"
+                    data-time="35 mins"
+                    data-calories="310 kcal"
+                    data-desc="Fluffy yeast dough dipped in browned-butter caramel and topped with flaky sea salt."
+                    data-ingredients="2.5 cups All-Purpose Flour|1 packet Active Dry Yeast|1/2 cup Warm Whole Milk|4 tbsp Browned Butter|1/2 cup Salted Caramel Sauce|Maldon Flaky Sea Salt"
+                    data-cook-url="pages/search.html?q=Caramel+Donuts">
                     <div class="trending-card-media">
                         <img src="assets/images/caramel.png" alt="Golden Salted Butter Caramel Donut" loading="lazy" decoding="async">
                         <span class="trending-cuisine-badge">Bakery</span>
+                        <button type="button" class="btn-favorite-heart" data-recipe-id="trend-caramel-donuts" aria-label="Save to favorites" title="Save to favorites">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
                     </div>
                     <div class="trending-card-body">
                         <div class="trending-metrics">
@@ -219,15 +342,31 @@
                         </div>
                         <h3 class="trending-card-title">Golden Salted Caramel Donuts</h3>
                         <p class="trending-desc">Fluffy yeast dough dipped in browned-butter caramel and topped with flaky sea salt.</p>
-                        <a href="pages/search.html?q=Caramel+Donuts" class="btn-card-cook">View Recipe &rarr;</a>
+                        <div class="trending-card-actions">
+                            <button type="button" class="btn-card-quickview">Quick View</button>
+                            <a href="pages/search.html?q=Caramel+Donuts" class="btn-card-cook">Cook &rarr;</a>
+                        </div>
                     </div>
                 </article>
 
                 <!-- CARD 5 -->
-                <article class="trending-recipe-card" data-category="healthy quick">
+                <article class="trending-recipe-card" data-category="healthy quick"
+                    data-title="Garden Farmhouse Veggie Pizza"
+                    data-image="assets/images/pizza3.png"
+                    data-cuisine="Vegetarian"
+                    data-time="25 mins"
+                    data-calories="380 kcal"
+                    data-desc="Loaded with roasted bell peppers, baby mushrooms, red onion, and low-fat mozzarella."
+                    data-ingredients="1 Rustic Whole Wheat Pizza Crust|1 cup Herb-Infused Tomato Puree|1 Bell Pepper, sliced|1/2 cup Baby Cremini Mushrooms|1/4 cup Sliced Red Onion|1.5 cups Low-Moisture Mozzarella"
+                    data-cook-url="pages/search.html?q=Farmhouse+Pizza">
                     <div class="trending-card-media">
                         <img src="assets/images/pizza3.png" alt="Garden Farmhouse Veggie Medley" loading="lazy" decoding="async">
                         <span class="trending-cuisine-badge">Vegetarian</span>
+                        <button type="button" class="btn-favorite-heart" data-recipe-id="trend-farmhouse-pizza" aria-label="Save to favorites" title="Save to favorites">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
                     </div>
                     <div class="trending-card-body">
                         <div class="trending-metrics">
@@ -236,15 +375,31 @@
                         </div>
                         <h3 class="trending-card-title">Garden Farmhouse Veggie Pizza</h3>
                         <p class="trending-desc">Loaded with roasted bell peppers, baby mushrooms, red onion, and low-fat mozzarella.</p>
-                        <a href="pages/search.html?q=Farmhouse+Pizza" class="btn-card-cook">View Recipe &rarr;</a>
+                        <div class="trending-card-actions">
+                            <button type="button" class="btn-card-quickview">Quick View</button>
+                            <a href="pages/search.html?q=Farmhouse+Pizza" class="btn-card-cook">Cook &rarr;</a>
+                        </div>
                     </div>
                 </article>
 
                 <!-- CARD 6 -->
-                <article class="trending-recipe-card" data-category="bakery">
+                <article class="trending-recipe-card" data-category="bakery"
+                    data-title="Fresh Strawberry Glazed Cronuts"
+                    data-image="assets/images/strawberry.png"
+                    data-cuisine="Patisserie"
+                    data-time="40 mins"
+                    data-calories="290 kcal"
+                    data-desc="Flaky laminated croissant-donut pastry filled with sweet strawberry puree and cream."
+                    data-ingredients="1 sheet Laminated Puff Pastry Dough|1 cup Fresh Strawberry Reduction|1/2 cup Vanilla Bean Mascarpone Cream|1/4 cup Powdered Sugar|Neutral Oil for Frying|Organic Freeze-Dried Strawberry Dust"
+                    data-cook-url="pages/search.html?q=Strawberry+Donuts">
                     <div class="trending-card-media">
                         <img src="assets/images/strawberry.png" alt="Fresh Strawberry Glazed Cronut" loading="lazy" decoding="async">
                         <span class="trending-cuisine-badge">Patisserie</span>
+                        <button type="button" class="btn-favorite-heart" data-recipe-id="trend-strawberry-donuts" aria-label="Save to favorites" title="Save to favorites">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
                     </div>
                     <div class="trending-card-body">
                         <div class="trending-metrics">
@@ -253,7 +408,10 @@
                         </div>
                         <h3 class="trending-card-title">Fresh Strawberry Glazed Cronuts</h3>
                         <p class="trending-desc">Flaky laminated croissant-donut pastry filled with sweet strawberry puree and cream.</p>
-                        <a href="pages/search.html?q=Strawberry+Donuts" class="btn-card-cook">View Recipe &rarr;</a>
+                        <div class="trending-card-actions">
+                            <button type="button" class="btn-card-quickview">Quick View</button>
+                            <a href="pages/search.html?q=Strawberry+Donuts" class="btn-card-cook">Cook &rarr;</a>
+                        </div>
                     </div>
                 </article>
             </div>
@@ -272,6 +430,7 @@
             <div class="cuisine-grid">
                 <!-- CUISINE 1 -->
                 <a href="pages/search.html?q=Italian" class="cuisine-card">
+                    <span class="cuisine-recipe-pill">3,400+ Dishes</span>
                     <img src="assets/images/3.jpeg" alt="Italian Cuisine" class="cuisine-card-bg" loading="lazy" decoding="async">
                     <div class="cuisine-card-overlay">
                         <h3>Italian Trattoria</h3>
@@ -282,6 +441,7 @@
 
                 <!-- CUISINE 2 -->
                 <a href="pages/search.html?q=Asian" class="cuisine-card">
+                    <span class="cuisine-recipe-pill">2,850+ Dishes</span>
                     <img src="assets/images/dan-gold-5O1ddenSM4g-unsplash.jpg" alt="Asian Fusion Cuisine" class="cuisine-card-bg" loading="lazy" decoding="async">
                     <div class="cuisine-card-overlay">
                         <h3>Asian &amp; Fusion</h3>
@@ -292,6 +452,7 @@
 
                 <!-- CUISINE 3 -->
                 <a href="pages/search.html?q=Mexican" class="cuisine-card">
+                    <span class="cuisine-recipe-pill">1,920+ Dishes</span>
                     <img src="assets/images/flame.jpeg" alt="Mexican Street Food" class="cuisine-card-bg" loading="lazy" decoding="async">
                     <div class="cuisine-card-overlay">
                         <h3>Mexican &amp; Latin Grill</h3>
@@ -302,6 +463,7 @@
 
                 <!-- CUISINE 4 -->
                 <a href="pages/search.html?q=Indian" class="cuisine-card">
+                    <span class="cuisine-recipe-pill">2,100+ Dishes</span>
                     <img src="assets/images/annie-spratt-R3LcfTvcGWY-unsplash.jpg" alt="Indian Spice Cuisine" class="cuisine-card-bg" loading="lazy" decoding="async">
                     <div class="cuisine-card-overlay">
                         <h3>Indian &amp; Fragrant Spices</h3>
@@ -312,6 +474,7 @@
 
                 <!-- CUISINE 5 -->
                 <a href="pages/search.html?q=Salad" class="cuisine-card">
+                    <span class="cuisine-recipe-pill">4,600+ Dishes</span>
                     <img src="assets/images/green-apple.png" alt="Fresh &amp; Healthy Cuisine" class="cuisine-card-bg" loading="lazy" decoding="async">
                     <div class="cuisine-card-overlay">
                         <h3>Fresh &amp; Healthy Fit</h3>
@@ -322,6 +485,7 @@
 
                 <!-- CUISINE 6 -->
                 <a href="pages/search.html?q=Dessert" class="cuisine-card">
+                    <span class="cuisine-recipe-pill">1,450+ Dishes</span>
                     <img src="assets/images/bannana.png" alt="Bakery &amp; Desserts" class="cuisine-card-bg" loading="lazy" decoding="async">
                     <div class="cuisine-card-overlay">
                         <h3>Bakery &amp; Patisserie</h3>
@@ -388,30 +552,83 @@
             </div>
         </section>
 
-        <!-- 4. AI DIETICIAN SHOWCASE TEASER -->
+        <!-- 4. AI DIETICIAN SHOWCASE TEASER (INTERACTIVE MACRO SIMULATOR) -->
         <section class="ai-teaser-section" aria-labelledby="ai-teaser-title">
             <div class="ai-teaser-card">
-                <span class="ai-teaser-badge">Smart Culinary Intelligence</span>
-                <h2 id="ai-teaser-title">Eat What You Love. <span>Hit Your Health Goals.</span></h2>
-                <p>
-                    Wondering how your favorite gourmet recipes fit into your health journey? Our smart AI Dietician calculates your personalized BMR, daily caloric targets, and optimal macronutrient split in seconds.
-                </p>
+                <div class="ai-teaser-grid">
+                    <div class="ai-teaser-info">
+                        <span class="ai-teaser-badge">Smart Culinary Intelligence</span>
+                        <h2 id="ai-teaser-title">Eat What You Love. <span>Hit Your Health Goals.</span></h2>
+                        <p>
+                            Wondering how your favorite gourmet recipes fit into your health journey? Our smart AI Dietician calculates your personalized BMR, daily caloric targets, and optimal macronutrient split in seconds.
+                        </p>
 
-                <div class="ai-teaser-features">
-                    <div class="ai-feature-pill">
-                        <span>Personalized Caloric Targets</span>
+                        <div class="ai-teaser-features">
+                            <div class="ai-feature-pill">
+                                <span>Personalized Caloric Targets</span>
+                            </div>
+                            <div class="ai-feature-pill">
+                                <span>Optimized Protein &amp; Macro Splits</span>
+                            </div>
+                            <div class="ai-feature-pill">
+                                <span>Custom Hydration Blueprint</span>
+                            </div>
+                        </div>
+
+                        <a id="sim-launch-btn" href="pages/ai.html" class="btn-ai-launch">
+                            Launch Full AI Dietician Planner &rarr;
+                        </a>
                     </div>
-                    <div class="ai-feature-pill">
-                        <span>Optimized Protein &amp; Macro Splits</span>
-                    </div>
-                    <div class="ai-feature-pill">
-                        <span>Custom Hydration Blueprint</span>
+
+                    <!-- Interactive Macro Simulator Box -->
+                    <div class="ai-simulator-box">
+                        <div class="simulator-header">
+                            <h3>⚡ Quick Macro Simulator</h3>
+                            <span class="sim-badge">Live Interactive</span>
+                        </div>
+
+                        <div class="sim-group">
+                            <label class="sim-label">Select Your Culinary Health Goal:</label>
+                            <div class="sim-goals">
+                                <button type="button" class="sim-goal-btn" data-goal="fat-loss">🔥 Fat Loss (-20%)</button>
+                                <button type="button" class="sim-goal-btn active" data-goal="maintenance">⚖️ Maintenance</button>
+                                <button type="button" class="sim-goal-btn" data-goal="muscle">💪 Muscle Gain (+15%)</button>
+                            </div>
+                        </div>
+
+                        <div class="sim-group">
+                            <div class="sim-slider-header">
+                                <label for="sim-calorie-slider" class="sim-label">Daily Caloric Target:</label>
+                                <span id="sim-calorie-val" class="sim-calorie-val">2,200 kcal</span>
+                            </div>
+                            <input type="range" id="sim-calorie-slider" min="1400" max="3600" step="50" value="2200" class="sim-range">
+                        </div>
+
+                        <div class="sim-results">
+                            <div class="sim-macro-card protein-card">
+                                <span class="macro-name">Protein</span>
+                                <span id="sim-protein-val" class="macro-val">138g</span>
+                                <span class="macro-sub">Muscle repair</span>
+                            </div>
+                            <div class="sim-macro-card carbs-card">
+                                <span class="macro-name">Carbs</span>
+                                <span id="sim-carbs-val" class="macro-val">275g</span>
+                                <span class="macro-sub">Clean energy</span>
+                            </div>
+                            <div class="sim-macro-card fats-card">
+                                <span class="macro-name">Fats</span>
+                                <span id="sim-fats-val" class="macro-val">61g</span>
+                                <span class="macro-sub">Hormone balance</span>
+                            </div>
+                        </div>
+
+                        <div class="sim-macro-track">
+                            <div id="sim-bar-protein" class="sim-track-seg protein-seg" style="width: 25%;"></div>
+                            <div id="sim-bar-carbs" class="sim-track-seg carbs-seg" style="width: 50%;"></div>
+                            <div id="sim-bar-fats" class="sim-track-seg fats-seg" style="width: 25%;"></div>
+                        </div>
                     </div>
                 </div>
-
-                <a href="pages/ai.html" class="btn-ai-launch">
-                    Launch AI Dietician Planner &rarr;
-                </a>
             </div>
         </section>
 
@@ -430,6 +647,36 @@
                 <div id="newsletter-status" class="newsletter-msg" role="status"></div>
             </div>
         </section>
+
+        <!-- 6. QUICK-VIEW RECIPE MODAL DIALOG -->
+        <div id="recipe-quickview-modal" class="foodies-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="quickview-title">
+            <div class="foodies-modal-dialog">
+                <button type="button" id="quickview-close-btn" class="foodies-modal-close" aria-label="Close modal">&times;</button>
+                <div class="quickview-grid">
+                    <div class="quickview-media">
+                        <img id="quickview-image" src="" alt="Recipe preview">
+                        <span id="quickview-cuisine" class="quickview-badge">Italian</span>
+                    </div>
+                    <div class="quickview-details">
+                        <div class="quickview-meta-row">
+                            <span id="quickview-time">⏱ 25 mins</span>
+                            <span id="quickview-calories">🔥 450 kcal</span>
+                        </div>
+                        <h3 id="quickview-title" class="quickview-title">Recipe Title</h3>
+                        <p id="quickview-desc" class="quickview-desc">Description of the recipe.</p>
+                        
+                        <div class="quickview-ingredients-box">
+                            <h4>Pantry Checklist (Check what you have):</h4>
+                            <ul id="quickview-ingredients" class="quickview-ingredients-list"></ul>
+                        </div>
+
+                        <div class="quickview-actions">
+                            <a id="quickview-cook-btn" href="pages/search.html" class="btn-spotlight-primary">Full Recipe &amp; Instructions &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- FOOTER (Enterprise MPA Structure) -->
@@ -484,9 +731,9 @@
         </div>
     </footer>
 
-    <script src="js/nav.js?v=4.2"></script>
+    <script src="js/nav.js?v=5.0"></script>
     <script src="js/auth.js"></script>
-    <script src="js/home.js"></script>
+    <script src="js/home.js?v=3.5"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
