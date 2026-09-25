@@ -21,8 +21,8 @@
 
     <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/global.css?v=5.3">
-    <link rel="stylesheet" href="../css/ai.css?v=6.0">
+    <link rel="stylesheet" href="../css/global.css?v=5.6">
+    <link rel="stylesheet" href="../css/ai.css?v=8.1">
     <link rel="icon" type="image/png" href="../assets/images/fav.png">
     <script src="../js/ambient-bg.js?v=4.1" defer></script>
 
@@ -147,6 +147,7 @@
                 </h2>
 
                 <!-- Measurement System Toggle -->
+                <!-- Measurement System Toggle -->
                 <div class="unit-toggle-container">
                     <span class="unit-toggle-label">Measurement System:</span>
                     <div class="unit-toggle-buttons">
@@ -156,160 +157,238 @@
                 </div>
 
                 <form id="aiDieticianForm" novalidate>
-                    <div class="form-row">
-                        <div>
-                            <label for="age">Age (Years)</label>
-                            <input type="number" id="age" min="14" max="100" value="24" required>
+                    <!-- SECTION 1: ABOUT YOU -->
+                    <div class="form-section-group">
+                        <h3 class="form-section-title">
+                            <ion-icon name="person-outline" aria-hidden="true"></ion-icon>
+                            1. Personal Biometrics
+                        </h3>
+
+                        <div class="form-row">
+                            <div>
+                                <label for="age">Age (Years)</label>
+                                <input type="number" id="age" min="14" max="100" value="24" required>
+                            </div>
+                            <div>
+                                <label for="gender">Biological Gender</label>
+                                <select id="gender" required>
+                                    <option value="male" selected>Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other / Non-binary</option>
+                                </select>
+                            </div>
                         </div>
-                        <div>
-                            <label for="gender">Biological Gender</label>
-                            <select id="gender" required>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other / Non-binary</option>
-                            </select>
+
+                        <div class="form-row">
+                            <div>
+                                <label for="height" id="label-height">Height (cm)</label>
+                                <input type="number" id="height" min="80" max="250" value="175" required>
+                            </div>
+                            <div>
+                                <label for="weight" id="label-weight">Weight (kg)</label>
+                                <input type="number" id="weight" min="25" max="350" value="75" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div>
+                                <label for="country">Country of Residence</label>
+                                <select id="country" required>
+                                    <option value="India" selected>🇮🇳 India</option>
+                                    <option value="United States">🇺🇸 United States</option>
+                                    <option value="Canada">🇨🇦 Canada</option>
+                                    <option value="United Kingdom">🇬🇧 United Kingdom</option>
+                                    <option value="Japan">🇯🇵 Japan</option>
+                                    <option value="South Korea">🇰🇷 South Korea</option>
+                                    <option value="Mexico">🇲🇽 Mexico</option>
+                                    <option value="Greece">🇬🇷 Greece</option>
+                                    <option value="Italy">🇮🇹 Italy</option>
+                                    <option value="France">🇫🇷 France</option>
+                                    <option value="Australia">🇦🇺 Australia</option>
+                                    <option value="Other">🌍 Other</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="region">State / Province / Region</label>
+                                <input type="text" id="region" value="Maharashtra" placeholder="e.g. Maharashtra, Punjab, Ontario" required>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="form-row">
-                        <div>
-                            <label for="height" id="label-height">Height (cm)</label>
-                            <input type="number" id="height" min="80" max="250" value="175" required>
-                        </div>
-                        <div>
-                            <label for="weight" id="label-weight">Weight (kg)</label>
-                            <input type="number" id="weight" min="25" max="350" value="70" required>
-                        </div>
-                    </div>
+                    <!-- SECTION 2: GOAL & ACTIVITY -->
+                    <div class="form-section-group">
+                        <h3 class="form-section-title">
+                            <ion-icon name="fitness-outline" aria-hidden="true"></ion-icon>
+                            2. Health Goal &amp; Activity
+                        </h3>
 
-                    <div class="form-group-full">
-                        <label for="activity">Daily Activity Level</label>
-                        <select id="activity" required>
-                            <option value="1.2">Sedentary (Desk work, little exercise)</option>
-                            <option value="1.375" selected>Lightly Active (Exercise 1-3 days/week)</option>
-                            <option value="1.55">Moderately Active (Exercise 3-5 days/week)</option>
-                            <option value="1.725">Very Active (Heavy workouts 6-7 days/week)</option>
-                            <option value="1.9">Extremely Active (Athletic training/physical job)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-row">
-                        <div>
-                            <label for="goal">Primary Health Goal</label>
-                            <select id="goal" required>
-                                <option value="loss">Healthy Fat Loss</option>
-                                <option value="maintain" selected>Weight Maintenance &amp; Vitality</option>
-                                <option value="muscle">Lean Muscle Building</option>
-                                <option value="energy">High Performance &amp; Energy</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="diet">Dietary Preference</label>
-                            <select id="diet" required>
-                                <option value="omnivore" selected>Balanced (Omnivore)</option>
-                                <option value="vegetarian">Vegetarian</option>
-                                <option value="vegan">100% Plant-Based / Vegan</option>
-                                <option value="keto">Low-Carb / Ketogenic</option>
-                                <option value="pescatarian">Pescatarian</option>
-                            </select>
+                        <div class="form-row">
+                            <div>
+                                <label for="goal">Primary Health Goal</label>
+                                <select id="goal" required>
+                                    <option value="fat_loss">Healthy Fat Loss &amp; Deficit</option>
+                                    <option value="maintenance">Weight Maintenance &amp; Vitality</option>
+                                    <option value="muscle_gain" selected>Lean Muscle Building</option>
+                                    <option value="energy">High Performance &amp; Energy</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="activity">Daily Activity Level</label>
+                                <select id="activity" required>
+                                    <option value="sedentary">Sedentary (Desk work, little exercise)</option>
+                                    <option value="light">Lightly Active (Exercise 1-3 days/week)</option>
+                                    <option value="moderate" selected>Moderately Active (Exercise 3-5 days/week)</option>
+                                    <option value="very_active">Very Active (Heavy training 6-7 days/week)</option>
+                                    <option value="extra_active">Extremely Active (Athletic/physical job)</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Country & Food Culture Selector -->
-                    <div class="form-group-full">
-                        <label for="cuisineRegion" class="label-with-icon">
-                            <ion-icon name="earth-outline" aria-hidden="true"></ion-icon>
-                            Country &amp; Regional Food Culture
-                        </label>
-                        <select id="cuisineRegion" required>
-                            <optgroup label="🇮🇳 India (Authentic Regional Heritage)">
-                                <option value="india-pan">🇮🇳 Pan-Indian Balanced Thali (Dal, Roti, Sabzi, Dahi)</option>
-                                <option value="india-north" selected>🇮🇳 North Indian (Paneer, Chana, Dal Makhani/Tadka, Phulka)</option>
-                                <option value="india-south">🇮🇳 South Indian (Idli, Sambar, Rasam, Curd Rice, Ragi)</option>
-                                <option value="india-sattvic">🌿 Ayurvedic / Sattvic (Pure Veg, Mung Dal, Ghee, No Onion/Garlic)</option>
-                            </optgroup>
-                            <optgroup label="🇬🇷 🇮🇹 Mediterranean &amp; Southern Europe">
-                                <option value="mediterranean">🇬🇷 🇮🇹 Mediterranean Blue Zone (Olive Oil, Feta, Legumes, Wild Fish)</option>
-                            </optgroup>
-                            <optgroup label="🇯🇵 🇰🇷 East Asia (Longevity &amp; Fermentation)">
-                                <option value="japan">🇯🇵 Japanese Washoku (Miso, Steamed Salmon, Tofu, Dashi, Seaweed)</option>
-                                <option value="korea">🇰🇷 Korean Hansik (Kimchi, Fermented Doenjang, Brown Rice, Banchan)</option>
-                            </optgroup>
-                            <optgroup label="🇲🇽 Latin America">
-                                <option value="mexico">🇲🇽 Mexican Traditional (Black Beans, Salsa Verde, Corn, Avocado)</option>
-                            </optgroup>
-                            <optgroup label="🇱🇧 Middle East &amp; Levant">
-                                <option value="middle-east">🇱🇧 Middle Eastern (Hummus, Tahini, Lentils, Tabbouleh, Olive Oil)</option>
-                            </optgroup>
-                            <optgroup label="🇺🇸 North America">
-                                <option value="north-america">🇺🇸 American Farm-to-Table (Whole Grains, Lean Proteins, Greens)</option>
-                            </optgroup>
-                            <optgroup label="🌍 Global Modern">
-                                <option value="global">🌍 Global Superfood Fusion (Quinoa, Edamame, Avocado, Colorful Bowls)</option>
-                            </optgroup>
-                        </select>
-                        <span class="form-helper-text">Meals and recipes will be tailored to authentic cultural ingredients, staple grains, and traditional spices.</span>
-                    </div>
+                    <!-- SECTION 3: FOOD & CULTURE -->
+                    <div class="form-section-group">
+                        <h3 class="form-section-title">
+                            <ion-icon name="restaurant-outline" aria-hidden="true"></ion-icon>
+                            3. Food Culture &amp; Dietary Preferences
+                        </h3>
 
-                    <!-- Dietary Restrictions & Allergies Multi-Select Chips -->
-                    <div class="form-group-full">
-                        <label class="label-with-icon">
-                            <ion-icon name="shield-checkmark-outline" aria-hidden="true"></ion-icon>
-                            Dietary Exclusions &amp; Sensitivities (Optional)
-                        </label>
-                        <div class="allergy-chips-container" id="allergyChips" role="group" aria-label="Dietary exclusions">
-                            <button type="button" class="allergy-chip" data-value="Gluten-Free">🌾 Gluten-Free</button>
-                            <button type="button" class="allergy-chip" data-value="Dairy-Free">🥛 Dairy-Free</button>
-                            <button type="button" class="allergy-chip" data-value="Nut-Free">🥜 Nut-Free</button>
-                            <button type="button" class="allergy-chip" data-value="Jain">🙏 Jain (No Root Veg)</button>
-                            <button type="button" class="allergy-chip" data-value="Halal">🌙 Halal</button>
-                            <button type="button" class="allergy-chip" data-value="Kosher">✡️ Kosher</button>
-                            <button type="button" class="allergy-chip" data-value="Low-Sodium">🧂 Low-Sodium</button>
+                        <div class="form-row">
+                            <div>
+                                <label for="diet">Dietary Preference</label>
+                                <select id="diet" required>
+                                    <option value="vegetarian" selected>Vegetarian</option>
+                                    <option value="omnivore">Balanced (Omnivore)</option>
+                                    <option value="vegan">100% Plant-Based / Vegan</option>
+                                    <option value="pescatarian">Pescatarian</option>
+                                    <option value="keto">Low-Carb / Ketogenic</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="cuisine">Cultural Cuisine Heritage</label>
+                                <select id="cuisine" required>
+                                    <optgroup label="🇮🇳 Indian Regional Heritage">
+                                        <option value="Maharashtrian" selected>Maharashtrian (Jowar, Usal, Goda Masala)</option>
+                                        <option value="North Indian">North Indian (Paneer, Dal Tadka, Phulkas)</option>
+                                        <option value="South Indian">South Indian (Idli, Sambar, Rasam, Ragi)</option>
+                                        <option value="Gujarati">Gujarati (Khichdi, Thepla, Kadhi)</option>
+                                        <option value="Ayurvedic Sattvic">Ayurvedic Sattvic (Pure Veg, Mung, Ghee)</option>
+                                        <option value="Pan-Indian Balanced Thali">Pan-Indian Balanced Thali</option>
+                                    </optgroup>
+                                    <optgroup label="🇬🇷 🇮🇹 Mediterranean &amp; Southern Europe">
+                                        <option value="Mediterranean">Mediterranean Blue Zone (Olive Oil, Feta, Legumes)</option>
+                                    </optgroup>
+                                    <optgroup label="🇯🇵 🇰🇷 East Asia">
+                                        <option value="Japanese">Japanese Washoku (Miso, Steamed Salmon, Soba)</option>
+                                        <option value="Korean">Korean Hansik (Kimchi, Fermented Doenjang, Rice)</option>
+                                    </optgroup>
+                                    <optgroup label="🇲🇽 Latin America">
+                                        <option value="Mexican">Mexican Traditional (Black Beans, Corn, Avocado)</option>
+                                    </optgroup>
+                                    <optgroup label="🇱🇧 Middle East &amp; Levant">
+                                        <option value="Middle Eastern">Middle Eastern (Hummus, Tahini, Lentils, Za'atar)</option>
+                                    </optgroup>
+                                    <optgroup label="🇺🇸 North America">
+                                        <option value="American Farm-to-Table">American Farm-to-Table (Whole Grains, Greens)</option>
+                                    </optgroup>
+                                    <optgroup label="🌍 Global Modern">
+                                        <option value="Global Clean Fusion">Global Superfood Fusion (Quinoa, Bowls)</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Dietary Restrictions & Allergies Multi-Select Chips -->
+                        <div class="form-group-full">
+                            <label class="label-with-icon">
+                                <ion-icon name="shield-checkmark-outline" aria-hidden="true"></ion-icon>
+                                Allergies &amp; Absolute Exclusions (Zero Tolerance)
+                            </label>
+                            <div class="allergy-chips-container" id="allergyChips" role="group" aria-label="Dietary exclusions">
+                                <button type="button" class="allergy-chip" data-value="peanuts">🥜 Peanuts</button>
+                                <button type="button" class="allergy-chip" data-value="tree nuts">🌰 Tree Nuts</button>
+                                <button type="button" class="allergy-chip" data-value="dairy">🥛 Dairy</button>
+                                <button type="button" class="allergy-chip" data-value="wheat/gluten">🌾 Gluten</button>
+                                <button type="button" class="allergy-chip" data-value="eggs">🥚 Eggs</button>
+                                <button type="button" class="allergy-chip" data-value="fish">🐟 Fish</button>
+                                <button type="button" class="allergy-chip" data-value="shellfish">🦐 Shellfish</button>
+                                <button type="button" class="allergy-chip" data-value="soy">🌱 Soy</button>
+                                <button type="button" class="allergy-chip" data-value="sesame">⚪ Sesame</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div>
+                                <label for="favoriteFoods">Favorite Foods (Optional)</label>
+                                <input type="text" id="favoriteFoods" placeholder="e.g. paneer, dal, rice, berries" value="paneer, dal, rice">
+                            </div>
+                            <div>
+                                <label for="foodsToAvoid">Foods to Avoid (Optional)</label>
+                                <input type="text" id="foodsToAvoid" placeholder="e.g. mushrooms, eggplant, bitter gourd">
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Meal Cadence -->
-                    <div class="form-group-full">
-                        <label for="mealCount" class="label-with-icon">
+                    <!-- SECTION 4: LIFESTYLE & COOKING -->
+                    <div class="form-section-group">
+                        <h3 class="form-section-title">
                             <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
-                            Daily Meal Cadence
-                        </label>
-                        <select id="mealCount" required>
-                            <option value="4" selected>4 Meals (Breakfast, Lunch, Afternoon Fuel Snack, Dinner)</option>
-                            <option value="3">3 Meals (Breakfast, Lunch, Dinner)</option>
-                            <option value="2">2 Meals (Intermittent Fasting 16:8 Window)</option>
-                        </select>
+                            4. Lifestyle &amp; Cooking Constraints
+                        </h3>
+
+                        <div class="form-row">
+                            <div>
+                                <label for="mealCount">Daily Meal Cadence</label>
+                                <select id="mealCount" required>
+                                    <option value="4" selected>4 Meals (Breakfast, Lunch, Afternoon Fuel, Dinner)</option>
+                                    <option value="3">3 Meals (Breakfast, Lunch, Dinner)</option>
+                                    <option value="5">5 Meals (3 Main Meals + 2 Snacks)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="maxCookingTime">Max Cooking Time</label>
+                                <select id="maxCookingTime" required>
+                                    <option value="15">15 min (Quick &amp; Easy)</option>
+                                    <option value="30" selected>30 min (Standard Routine)</option>
+                                    <option value="45">45 min (Hearty Cooking)</option>
+                                    <option value="60">60 min (Gourmet / Elaborate)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div>
+                                <label for="budget">Budget Level</label>
+                                <select id="budget" required>
+                                    <option value="low">Budget-Friendly / Economical</option>
+                                    <option value="moderate" selected>Moderate (Standard Groceries)</option>
+                                    <option value="flexible">Flexible / Artisanal Ingredients</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="cookingSkill">Cooking Skill</label>
+                                <select id="cookingSkill" required>
+                                    <option value="beginner">Beginner (Simple recipes)</option>
+                                    <option value="intermediate" selected>Intermediate (Home cook)</option>
+                                    <option value="advanced">Advanced (Master home chef)</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- AI Engine Settings & Drawer -->
+                    <!-- Server-Side AI Status Banner -->
                     <div class="ai-engine-banner">
                         <div class="engine-info">
                             <span class="engine-badge-pill">
                                 <span class="engine-pulse-dot" aria-hidden="true"></span>
-                                Gemini 1.5 Flash + Cultural Engine
+                                Server-Side Gemini AI Diet Planner
                             </span>
-                            <span class="engine-subtext">Dual Engine Architecture</span>
-                        </div>
-                        <button type="button" class="btn-toggle-key-drawer" id="btnToggleKeyDrawer" aria-expanded="false" title="Configure custom Gemini API Key">
-                            <ion-icon name="key-outline"></ion-icon>
-                            <span>API Key</span>
-                        </button>
-                    </div>
-
-                    <div class="api-key-drawer" id="apiKeyDrawer" hidden>
-                        <div class="api-key-field">
-                            <label for="clientApiKey">Personal Gemini API Key (Saved in browser localStorage)</label>
-                            <div class="api-key-input-row">
-                                <input type="password" id="clientApiKey" placeholder="AIzaSy... (Leave blank to use server key / knowledge engine)" autocomplete="off">
-                                <button type="button" id="btnSaveApiKey" class="btn-save-key">Save</button>
-                            </div>
-                            <span class="api-key-help">Get a free key from <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer">Google AI Studio</a>. If left blank, our built-in Cultural Knowledge Engine generates authentic plans automatically.</span>
+                            <span class="engine-subtext">Deterministic Nutrition • Cultural Intelligence • Server Security</span>
                         </div>
                     </div>
 
                     <button type="submit" class="btn-generate-plan" id="btnGeneratePlan">
                         <ion-icon name="sparkles" aria-hidden="true"></ion-icon>
-                        Generate Cultural AI Meal Plan
+                        Generate 7-Day Personalized Plan
                     </button>
                 </form>
             </section>
@@ -409,7 +488,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../js/nav.js?v=5.1"></script>
     <script src="../js/auth.js"></script>
-    <script src="../js/ai.js?v=6.0"></script>
+    <script src="../js/ai.js?v=8.0"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>

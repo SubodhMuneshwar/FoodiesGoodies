@@ -9,9 +9,14 @@ using FoodiesGoodies.Api.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using FoodiesGoodies.Api.Services.Cuisine;
+using FoodiesGoodies.Api.Services.Diet;
+using FoodiesGoodies.Api.Services.Gemini;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -128,12 +133,35 @@ builder.Services.AddHttpClient<IRecipeService, RecipeService>(client =>
     client.DefaultRequestHeaders.Add("User-Agent", "FoodiesGoodies-Api/1.0");
 });
 
-// 4.1 Typed HttpClient for Google Gemini AI Dietician Agent
+// 4.1 Typed HttpClient for Google Gemini AI Transport
 builder.Services.Configure<GeminiOptions>(builder.Configuration.GetSection(GeminiOptions.SectionName));
-builder.Services.AddHttpClient<IAiDietService, GeminiDietAgentService>(client =>
+builder.Services.AddHttpClient<IGeminiClient, GeminiClient>(client =>
 {
-    client.Timeout = TimeSpan.FromSeconds(30);
-    client.DefaultRequestHeaders.Add("User-Agent", "FoodiesGoodies-AiAgent/1.0");
+    client.Timeout = TimeSpan.FromSeconds(50);
+    client.DefaultRequestHeaders.Add("User-Agent", "FoodiesGoodies-AiAgent/2.0");
+});
+
+// 4.2 Server-Side AI Diet Planning & Nutrition Services
+builder.Services.AddScoped<INutritionCalculatorService, NutritionCalculatorService>();
+builder.Services.AddScoped<ICuisineProfileService, CuisineProfileService>();
+builder.Services.AddScoped<IDietPlanValidator, DietPlanValidator>();
+builder.Services.AddScoped<IFallbackDietPlanner, FallbackDietPlanner>();
+builder.Services.AddScoped<IDietPlannerAgent, GeminiDietPlannerAgent>();
+
+// 4.3 ASP.NET Core Rate Limiting for AI Diet Endpoints (10 requests per 15 min per IP)
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddPolicy("AiDietRateLimit", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "anonymous",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 10,
+                Window = TimeSpan.FromMinutes(15),
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = 0
+            }));
 });
 
 // 5. Application Services
@@ -196,9 +224,10 @@ if (app.Environment.IsDevelopment())
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-// 11. CORS & Routing
+// 11. CORS, Routing & Rate Limiting
 app.UseCors();
 app.UseRouting();
+app.UseRateLimiter();
 
 // 12. Authentication & Authorization
 app.UseAuthentication();

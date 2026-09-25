@@ -358,14 +358,14 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(cordCanvas);
     }
 
-    // 3.3.1 Desktop Discovery Hint Tooltip
+    // 3.3.1 Desktop Discovery Hint — about the pull cord
     if (window.innerWidth > 992 && !sessionStorage.getItem('foodies_cord_hint_dismissed')) {
         let hint = document.getElementById('cord-discovery-hint');
         if (!hint) {
             hint = document.createElement('div');
             hint.id = 'cord-discovery-hint';
             hint.className = 'cord-discovery-hint';
-            hint.innerHTML = '<span>💡</span> <span>Pull cord to toggle lights</span>';
+            hint.innerHTML = '<span>🪢</span> <span>Pull the wire to toggle light / dark</span>';
             hint.addEventListener('click', () => {
                 hint.classList.add('hidden');
                 sessionStorage.setItem('foodies_cord_hint_dismissed', 'true');
@@ -381,6 +381,31 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 8000);
         }
     }
+
+    // 3.3.1b Mobile Discovery Hint — about the bulb (responsive only)
+    if (window.innerWidth <= 992 && !sessionStorage.getItem('foodies_bulb_hint_dismissed')) {
+        const existingBulbHint = document.getElementById('bulb-discovery-hint');
+        if (!existingBulbHint) {
+            const bulbHint = document.createElement('div');
+            bulbHint.id = 'bulb-discovery-hint';
+            bulbHint.className = 'cord-discovery-hint bulb-discovery-hint';
+            bulbHint.innerHTML = '<span>💡</span> <span>Tap the bulb to switch light / dark</span>';
+            bulbHint.addEventListener('click', () => {
+                bulbHint.classList.add('hidden');
+                sessionStorage.setItem('foodies_bulb_hint_dismissed', 'true');
+            });
+            document.body.appendChild(bulbHint);
+
+            // Auto-hide after 6 seconds
+            setTimeout(() => {
+                if (bulbHint && !bulbHint.classList.contains('hidden')) {
+                    bulbHint.classList.add('hidden');
+                    setTimeout(() => bulbHint.remove(), 500);
+                }
+            }, 6000);
+        }
+    }
+
 
     // 3.3.2 Ensure Ambient Interactive Culinary Canvas is active
     if (!document.getElementById('ambient-culinary-canvas')) {

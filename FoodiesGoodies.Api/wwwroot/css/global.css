@@ -195,7 +195,105 @@ img[loading="lazy"] {
 }
 
 @media (max-width: 992px) {
-  .cord-discovery-hint {
+  /* Hide the desktop cord hint on mobile */
+  .cord-discovery-hint:not(.bulb-discovery-hint) {
+    display: none !important;
+  }
+
+  /* Position the mobile bulb hint below the center bulb */
+  .bulb-discovery-hint {
+    top: 60px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 0.73rem;
+  }
+
+  .bulb-discovery-hint::before {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%) rotate(45deg);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Welcome Tip Banner  — "Click the bulb" message at top of site (desktop only)
+   -------------------------------------------------------------------------- */
+.foodies-tip-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 7px 48px 7px 16px;
+  background: linear-gradient(90deg, var(--primary, #e07b39) 0%, color-mix(in srgb, var(--primary, #e07b39) 80%, #fff 20%) 100%);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  animation: tipBannerSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.foodies-tip-banner .tip-bulb-icon {
+  font-size: 1.15em;
+  line-height: 1;
+  animation: tipBulbPulse 2.4s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.foodies-tip-banner .tip-close-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.25);
+  border: none;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #fff;
+  font-size: 0.75rem;
+  line-height: 1;
+  padding: 0;
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+}
+
+.foodies-tip-banner .tip-close-btn:hover {
+  background: rgba(255,255,255,0.45);
+}
+
+.foodies-tip-banner.dismissed {
+  opacity: 0;
+  transform: translateY(-100%);
+  pointer-events: none;
+}
+
+@keyframes tipBannerSlideIn {
+  from { transform: translateY(-100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes tipBulbPulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(255,255,240,0.5)); }
+  50%       { transform: scale(1.18); filter: drop-shadow(0 0 6px rgba(255,255,200,0.85)); }
+}
+
+/* Hide the tip banner on mobile (bulb is hidden there anyway) */
+@media (max-width: 992px) {
+  .foodies-tip-banner {
     display: none !important;
   }
 }
@@ -937,7 +1035,7 @@ html.theme-lighting-transition *::after {
 }
 
 @media (max-width: 992px) {
-  /* On responsive view (mobile/tablet): REMOVE the long horizontal tubelight */
+  /* On responsive view (mobile/tablet): hide the long horizontal tubelight parts */
   .navbar-tubelight .tubelight-fixture,
   .navbar-tubelight .tubelight-beam,
   .navbar-tubelight .tubelight-ambient-wash {
@@ -960,7 +1058,7 @@ html.theme-lighting-transition *::after {
     overflow: visible !important;
   }
 
-  /* SHOW the small hanging vintage bulb */
+  /* SHOW the small hanging vintage bulb on responsive — it IS the theme toggle */
   .navbar-bulb-fixture {
     display: flex !important;
   }
@@ -1011,10 +1109,10 @@ html.theme-lighting-transition *::after {
   transform: rotate(30deg);
 }
 
-/* Show on responsive mobile/tablet mode */
+/* Hide the button toggle on responsive — the bulb handles theme switching */
 @media (max-width: 992px) {
   .mobile-theme-toggle {
-    display: inline-flex !important;
+    display: none !important;
   }
 }
 

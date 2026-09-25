@@ -1,6 +1,9 @@
 using FoodiesGoodies.Api.DTOs;
-using FoodiesGoodies.Api.Services;
+using FoodiesGoodies.Api.DTOs.Diet;
+using FoodiesGoodies.Api.Services.Cuisine;
+using FoodiesGoodies.Api.Services.Diet;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace FoodiesGoodies.Api.Controllers;
 
@@ -8,12 +11,20 @@ namespace FoodiesGoodies.Api.Controllers;
 [Route("api/ai")]
 public class AiDietController : ControllerBase
 {
-    private readonly IAiDietService _aiDietService;
+    private readonly IDietPlannerAgent _plannerAgent;
+    private readonly INutritionCalculatorService _nutritionCalculator;
+    private readonly ICuisineProfileService _cuisineProfileService;
     private readonly ILogger<AiDietController> _logger;
 
-    public AiDietController(IAiDietService aiDietService, ILogger<AiDietController> logger)
+    public AiDietController(
+        IDietPlannerAgent plannerAgent,
+        INutritionCalculatorService nutritionCalculator,
+        ICuisineProfileService cuisineProfileService,
+        ILogger<AiDietController> logger)
     {
-        _aiDietService = aiDietService;
+        _plannerAgent = plannerAgent;
+        _nutritionCalculator = nutritionCalculator;
+        _cuisineProfileService = cuisineProfileService;
         _logger = logger;
     }
 
@@ -21,20 +32,21 @@ public class AiDietController : ControllerBase
     /// Returns the catalog of supported world culinary cultures and regional dietary traditions.
     /// </summary>
     [HttpGet("cuisines")]
-    [ProducesResponseType(typeof(IReadOnlyList<CuisineInfoDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<IReadOnlyList<CuisineContextDto>>), StatusCodes.Status200OK)]
     public IActionResult GetSupportedCuisines()
     {
-        var list = _aiDietService.GetSupportedCuisines();
-        return Ok(list);
+        var list = _cuisineProfileService.GetAllProfiles();
+        return Ok(ApiResponse<IReadOnlyList<CuisineContextDto>>.Ok(list));
     }
 
     /// <summary>
-    /// Generates a personalized daily diet plan powered by Google Gemini AI and authentic cultural anthropology.
+    /// Generates a personalized 7-day diet plan powered by Google Gemini AI and cultural nutritional anthropology.
     /// </summary>
     [HttpPost("diet-plan")]
-    [ProducesResponseType(typeof(AiDietPlanResponse), StatusCodes.Status200OK)]
+    [EnableRateLimiting("AiDietRateLimit")]
+    [ProducesResponseType(typeof(ApiResponse<DietPlanResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GenerateDietPlan([FromBody] AiDietPlanRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> GenerateDietPlan([FromBody] DietPlanRequest request, CancellationToken cancellationToken)
     {
         if (request == null)
         {
@@ -46,36 +58,78 @@ public class AiDietController : ControllerBase
             return BadRequest(ApiResponse.Fail("Please provide a valid age between 10 and 110 years."));
         }
 
-        if (request.Weight < 20 || request.Weight > 400)
+        if (request.WeightKg < 20 || request.WeightKg > 400)
         {
             return BadRequest(ApiResponse.Fail("Please provide a valid weight between 20kg and 400kg."));
         }
 
-        if (request.Height < 60 || request.Height > 260)
+        if (request.HeightCm < 60 || request.HeightCm > 260)
         {
             return BadRequest(ApiResponse.Fail("Please provide a valid height between 60cm and 260cm."));
         }
 
         try
         {
-            var plan = await _aiDietService.GenerateDietPlanAsync(request, cancellationToken);
-            return Ok(plan);
+            var plan = await _plannerAgent.GenerateDietPlanAsync(request, cancellationToken);
+            return Ok(ApiResponse<DietPlanResponse>.Ok(plan, "Diet plan generated successfully."));
+        }
+        catch (OperationCanceledException)
+        {
+            return StatusCode(499, ApiResponse.Fail("Client closed request."));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Unexpected error generating AI diet plan.");
-            return StatusCode(StatusCodes.Status500InternalServerError, ApiResponse.Fail("Unable to generate diet plan. Please try again."));
+            _logger.LogError(ex, "Unexpected error in diet plan controller.");
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                ApiResponse.Fail("An unexpected error occurred while generating your nutrition plan. Please try again."));
         }
     }
 
     /// <summary>
-    /// Calculates biometric metrics (BMR, TDEE, Macros, Water) without generating the full meal schedule.
+    /// Regenerates/swaps a single meal without regenerating the entire 7-day schedule.
+    /// </summary>
+    [HttpPost("diet-plan/swap-meal")]
+    [EnableRateLimiting("AiDietRateLimit")]
+    [ProducesResponseType(typeof(ApiResponse<MealSwapResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> SwapSingleMeal([FromBody] MealSwapRequest request, CancellationToken cancellationToken)
+    {
+        if (request == null)
+        {
+            return BadRequest(ApiResponse.Fail("Meal swap request body is required."));
+        }
+
+        if (request.Day < 1 || request.Day > 7)
+        {
+            return BadRequest(ApiResponse.Fail("Day must be between 1 and 7."));
+        }
+
+        try
+        {
+            var swapResponse = await _plannerAgent.SwapSingleMealAsync(request, cancellationToken);
+            return Ok(ApiResponse<MealSwapResponse>.Ok(swapResponse, "Meal swapped successfully."));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error swapping single meal.");
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                ApiResponse.Fail("Unable to swap meal at this time."));
+        }
+    }
+
+    /// <summary>
+    /// Calculates deterministic biometric targets (BMR, TDEE, Macros, Water) without generating the full meal schedule.
     /// </summary>
     [HttpPost("calculate")]
-    [ProducesResponseType(typeof(BiometricsSummaryDto), StatusCodes.Status200OK)]
-    public IActionResult CalculateBiometrics([FromBody] AiDietPlanRequest request)
+    [ProducesResponseType(typeof(ApiResponse<NutritionTargetsDto>), StatusCodes.Status200OK)]
+    public IActionResult CalculateBiometrics([FromBody] DietPlanRequest request)
     {
-        var bio = _aiDietService.CalculateBiometrics(request);
-        return Ok(bio);
+        if (request == null)
+        {
+            return BadRequest(ApiResponse.Fail("Diet plan request body is required."));
+        }
+
+        var targets = _nutritionCalculator.CalculateTargets(request);
+        return Ok(ApiResponse<NutritionTargetsDto>.Ok(targets));
     }
 }
