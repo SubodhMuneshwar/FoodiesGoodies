@@ -35,6 +35,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // 1.1 Responsive Search Placeholder Adaptation
+    function syncHeroSearchPlaceholder() {
+        if (!heroSearchInput) return;
+        if (window.innerWidth <= 400) {
+            heroSearchInput.placeholder = "Search recipes...";
+        } else if (window.innerWidth <= 640) {
+            heroSearchInput.placeholder = "Search recipes or ingredients...";
+        } else {
+            heroSearchInput.placeholder = "Search by dish, ingredient, or cuisine...";
+        }
+    }
+    syncHeroSearchPlaceholder();
+    window.addEventListener('resize', syncHeroSearchPlaceholder, { passive: true });
+
     // -------------------------------------------------------------------------
     // 2. Animated Statistical Counter Ticker
     // -------------------------------------------------------------------------
