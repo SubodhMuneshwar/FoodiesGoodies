@@ -1052,6 +1052,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 4. Search Execution — Dynamic buffered pagination
     // =========================================================================
     async function executeSearch(query, startPage = 1, updateUrl = true) {
+        if (window.FoodiesLoader) {
+            window.FoodiesLoader.show(`Simmering recipes for "${query}"...`);
+        }
         currentSearchQuery = query;
         currentPage = startPage;
         totalHits = 0;
@@ -1080,52 +1083,58 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         resultsList.innerHTML = `<div class="recipes-grid">${Array(Math.min(pageSize, 12)).fill(skeletonCardHtml).join('')}</div>`;
 
-        // Attempt API candidate endpoints
-        const apiPath = `/api/recipes?q=${encodeURIComponent(query)}`;
-        const apiResult = await fetchFromApiCandidates(apiPath, query);
+        try {
+            // Attempt API candidate endpoints
+            const apiPath = `/api/recipes?q=${encodeURIComponent(query)}`;
+            const apiResult = await fetchFromApiCandidates(apiPath, query);
 
-        if (apiResult.ok && apiResult.data) {
-            const data = apiResult.data;
-            nextPaginationCursor = data.nextCursor || null;
-            totalHits = data.count || (data.hits ? data.hits.length : 0);
+            if (apiResult.ok && apiResult.data) {
+                const data = apiResult.data;
+                nextPaginationCursor = data.nextCursor || null;
+                totalHits = data.count || (data.hits ? data.hits.length : 0);
 
-            if (data.hits && data.hits.length > 0) {
-                // Buffer all hits
-                liveAllHits = [...data.hits];
-                currentDataIsLive = true;
-                if (startPage > 1) {
-                    await ensureLiveBufferForPage(startPage);
+                if (data.hits && data.hits.length > 0) {
+                    // Buffer all hits
+                    liveAllHits = [...data.hits];
+                    currentDataIsLive = true;
+                    if (startPage > 1) {
+                        await ensureLiveBufferForPage(startPage);
+                    }
+                    const maxPage = getTotalPages();
+                    const validPage = Math.min(startPage, maxPage);
+                    renderCurrentPage(validPage, false);
+                    if (updateUrl) syncUrlState(false);
+                    return;
+                } else {
+                    renderEmptyState(query);
+                    if (updateUrl) syncUrlState(false);
+                    return;
                 }
+            }
+
+            // Seamless Fallback to Curated Culinary Vault if network/backend failed
+            const vaultMatches = searchCuratedVault(query);
+
+            if (vaultMatches && vaultMatches.length > 0) {
+                isVaultMode = true;
+                currentDataIsLive = false;
+                vaultAllHits = vaultMatches;
+                totalHits = vaultAllHits.length;
+                nextPaginationCursor = null;
                 const maxPage = getTotalPages();
                 const validPage = Math.min(startPage, maxPage);
                 renderCurrentPage(validPage, false);
                 if (updateUrl) syncUrlState(false);
                 return;
-            } else {
-                renderEmptyState(query);
-                if (updateUrl) syncUrlState(false);
-                return;
+            }
+
+            // True connection / offline failure state
+            renderConnectionErrorState(query);
+        } finally {
+            if (window.FoodiesLoader) {
+                window.FoodiesLoader.hide();
             }
         }
-
-        // Seamless Fallback to Curated Culinary Vault if network/backend failed
-        const vaultMatches = searchCuratedVault(query);
-
-        if (vaultMatches && vaultMatches.length > 0) {
-            isVaultMode = true;
-            currentDataIsLive = false;
-            vaultAllHits = vaultMatches;
-            totalHits = vaultAllHits.length;
-            nextPaginationCursor = null;
-            const maxPage = getTotalPages();
-            const validPage = Math.min(startPage, maxPage);
-            renderCurrentPage(validPage, false);
-            if (updateUrl) syncUrlState(false);
-            return;
-        }
-
-        // True connection / offline failure state
-        renderConnectionErrorState(query);
     }
 
     /**
@@ -1218,6 +1227,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Live mode: ensure buffer has enough hits for this full target page
         const requiredEnd = targetPage * pageSize;
         if (liveAllHits.length < requiredEnd && nextPaginationCursor) {
+            if (window.FoodiesLoader) {
+                window.FoodiesLoader.show(`Plating recipes for page ${targetPage}...`);
+            }
             // Show loading state across all pagination wrappers
             const wrappers = document.querySelectorAll('.pagination-wrapper');
             wrappers.forEach(wrapper => {
@@ -1228,7 +1240,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            await ensureLiveBufferForPage(targetPage);
+            try {
+                await ensureLiveBufferForPage(targetPage);
+            } finally {
+                if (window.FoodiesLoader) {
+                    window.FoodiesLoader.hide();
+                }
+            }
         }
 
         // Re-check after fetching

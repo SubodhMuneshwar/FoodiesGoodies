@@ -53,6 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.disabled = true;
             submitBtn.textContent = 'Sending Message...';
         }
+        if (window.FoodiesLoader) {
+            window.FoodiesLoader.show('Sending your message to our kitchen team...');
+        }
 
         try {
             const response = await fetch('/api/contact', {
@@ -79,6 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (submitBtn) {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Send Message';
+            }
+            if (window.FoodiesLoader) {
+                window.FoodiesLoader.hide();
             }
         }
     });

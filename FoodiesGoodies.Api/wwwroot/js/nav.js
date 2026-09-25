@@ -1137,3 +1137,300 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     })();
 });
+
+// 4. Universal Artisanal Culinary Loading Service ("Sizzling Gourmet Skillet")
+(function initFoodiesLoader() {
+    if (typeof window === 'undefined') return;
+
+    const CULINARY_QUOTES = [
+        "Simmering aromatic herbs and spices...",
+        "Selecting farm-fresh organic produce...",
+        "Plating your culinary journal...",
+        "Handcrafting artisan flavours...",
+        "Warming the bistro oven...",
+        "Garnishing with garden-picked herbs...",
+        "Brewing culinary inspiration..."
+    ];
+
+    let overlayEl = null;
+    let messageEl = null;
+    let quoteInterval = null;
+    let activeTimer = null;
+    let shownAt = 0;
+    const MIN_DISPLAY_MS = 380; // Prevents jarring 10ms micro-flickers
+
+    function getOrCreateDOM() {
+        if (overlayEl && document.body && document.body.contains(overlayEl)) return overlayEl;
+        let existing = document.getElementById('foodies-global-loader');
+        if (existing) {
+            overlayEl = existing;
+            messageEl = existing.querySelector('#foodiesLoaderMessage');
+            return overlayEl;
+        }
+
+        const overlay = document.createElement('div');
+        overlay.id = 'foodies-global-loader';
+        overlay.className = 'foodies-loader-overlay';
+        overlay.setAttribute('role', 'status');
+        overlay.setAttribute('aria-live', 'polite');
+        overlay.setAttribute('aria-busy', 'true');
+        overlay.innerHTML = `
+            <div class="foodies-loader-card">
+                <div class="foodies-skillet-stage" aria-hidden="true">
+                    <!-- Rising Steam Wisps -->
+                    <div class="foodies-steam-group">
+                        <svg class="steam-wisp steam-wisp-1" width="16" height="34" viewBox="0 0 16 34">
+                            <path d="M8 32 C3 26 12 18 6 10 C3 6 8 2 8 0"/>
+                        </svg>
+                        <svg class="steam-wisp steam-wisp-2" width="16" height="34" viewBox="0 0 16 34">
+                            <path d="M8 32 C12 25 4 18 9 10 C12 5 7 2 8 0"/>
+                        </svg>
+                        <svg class="steam-wisp steam-wisp-3" width="16" height="34" viewBox="0 0 16 34">
+                            <path d="M8 32 C4 24 13 17 7 9 C4 5 8 1 8 0"/>
+                        </svg>
+                    </div>
+
+                    <!-- Sizzle Spark Particles -->
+                    <div class="foodies-sizzle-sparks">
+                        <span class="sizzle-spark spark-1"></span>
+                        <span class="sizzle-spark spark-2"></span>
+                        <span class="sizzle-spark spark-3"></span>
+                    </div>
+
+                    <!-- Flipping Food (Golden Fluffy Souffle / Crepe) -->
+                    <div class="foodies-food-toss">
+                        <svg viewBox="0 0 44 24" width="44" height="24">
+                            <defs>
+                                <linearGradient id="foodGoldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#FED7AA"/>
+                                    <stop offset="35%" stop-color="#F59E0B"/>
+                                    <stop offset="85%" stop-color="#B45309"/>
+                                    <stop offset="100%" stop-color="#78350F"/>
+                                </linearGradient>
+                                <radialGradient id="foodHighlight" cx="40%" cy="30%" r="45%">
+                                    <stop offset="0%" stop-color="#FEF3C7" stop-opacity="0.95"/>
+                                    <stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/>
+                                </radialGradient>
+                            </defs>
+                            <ellipse cx="22" cy="13" rx="19" ry="8.5" fill="url(#foodGoldGrad)"/>
+                            <ellipse cx="21" cy="11.5" rx="16" ry="6.5" fill="url(#foodHighlight)"/>
+                            <rect x="18" y="8" width="6" height="3.5" rx="1.2" fill="#FEF08A" transform="rotate(-12 21 10)" opacity="0.95"/>
+                            <circle cx="14" cy="13" r="0.8" fill="#15803D" opacity="0.8"/>
+                            <circle cx="28" cy="11" r="0.8" fill="#15803D" opacity="0.8"/>
+                            <circle cx="22" cy="15" r="0.7" fill="#B91C1C" opacity="0.75"/>
+                        </svg>
+                    </div>
+
+                    <!-- Skillet Body and Handle -->
+                    <div class="foodies-skillet">
+                        <svg viewBox="0 0 116 48" width="116" height="48">
+                            <defs>
+                                <linearGradient id="skilletPanGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#C2703A"/>
+                                    <stop offset="30%" stop-color="#9A3412"/>
+                                    <stop offset="70%" stop-color="#431407"/>
+                                    <stop offset="100%" stop-color="#1C1917"/>
+                                </linearGradient>
+                                <linearGradient id="handleGrad" x1="0%" y1="50%" x2="100%" y2="50%">
+                                    <stop offset="0%" stop-color="#D4AF37"/>
+                                    <stop offset="35%" stop-color="#FEF08A"/>
+                                    <stop offset="70%" stop-color="#B45309"/>
+                                    <stop offset="100%" stop-color="#78350F"/>
+                                </linearGradient>
+                                <linearGradient id="rimGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#FDBA74" stop-opacity="0.4"/>
+                                    <stop offset="50%" stop-color="#FED7AA" stop-opacity="0.9"/>
+                                    <stop offset="100%" stop-color="#EA580C" stop-opacity="0.3"/>
+                                </linearGradient>
+                            </defs>
+                            <path d="M 2 27 C 2 24, 18 25, 36 29 C 45 31, 52 33, 56 34 L 54 39 C 50 38, 43 36, 35 34 C 17 30, 2 30, 2 27 Z" fill="url(#handleGrad)"/>
+                            <circle cx="9" cy="27" r="2.5" fill="#451A03"/>
+                            <circle cx="48" cy="34" r="1.5" fill="#78350F"/>
+                            <circle cx="51" cy="37" r="1.5" fill="#78350F"/>
+                            <path d="M 52 34 C 54 44, 70 47, 85 47 C 100 47, 114 44, 115 34 C 115 32, 113 32, 108 34 C 98 37, 72 37, 59 34 Z" fill="url(#skilletPanGrad)"/>
+                            <ellipse cx="84" cy="34" rx="30" ry="11" fill="#1C1917" stroke="url(#rimGrad)" stroke-width="1.6"/>
+                            <ellipse cx="84" cy="35" rx="27" ry="9" fill="#0C0A09"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="foodies-loader-badge">
+                    <span class="foodies-loader-badge-star">✦</span>
+                    <span>FOODIES &amp; GOODIES</span>
+                    <span class="foodies-loader-badge-star">✦</span>
+                </div>
+
+                <div class="foodies-loader-message" id="foodiesLoaderMessage">
+                    Simmering delicious recipes...
+                </div>
+
+                <div class="foodies-loader-track" aria-hidden="true">
+                    <div class="foodies-loader-bar"></div>
+                </div>
+            </div>
+        `;
+
+        if (document.body) {
+            document.body.appendChild(overlay);
+        } else {
+            document.addEventListener('DOMContentLoaded', () => {
+                if (!document.getElementById('foodies-global-loader')) {
+                    document.body.appendChild(overlay);
+                }
+            });
+        }
+        overlayEl = overlay;
+        messageEl = overlay.querySelector('#foodiesLoaderMessage');
+        return overlayEl;
+    }
+
+    function setMessageText(msg) {
+        if (!messageEl) return;
+        messageEl.classList.add('is-swapping');
+        setTimeout(() => {
+            messageEl.textContent = msg;
+            messageEl.classList.remove('is-swapping');
+        }, 220);
+    }
+
+    const FoodiesLoader = {
+        show(message = 'Preparing your culinary journal...', options = {}) {
+            const el = getOrCreateDOM();
+            if (!el) return;
+
+            shownAt = Date.now();
+            if (activeTimer) clearTimeout(activeTimer);
+            if (quoteInterval) clearInterval(quoteInterval);
+
+            if (messageEl) {
+                messageEl.textContent = message;
+                messageEl.classList.remove('is-swapping');
+            }
+
+            el.classList.remove('is-closing');
+            el.classList.add('is-active');
+
+            // Rotate through culinary quotes every 2.4s if loader remains visible
+            let quoteIdx = 0;
+            quoteInterval = setInterval(() => {
+                if (!el.classList.contains('is-active')) {
+                    clearInterval(quoteInterval);
+                    return;
+                }
+                const nextQuote = CULINARY_QUOTES[quoteIdx % CULINARY_QUOTES.length];
+                quoteIdx++;
+                setMessageText(nextQuote);
+            }, 2400);
+        },
+
+        hide(force = false) {
+            if (!overlayEl || !overlayEl.classList.contains('is-active')) return;
+
+            const elapsed = Date.now() - shownAt;
+            const remaining = force ? 0 : Math.max(0, MIN_DISPLAY_MS - elapsed);
+
+            if (quoteInterval) {
+                clearInterval(quoteInterval);
+                quoteInterval = null;
+            }
+
+            if (activeTimer) clearTimeout(activeTimer);
+            activeTimer = setTimeout(() => {
+                overlayEl.classList.add('is-closing');
+                setTimeout(() => {
+                    overlayEl.classList.remove('is-active', 'is-closing');
+                }, 320);
+            }, remaining);
+        },
+
+        update(message) {
+            if (!overlayEl || !overlayEl.classList.contains('is-active')) return;
+            setMessageText(message);
+        },
+
+        async wrap(promiseOrFn, message = 'Preparing your culinary journal...') {
+            this.show(message);
+            try {
+                const res = (typeof promiseOrFn === 'function') ? await promiseOrFn() : await promiseOrFn;
+                return res;
+            } finally {
+                this.hide();
+            }
+        }
+    };
+
+    window.FoodiesLoader = FoodiesLoader;
+
+    // Auto-intercept internal navigation links and page unloads
+    function wireAutoNavigationLoader() {
+        // 1. Browser reload / form submit / unload event
+        window.addEventListener('beforeunload', () => {
+            FoodiesLoader.show('Refreshing culinary journal...');
+        });
+
+        // 2. Hide loader on bfcache page restore
+        window.addEventListener('pageshow', (e) => {
+            if (e.persisted) {
+                FoodiesLoader.hide(true);
+            }
+        });
+
+        // 3. Smooth page link transitions
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('a[href]');
+            if (!link) return;
+
+            // Ignore modified clicks (Ctrl, Shift, Cmd, right click) or target="_blank"
+            if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button !== 0) return;
+            if (link.target === '_blank' || link.hasAttribute('download')) return;
+
+            const href = link.getAttribute('href');
+            if (!href || href.startsWith('#') || href.startsWith('javascript:') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+
+            try {
+                const destUrl = new URL(link.href, window.location.origin);
+                // Only intercept internal same-origin links
+                if (destUrl.origin === window.location.origin) {
+                    // If target is same page with just different hash, don't show loader
+                    if (destUrl.pathname === window.location.pathname && destUrl.search === window.location.search) return;
+
+                    // Choose contextual message based on destination
+                    let msg = 'Opening culinary journal...';
+                    const lowerPath = destUrl.pathname.toLowerCase();
+                    if (lowerPath.includes('search')) {
+                        msg = 'Warming the recipe cloud...';
+                    } else if (lowerPath.includes('ai')) {
+                        msg = 'Consulting AI Dietician...';
+                    } else if (lowerPath.includes('about')) {
+                        msg = 'Gathering kitchen stories...';
+                    } else if (lowerPath.includes('contact')) {
+                        msg = 'Opening guestbook...';
+                    } else if (lowerPath.includes('login') || lowerPath.includes('auth')) {
+                        msg = 'Entering the chef’s study...';
+                    } else if (lowerPath.includes('dashboard') || lowerPath.includes('kitchen')) {
+                        msg = 'Entering the social kitchen...';
+                    } else if (lowerPath.includes('profile')) {
+                        msg = 'Plating your saved recipes...';
+                    } else if (lowerPath.endsWith('/') || lowerPath.includes('index')) {
+                        msg = 'Returning to dining room...';
+                    }
+
+                    FoodiesLoader.show(msg);
+
+                    // Safety timeout: if page doesn't navigate within 6s (e.g. cancelled), hide
+                    setTimeout(() => FoodiesLoader.hide(), 6000);
+                }
+            } catch (_) {}
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            getOrCreateDOM();
+            wireAutoNavigationLoader();
+        });
+    } else {
+        getOrCreateDOM();
+        wireAutoNavigationLoader();
+    }
+})();

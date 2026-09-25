@@ -1824,3 +1824,417 @@ select:focus.form-control {
 .scroll-to-top-btn:active {
   transform: translateY(0) scale(0.95);
 }
+
+/* --------------------------------------------------------------------------
+   7. Artisanal Culinary Loading Animation ("Sizzling Gourmet Skillet")
+   -------------------------------------------------------------------------- */
+.foodies-loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(248, 245, 238, 0.78);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.32s ease;
+}
+
+[data-theme="dark"] .foodies-loader-overlay,
+.dark .foodies-loader-overlay {
+  background: rgba(14, 13, 12, 0.84);
+}
+
+.foodies-loader-overlay.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.foodies-loader-overlay.is-closing {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.foodies-loader-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 26px;
+  box-shadow: 0 28px 64px rgba(45, 30, 15, 0.16), 0 0 1px rgba(0, 0, 0, 0.12);
+  padding: 34px 38px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 360px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  transform: scale(0.92) translateY(14px);
+  transition: transform 0.38s cubic-bezier(0.175, 0.885, 0.32, 1.25);
+}
+
+[data-theme="dark"] .foodies-loader-card,
+.dark .foodies-loader-card {
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.65), 0 0 1px rgba(255, 255, 255, 0.1);
+  border-color: rgba(212, 163, 89, 0.22);
+}
+
+.foodies-loader-overlay.is-active .foodies-loader-card {
+  transform: scale(1) translateY(0);
+}
+
+.foodies-loader-overlay.is-closing .foodies-loader-card {
+  transform: scale(1.03) translateY(-6px);
+}
+
+/* Subtle Card Backdrop Glow */
+.foodies-loader-card::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 160px;
+  height: 160px;
+  background: radial-gradient(circle, rgba(194, 112, 58, 0.16) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+[data-theme="dark"] .foodies-loader-card::before,
+.dark .foodies-loader-card::before {
+  background: radial-gradient(circle, rgba(229, 169, 59, 0.2) 0%, transparent 70%);
+}
+
+/* Gourmet Skillet Stage */
+.foodies-skillet-stage {
+  position: relative;
+  width: 140px;
+  height: 110px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+/* Skillet Body & Sizzle Movement */
+.foodies-skillet-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.foodies-skillet {
+  position: absolute;
+  bottom: 16px;
+  left: 12px;
+  width: 116px;
+  height: 48px;
+  transform-origin: 20px 42px;
+  animation: skilletSizzleBob 2.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+/* Flipping Culinary Delicacy */
+.foodies-food-toss {
+  position: absolute;
+  bottom: 24px;
+  left: 64px;
+  width: 44px;
+  height: 24px;
+  transform-origin: center center;
+  animation: foodTossFlip 2.2s cubic-bezier(0.35, 0, 0.35, 1) infinite;
+  z-index: 3;
+}
+
+/* Steam Wisps */
+.foodies-steam-group {
+  position: absolute;
+  bottom: 38px;
+  left: 56px;
+  width: 60px;
+  height: 60px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.steam-wisp {
+  position: absolute;
+  bottom: 0;
+  stroke: var(--primary);
+  opacity: 0;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.steam-wisp-1 {
+  left: 10px;
+  animation: steamDrift 2.2s ease-out infinite;
+  animation-delay: 0.1s;
+}
+
+.steam-wisp-2 {
+  left: 24px;
+  animation: steamDrift 2.2s ease-out infinite;
+  animation-delay: 0.75s;
+}
+
+.steam-wisp-3 {
+  left: 38px;
+  animation: steamDrift 2.2s ease-out infinite;
+  animation-delay: 1.35s;
+}
+
+/* Sizzle Sparks */
+.foodies-sizzle-sparks {
+  position: absolute;
+  bottom: 22px;
+  left: 60px;
+  width: 50px;
+  height: 30px;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.sizzle-spark {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #f59e0b;
+  opacity: 0;
+}
+
+.spark-1 {
+  left: 10px;
+  bottom: 2px;
+  --spark-x: -12px;
+  --spark-y: -18px;
+  animation: sizzleSparkPop 2.2s ease-out infinite;
+  animation-delay: 0.5s;
+}
+
+.spark-2 {
+  left: 24px;
+  bottom: 4px;
+  background: #fbbf24;
+  --spark-x: 6px;
+  --spark-y: -22px;
+  animation: sizzleSparkPop 2.2s ease-out infinite;
+  animation-delay: 0.54s;
+}
+
+.spark-3 {
+  left: 36px;
+  bottom: 2px;
+  background: #ea580c;
+  --spark-x: 14px;
+  --spark-y: -16px;
+  animation: sizzleSparkPop 2.2s ease-out infinite;
+  animation-delay: 0.58s;
+}
+
+/* Card Brand Tag & Editorial Message */
+.foodies-loader-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+
+.foodies-loader-badge-star {
+  font-size: 0.65rem;
+  animation: starTwinkle 1.8s ease-in-out infinite alternate;
+}
+
+.foodies-loader-message {
+  font-family: var(--font-heading, 'Playfair Display', serif);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.45;
+  min-height: 2.9em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 14px 0;
+  padding: 0 8px;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.foodies-loader-message.is-swapping {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+/* Fluid Simmer Progress Track */
+.foodies-loader-track {
+  width: 140px;
+  height: 3.5px;
+  background: var(--border-subtle);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.foodies-loader-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 48%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary), #e5a93b, #d4af37, var(--primary));
+  background-size: 200% 100%;
+  animation: loaderBarShift 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Keyframe Animations */
+@keyframes skilletSizzleBob {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  16% {
+    transform: translateY(1.5px) rotate(-1deg);
+  }
+  22% {
+    transform: translateY(-3.5px) rotate(3.2deg);
+  }
+  28% {
+    transform: translateY(1px) rotate(-1.5deg);
+  }
+  38% {
+    transform: translateY(-0.8px) rotate(0.6deg);
+  }
+  50% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+@keyframes foodTossFlip {
+  0%, 18% {
+    transform: translate(0, 0) rotate(0deg) scale(1, 1);
+  }
+  22% {
+    /* Compression before launch */
+    transform: translate(-1px, 2px) rotate(-2deg) scale(1.08, 0.9);
+  }
+  28% {
+    /* Upward flick */
+    transform: translate(-3px, -18px) rotate(45deg) scale(0.96, 1.05);
+  }
+  48% {
+    /* Apex flip */
+    transform: translate(-6px, -46px) rotate(190deg) scale(1, 1);
+  }
+  68% {
+    /* Gravity descent */
+    transform: translate(-3px, -12px) rotate(330deg) scale(0.96, 1.04);
+  }
+  76% {
+    /* Catch & squash */
+    transform: translate(0, 1.5px) rotate(360deg) scale(1.12, 0.85);
+  }
+  84% {
+    /* Rebound */
+    transform: translate(0, -2.5px) rotate(360deg) scale(0.97, 1.03);
+  }
+  92%, 100% {
+    /* Rest in skillet */
+    transform: translate(0, 0) rotate(360deg) scale(1, 1);
+  }
+}
+
+@keyframes steamDrift {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scaleX(0.7) scaleY(0.7);
+  }
+  20% {
+    opacity: 0.7;
+  }
+  55% {
+    opacity: 0.45;
+    transform: translateY(-24px) translateX(4px) scaleX(1.1) scaleY(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-46px) translateX(-5px) scaleX(1.4) scaleY(1.3);
+  }
+}
+
+@keyframes sizzleSparkPop {
+  0%, 20% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0);
+  }
+  26% {
+    opacity: 1;
+    transform: translate(calc(var(--spark-x) * 0.5), calc(var(--spark-y) * 0.5)) scale(1.2);
+  }
+  38% {
+    opacity: 0;
+    transform: translate(var(--spark-x), var(--spark-y)) scale(0.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--spark-x), var(--spark-y)) scale(0);
+  }
+}
+
+@keyframes starTwinkle {
+  0% {
+    opacity: 0.4;
+    transform: scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes loaderBarShift {
+  0% {
+    left: -48%;
+    background-position: 0% 50%;
+  }
+  50% {
+    left: 28%;
+    background-position: 100% 50%;
+  }
+  100% {
+    left: 100%;
+    background-position: 200% 50%;
+  }
+}
+
+/* Reduced Motion Preference */
+@media (prefers-reduced-motion: reduce) {
+  .foodies-skillet,
+  .foodies-food-toss,
+  .steam-wisp,
+  .sizzle-spark,
+  .foodies-loader-bar {
+    animation-duration: 4s !important;
+  }
+  .foodies-food-toss {
+    animation-name: foodSimmerSubtle !important;
+  }
+  @keyframes foodSimmerSubtle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+}

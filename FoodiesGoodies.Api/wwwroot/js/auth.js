@@ -125,6 +125,9 @@ const Auth = {
     // A failed or unreachable backend must NOT produce an authenticated state.
     async login(email, password) {
         const cleanEmail = (email || '').trim().toLowerCase();
+        if (window.FoodiesLoader) {
+            window.FoodiesLoader.show('Entering the chef’s study...');
+        }
 
         try {
             const res = await fetch('/api/auth/login', {
@@ -160,6 +163,10 @@ const Auth = {
             const errNet = 'Unable to reach the authentication server. Please try again.';
             if (window.Toast) window.Toast.show('error', errNet);
             return { success: false, message: errNet };
+        } finally {
+            if (window.FoodiesLoader) {
+                window.FoodiesLoader.hide();
+            }
         }
     },
 
@@ -167,6 +174,9 @@ const Auth = {
     async register(username, email, password) {
         const cleanName = (username || '').trim() || 'Foodie Chef';
         const cleanEmail = (email || '').trim().toLowerCase();
+        if (window.FoodiesLoader) {
+            window.FoodiesLoader.show('Setting your chef’s station...');
+        }
 
         try {
             const res = await fetch('/api/auth/register', {
@@ -202,11 +212,18 @@ const Auth = {
             const errNet = 'Unable to reach the registration server. Please try again.';
             if (window.Toast) window.Toast.show('error', errNet);
             return { success: false, message: errNet };
+        } finally {
+            if (window.FoodiesLoader) {
+                window.FoodiesLoader.hide();
+            }
         }
     },
 
     // Quick 1-click Demo Foodie Login with server-issued authentication session
     async quickDemoLogin() {
+        if (window.FoodiesLoader) {
+            window.FoodiesLoader.show('Preparing Demo Kitchen...');
+        }
         try {
             const res = await fetch('/api/auth/demo', {
                 method: 'POST',
@@ -226,6 +243,10 @@ const Auth = {
             }
         } catch (e) {
             console.warn('Demo login API unavailable, falling back to local demo profile:', e);
+        } finally {
+            if (window.FoodiesLoader) {
+                window.FoodiesLoader.hide();
+            }
         }
 
         // Offline / fallback demo profile

@@ -163,8 +163,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Meal suggestions library
         const mealPlans = getMealSuggestions(diet, goal);
 
-        // Render Results
-        resultsContainer.innerHTML = `
+        if (window.FoodiesLoader) {
+            window.FoodiesLoader.show('Analyzing metabolic blueprint & crafting nutrition plan...');
+        }
+
+        setTimeout(() => {
+            // Render Results
+            resultsContainer.innerHTML = `
             <div class="results-header">
                 <h2 style="margin:0; font-size:1.6rem; color:var(--text-primary);">Your AI Nutrition Blueprint</h2>
                 <span class="goal-tag">${goalLabel}</span>
@@ -315,7 +320,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            if (window.FoodiesLoader) {
+                window.FoodiesLoader.hide();
+            }
+            resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 550);
     });
 
     function getMealSuggestions(diet, goal) {
