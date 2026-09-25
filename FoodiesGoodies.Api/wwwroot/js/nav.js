@@ -167,8 +167,56 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="tubelight-beam"></div>
                 <div class="tubelight-ambient-wash"></div>
+                <div class="navbar-bulb-fixture" role="button" tabindex="0" aria-label="Toggle ambiance lighting" title="Toggle ambiance lighting">
+                    <div class="bulb-rosette"></div>
+                    <div class="bulb-wire"></div>
+                    <div class="bulb-socket"></div>
+                    <div class="bulb-glass">
+                        <div class="bulb-filament"></div>
+                        <div class="bulb-specular"></div>
+                    </div>
+                    <div class="bulb-halo"></div>
+                </div>
             `;
             header.prepend(tubelight);
+        }
+
+        // Ensure small bulb fixture exists for responsive view
+        if (tubelight && !tubelight.querySelector('.navbar-bulb-fixture')) {
+            const bulb = document.createElement('div');
+            bulb.className = 'navbar-bulb-fixture';
+            bulb.setAttribute('role', 'button');
+            bulb.setAttribute('tabindex', '0');
+            bulb.setAttribute('aria-label', 'Toggle ambiance lighting');
+            bulb.setAttribute('title', 'Toggle ambiance lighting');
+            bulb.innerHTML = `
+                <div class="bulb-rosette"></div>
+                <div class="bulb-wire"></div>
+                <div class="bulb-socket"></div>
+                <div class="bulb-glass">
+                    <div class="bulb-filament"></div>
+                    <div class="bulb-specular"></div>
+                </div>
+                <div class="bulb-halo"></div>
+            `;
+            tubelight.appendChild(bulb);
+        }
+
+        // Wire interactive click & keydown on small bulb
+        const bulbFixture = tubelight ? tubelight.querySelector('.navbar-bulb-fixture') : null;
+        if (bulbFixture && !bulbFixture.dataset.wired) {
+            bulbFixture.dataset.wired = 'true';
+            bulbFixture.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleTheme();
+            });
+            bulbFixture.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleTheme();
+                }
+            });
         }
 
         const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
