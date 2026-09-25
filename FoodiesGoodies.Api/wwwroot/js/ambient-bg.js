@@ -1,12 +1,20 @@
 /**
- * FoodiesGoodies - Ambient Interactive Culinary Canvas Engine
- * Creates living interactive background elements:
- * - Floating golden aroma embers, champagne bubbles & culinary stardust
- * - Fluid cursor magnetism & magnetic particle repulsion
- * - Dynamic cursor stardust wake trail
- * - Click/Tap celebratory micro-sparkle bursts
- * - Seamless Light/Dark theme synchronization
- * - High-DPI support, zero layout interference, automatic battery/visibility pausing
+ * FoodiesGoodies - Minimal Culinary Food Elements Ambient Canvas Engine
+ * 
+ * Interactive background featuring stylized minimal culinary icons:
+ * - Vegetables: Carrot, Avocado, Cherry Tomato
+ * - Fruits: Citrus / Lemon Slice, Apple, Twin Cherries
+ * - Comfort Classics: Pizza Slice, Gourmet Burger
+ * - Bakery & Botanicals: Flaky Croissant, Fresh Herb Leaf
+ * 
+ * Interactivity:
+ * - Gentle thermal floating drift with organic pendulum sway
+ * - Proximity interaction: nearby cursor creates a soft thermal waft, slight scale lift, and gentle tilt
+ * - Tap / Click: gentle playful food bobble / wobble spin without distracting visual clutter
+ * - Fully responsive across mobile, tablet, and 4K desktop screens
+ * - Subtle, elegant opacity that enhances the recipe journal aesthetic without taking attention away from text
+ * - Dynamic Light / Dark theme palette synchronization
+ * - High-DPI support, battery-saving visibility pausing, and prefers-reduced-motion accessibility
  */
 
 class AmbientCulinaryEngine {
@@ -14,17 +22,11 @@ class AmbientCulinaryEngine {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d', { alpha: true });
         this.prefersReducedMotion = prefersReducedMotion;
-        this.particles = [];
-        this.bokehOrbs = [];
-        this.cursorTrails = [];
-        this.burstParticles = [];
+        this.items = [];
 
         this.mouse = {
             x: -9999,
             y: -9999,
-            prevX: -9999,
-            prevY: -9999,
-            speed: 0,
             active: false
         };
 
@@ -37,27 +39,43 @@ class AmbientCulinaryEngine {
 
         this.initResize();
         this.initThemeListener();
-        this.initParticles();
+        this.initItems();
         this.initInteractions();
-        this.loop(this.lastTime);
+
+        if (!this.prefersReducedMotion) {
+            this.loop(this.lastTime);
+        } else {
+            this.renderStatic();
+        }
     }
 
     initResize() {
-        const resize = () => {
-            this.width = window.innerWidth;
-            this.height = window.innerHeight;
-            this.dpr = Math.min(window.devicePixelRatio || 1, 2);
+        let resizeTimer = null;
+        const onResize = () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                this.width = window.innerWidth;
+                this.height = window.innerHeight;
+                this.dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-            this.canvas.width = this.width * this.dpr;
-            this.canvas.height = this.height * this.dpr;
-            this.ctx.scale(this.dpr, this.dpr);
+                this.canvas.width = this.width * this.dpr;
+                this.canvas.height = this.height * this.dpr;
+                this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+                this.ctx.scale(this.dpr, this.dpr);
 
-            // Re-seed particles to fit new dimensions
-            this.initParticles();
+                this.initItems();
+                if (this.prefersReducedMotion) {
+                    this.renderStatic();
+                }
+            }, 120);
         };
 
-        window.addEventListener('resize', resize, { passive: true });
-        resize();
+        window.addEventListener('resize', onResize, { passive: true });
+
+        // Initial setup
+        this.canvas.width = this.width * this.dpr;
+        this.canvas.height = this.height * this.dpr;
+        this.ctx.scale(this.dpr, this.dpr);
     }
 
     initThemeListener() {
@@ -65,14 +83,20 @@ class AmbientCulinaryEngine {
             const dark = document.documentElement.getAttribute('data-theme') === 'dark';
             if (this.isDark !== dark) {
                 this.isDark = dark;
-                this.updateParticleColors();
+                this.updateItemColors();
+                if (this.prefersReducedMotion) {
+                    this.renderStatic();
+                }
             }
         };
 
         window.addEventListener('foodies:theme-change', (e) => {
             if (e.detail && e.detail.theme) {
                 this.isDark = e.detail.theme === 'dark';
-                this.updateParticleColors();
+                this.updateItemColors();
+                if (this.prefersReducedMotion) {
+                    this.renderStatic();
+                }
             }
         });
 
@@ -82,165 +106,170 @@ class AmbientCulinaryEngine {
             attributeFilter: ['data-theme', 'class']
         });
 
-        // Pause animation when tab is not visible to preserve GPU & battery
+        // Pause rendering when tab is hidden to conserve system resources
         document.addEventListener('visibilitychange', () => {
             this.isRunning = !document.hidden;
-            if (this.isRunning) {
+            if (this.isRunning && !this.prefersReducedMotion) {
                 this.lastTime = performance.now();
                 requestAnimationFrame((t) => this.loop(t));
             }
         });
     }
 
-    getColorPalettes() {
+    getPalettes() {
         if (this.isDark) {
-            // Luminous golden embers, paprika & warm saffron glow
+            // Dark Bistro theme
             return {
-                orbs: [
-                    { r: 217, g: 119, b: 6, a: 0.14 },   // Warm amber
-                    { r: 194, g: 112, b: 58, a: 0.11 },  // Terracotta
-                    { r: 245, g: 158, b: 11, a: 0.09 }   // Golden saffron
-                ],
-                particles: [
-                    'rgba(251, 191, 36, 0.80)',  // Warm Gold
-                    'rgba(245, 158, 11, 0.70)',  // Amber Ember
-                    'rgba(217, 119, 6, 0.60)',   // Saffron
-                    'rgba(253, 230, 138, 0.90)', // Champagne spark
-                    'rgba(194, 112, 58, 0.65)'   // Terracotta warmth
-                ],
-                wake: 'rgba(251, 191, 36, ',
-                ring: 'rgba(245, 158, 11, 0.45)'
+                terracotta: 'rgba(226, 126, 88, ',  // Pizza, tomato, cherries
+                gold: 'rgba(238, 178, 72, ',        // Burger, croissant, citrus
+                sage: 'rgba(128, 172, 124, ',       // Avocado, herbs
+                nutmeg: 'rgba(188, 134, 98, ',      // Patty, apple stem
+                orange: 'rgba(232, 138, 70, '       // Carrot, citrus
             };
         } else {
-            // Warm delicate champagne, soft terracotta & honey peach
+            // Light Cream Editorial theme
             return {
-                orbs: [
-                    { r: 194, g: 112, b: 58, a: 0.07 },  // Terracotta soft
-                    { r: 231, g: 162, b: 110, a: 0.06 }, // Warm Peach
-                    { r: 95, g: 111, b: 82, a: 0.04 }    // Sage hint
-                ],
-                particles: [
-                    'rgba(194, 112, 58, 0.42)',  // Terracotta
-                    'rgba(217, 134, 78, 0.36)',  // Honey Terracotta
-                    'rgba(168, 90, 42, 0.32)',   // Deep Cinnamon
-                    'rgba(225, 160, 110, 0.48)', // Peach Champagne
-                    'rgba(95, 111, 82, 0.26)'    // Herb Sage
-                ],
-                wake: 'rgba(194, 112, 58, ',
-                ring: 'rgba(194, 112, 58, 0.32)'
+                terracotta: 'rgba(196, 92, 60, ',   // Pizza, tomato, cherries
+                gold: 'rgba(206, 142, 38, ',        // Burger, croissant, citrus
+                sage: 'rgba(92, 126, 88, ',         // Avocado, herbs
+                nutmeg: 'rgba(152, 102, 70, ',      // Patty, apple stem
+                orange: 'rgba(214, 116, 52, '       // Carrot, citrus
             };
         }
     }
 
-    initParticles() {
-        const isMobile = this.width < 768;
-        const count = this.prefersReducedMotion ? 12 : (isMobile ? 28 : 60);
-        const palette = this.getColorPalettes();
-
-        this.particles = [];
-        for (let i = 0; i < count; i++) {
-            this.particles.push({
-                x: Math.random() * this.width,
-                y: Math.random() * this.height,
-                radius: Math.random() * 3.2 + 1.2,
-                baseRadius: Math.random() * 3.2 + 1.2,
-                color: palette.particles[Math.floor(Math.random() * palette.particles.length)],
-                vx: (Math.random() - 0.5) * 0.45,
-                vy: (Math.random() * -0.5) - 0.18, // Gentle upward drifting motion
-                pulse: Math.random() * Math.PI * 2,
-                pulseSpeed: 0.02 + Math.random() * 0.02,
-                isStar: Math.random() > 0.82, // Stylized star particles
-                starAngle: Math.random() * Math.PI,
-                starRotSpeed: (Math.random() - 0.5) * 0.025
-            });
+    initItems() {
+        // Responsive item count: 22-26 on desktop, 16 on tablet, 10-12 on mobile
+        let count = 22;
+        if (this.width < 768) {
+            count = 11;
+        } else if (this.width < 1024) {
+            count = 16;
         }
 
-        // Ambient large bokeh orbs that drift gently in the background
-        const orbCount = isMobile ? 3 : 5;
-        this.bokehOrbs = [];
-        for (let i = 0; i < orbCount; i++) {
-            const orbColor = palette.orbs[i % palette.orbs.length];
-            this.bokehOrbs.push({
-                x: Math.random() * this.width,
-                y: Math.random() * this.height,
-                radius: (Math.random() * 120 + 90) * (isMobile ? 0.7 : 1),
-                vx: (Math.random() - 0.5) * 0.25,
-                vy: (Math.random() - 0.5) * 0.25,
-                color: orbColor
-            });
+        const palettes = this.getPalettes();
+        this.items = [];
+
+        // 10 Food types:
+        // 0: Pizza Slice
+        // 1: Burger
+        // 2: Carrot
+        // 3: Avocado
+        // 4: Cherry Tomato
+        // 5: Citrus / Lemon Slice
+        // 6: Apple
+        // 7: Twin Cherries
+        // 8: Croissant
+        // 9: Herb Leaf
+        const foodTypes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+        for (let i = 0; i < count; i++) {
+            const type = foodTypes[i % foodTypes.length];
+            const item = this.createItem(type, palettes, true);
+            this.items.push(item);
         }
     }
 
-    updateParticleColors() {
-        const palette = this.getColorPalettes();
-        this.particles.forEach(p => {
-            p.color = palette.particles[Math.floor(Math.random() * palette.particles.length)];
-        });
-        this.bokehOrbs.forEach((orb, i) => {
-            orb.color = palette.orbs[i % palette.orbs.length];
+    createItem(type, palettes, initialScatter = false) {
+        const isMobile = this.width < 768;
+        const isTablet = this.width >= 768 && this.width < 1024;
+        
+        const x = Math.random() * this.width;
+        const y = initialScatter ? Math.random() * this.height : this.height + 40 + Math.random() * 40;
+
+        // Responsive size scaling
+        let baseSize = isMobile ? 16 : (isTablet ? 20 : 25);
+        let sizeVariance = isMobile ? 4 : 7;
+        const size = baseSize + Math.random() * sizeVariance;
+
+        let colorKey = 'terracotta';
+        switch (type) {
+            case 0: colorKey = 'terracotta'; break; // Pizza
+            case 1: colorKey = 'gold'; break;       // Burger
+            case 2: colorKey = 'orange'; break;     // Carrot
+            case 3: colorKey = 'sage'; break;       // Avocado
+            case 4: colorKey = 'terracotta'; break; // Tomato
+            case 5: colorKey = 'gold'; break;       // Citrus
+            case 6: colorKey = 'terracotta'; break; // Apple
+            case 7: colorKey = 'terracotta'; break; // Cherries
+            case 8: colorKey = 'gold'; break;       // Croissant
+            case 9: colorKey = 'sage'; break;       // Herb Leaf
+        }
+
+        const baseAlpha = this.isDark ? (0.10 + Math.random() * 0.06) : (0.08 + Math.random() * 0.05);
+        const baseVy = -0.16 - Math.random() * 0.16; // Gentle thermal rise
+
+        return {
+            type,
+            x,
+            y,
+            size,
+            colorKey,
+            colorPrefix: palettes[colorKey],
+            nutmegPrefix: palettes.nutmeg,
+            alpha: baseAlpha,
+            baseAlpha,
+            targetAlpha: baseAlpha,
+            scale: 1.0,
+            targetScale: 1.0,
+            vx: 0,
+            vy: baseVy,
+            baseVy,
+            angle: Math.random() * Math.PI * 2,
+            rotSpeed: (Math.random() - 0.5) * 0.005,
+            wobble: Math.random() * Math.PI * 2,
+            wobbleSpeed: 0.014 + Math.random() * 0.012,
+            wobbleWidth: 0.22 + Math.random() * 0.28,
+            interactiveSpin: 0
+        };
+    }
+
+    updateItemColors() {
+        const palettes = this.getPalettes();
+        this.items.forEach(item => {
+            item.colorPrefix = palettes[item.colorKey];
+            item.nutmegPrefix = palettes.nutmeg;
+            item.baseAlpha = this.isDark ? 0.12 : 0.09;
+            item.alpha = item.baseAlpha;
+            item.targetAlpha = item.baseAlpha;
         });
     }
 
     initInteractions() {
-        // Track mouse position and velocity
+        // Track pointer position softly
         window.addEventListener('pointermove', (e) => {
-            const prevX = this.mouse.x;
-            const prevY = this.mouse.y;
             this.mouse.x = e.clientX;
             this.mouse.y = e.clientY;
             this.mouse.active = true;
-
-            const dx = this.mouse.x - prevX;
-            const dy = this.mouse.y - prevY;
-            this.mouse.speed = Math.hypot(dx, dy);
-
-            // Add stardust wake trail if moving
-            if (this.mouse.speed > 2.5 && !this.prefersReducedMotion) {
-                const palette = this.getColorPalettes();
-                this.cursorTrails.push({
-                    x: this.mouse.x + (Math.random() - 0.5) * 16,
-                    y: this.mouse.y + (Math.random() - 0.5) * 16,
-                    radius: Math.random() * 2.8 + 1.2,
-                    alpha: 0.85,
-                    decay: 0.032 + Math.random() * 0.02,
-                    vx: (Math.random() - 0.5) * 0.9,
-                    vy: (Math.random() - 0.5) * 0.9,
-                    colorBase: palette.wake
-                });
-
-                // Cap trail length
-                if (this.cursorTrails.length > 40) {
-                    this.cursorTrails.shift();
-                }
-            }
         }, { passive: true });
 
-        // Pointer leave window
         document.addEventListener('mouseleave', () => {
             this.mouse.active = false;
             this.mouse.x = -9999;
             this.mouse.y = -9999;
         });
 
-        // Click / Tap celebratory micro-sparkle burst
+        // Gentle interactive tap/click bobble for food elements near click point
         window.addEventListener('pointerdown', (e) => {
             if (this.prefersReducedMotion) return;
-            // Spawn 14-18 micro-burst sparkles radiating outward
-            const palette = this.getColorPalettes();
-            const sparkCount = 16;
-            for (let i = 0; i < sparkCount; i++) {
-                const angle = (Math.PI * 2 / sparkCount) * i + (Math.random() * 0.35);
-                const speed = 2.2 + Math.random() * 3.8;
-                this.burstParticles.push({
-                    x: e.clientX,
-                    y: e.clientY,
-                    vx: Math.cos(angle) * speed,
-                    vy: Math.sin(angle) * speed,
-                    radius: Math.random() * 3.0 + 1.2,
-                    alpha: 0.98,
-                    decay: 0.028 + Math.random() * 0.02,
-                    color: palette.particles[i % palette.particles.length]
-                });
+
+            const clickX = e.clientX;
+            const clickY = e.clientY;
+            const clickRadius = 90;
+
+            for (let i = 0; i < this.items.length; i++) {
+                const item = this.items[i];
+                const dx = item.x - clickX;
+                const dy = item.y - clickY;
+                const dist = Math.hypot(dx, dy);
+
+                if (dist < clickRadius) {
+                    // Tactile culinary bobble
+                    item.scale = 1.22;
+                    item.vy -= 0.6; // Gentle buoyant hop
+                    item.interactiveSpin = (Math.random() > 0.5 ? 1 : -1) * 0.08;
+                    item.wobbleSpeed += 0.03;
+                }
             }
         }, { passive: true });
     }
@@ -252,178 +281,469 @@ class AmbientCulinaryEngine {
         this.lastTime = timestamp;
 
         this.ctx.clearRect(0, 0, this.width, this.height);
-
-        // 1. Render Large Ambient Bokeh Aroma Orbs
-        this.drawBokehOrbs(dt);
-
-        // 2. Render Floating Culinary Stardust Particles
-        this.drawParticles(dt);
-
-        // 3. Render Cursor Stardust Wake
-        this.drawCursorWake(dt);
-
-        // 4. Render Click/Tap Bursts
-        this.drawBurstParticles(dt);
+        this.updateAndDrawItems(dt);
 
         requestAnimationFrame((t) => this.loop(t));
     }
 
-    drawBokehOrbs(dt) {
-        for (let i = 0; i < this.bokehOrbs.length; i++) {
-            const orb = this.bokehOrbs[i];
-
-            if (!this.prefersReducedMotion) {
-                orb.x += orb.vx * 60 * dt;
-                orb.y += orb.vy * 60 * dt;
-
-                // Bounce off edges gently
-                if (orb.x < -orb.radius) orb.x = this.width + orb.radius;
-                if (orb.x > this.width + orb.radius) orb.x = -orb.radius;
-                if (orb.y < -orb.radius) orb.y = this.height + orb.radius;
-                if (orb.y > this.height + orb.radius) orb.y = -orb.radius;
-            }
-
-            const grad = this.ctx.createRadialGradient(
-                orb.x, orb.y, 0,
-                orb.x, orb.y, orb.radius
-            );
-            const { r, g, b, a } = orb.color;
-            grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${a})`);
-            grad.addColorStop(0.65, `rgba(${r}, ${g}, ${b}, ${a * 0.4})`);
-            grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
-
-            this.ctx.fillStyle = grad;
-            this.ctx.beginPath();
-            this.ctx.arc(orb.x, orb.y, orb.radius, 0, Math.PI * 2);
-            this.ctx.fill();
+    renderStatic() {
+        this.ctx.clearRect(0, 0, this.width, this.height);
+        for (let i = 0; i < this.items.length; i++) {
+            this.drawFoodItem(this.items[i]);
         }
     }
 
-    drawParticles(dt) {
+    updateAndDrawItems(dt) {
         const mouseX = this.mouse.x;
         const mouseY = this.mouse.y;
-        const interactionRadius = 140;
+        const interactionRadius = 95;
 
-        for (let i = 0; i < this.particles.length; i++) {
-            const p = this.particles[i];
+        for (let i = 0; i < this.items.length; i++) {
+            const item = this.items[i];
 
-            if (!this.prefersReducedMotion) {
-                // Natural upward drift and gentle horizontal wave
-                p.x += p.vx * 60 * dt;
-                p.y += p.vy * 60 * dt;
+            // 1. Natural slow thermal updraft & horizontal sway
+            item.wobble += item.wobbleSpeed;
+            const sway = Math.sin(item.wobble) * item.wobbleWidth;
 
-                // Pulsating brightness/size
-                p.pulse += p.pulseSpeed;
-                p.radius = p.baseRadius + Math.sin(p.pulse) * 0.7;
+            // Decay temporary interactive boosts smoothly
+            if (item.wobbleSpeed > 0.02) {
+                item.wobbleSpeed *= 0.98;
+            }
+            if (Math.abs(item.interactiveSpin) > 0.001) {
+                item.angle += item.interactiveSpin;
+                item.interactiveSpin *= 0.94;
+            }
 
-                // Cursor magnetic repulsion & swirling
-                if (this.mouse.active) {
-                    const dx = p.x - mouseX;
-                    const dy = p.y - mouseY;
-                    const dist = Math.hypot(dx, dy);
+            // 2. Soft air current / thermal waft from cursor proximity
+            let isHovered = false;
+            if (this.mouse.active) {
+                const dx = item.x - mouseX;
+                const dy = item.y - mouseY;
+                const dist = Math.hypot(dx, dy);
 
-                    if (dist < interactionRadius && dist > 1) {
-                        const force = (interactionRadius - dist) / interactionRadius;
-                        const angle = Math.atan2(dy, dx);
-                        // Repel with slight tangential swirl
-                        const pushX = Math.cos(angle) * force * 3.8;
-                        const pushY = Math.sin(angle) * force * 3.8;
-                        p.x += pushX;
-                        p.y += pushY;
-                    }
+                if (dist < interactionRadius && dist > 1) {
+                    isHovered = true;
+                    const force = (interactionRadius - dist) / interactionRadius;
+                    // Whisper-soft air displacement
+                    item.vx += (dx / dist) * force * 0.30;
+                    item.vy += (dy / dist) * force * 0.20;
                 }
-
-                // Wrap-around boundaries
-                if (p.y < -10) {
-                    p.y = this.height + 10;
-                    p.x = Math.random() * this.width;
-                }
-                if (p.x < -10) p.x = this.width + 10;
-                if (p.x > this.width + 10) p.x = -10;
             }
 
-            // Draw particle
-            if (p.isStar) {
-                this.drawStar(p.x, p.y, p.radius * 1.6, p.starAngle, p.color);
-                p.starAngle += p.starRotSpeed;
-            } else {
-                this.ctx.beginPath();
-                this.ctx.arc(p.x, p.y, Math.max(0.5, p.radius), 0, Math.PI * 2);
-                this.ctx.fillStyle = p.color;
-                this.ctx.fill();
+            // Target scale & alpha response
+            item.targetScale = isHovered ? 1.15 : 1.0;
+            item.targetAlpha = isHovered ? (item.baseAlpha + 0.05) : item.baseAlpha;
+
+            // Smooth spring interpolation
+            item.scale += (item.targetScale - item.scale) * 0.1;
+            item.alpha += (item.targetAlpha - item.alpha) * 0.1;
+
+            // Velocity damping back to baseline drift
+            item.vx *= 0.95;
+            item.vy = item.vy * 0.96 + item.baseVy * 0.04;
+
+            item.x += (item.vx + sway) * 60 * dt;
+            item.y += item.vy * 60 * dt;
+            item.angle += item.rotSpeed;
+
+            // Screen wrap-around (gentle loop)
+            const margin = item.size + 40;
+            if (item.y < -margin) {
+                item.y = this.height + margin;
+                item.x = Math.random() * this.width;
             }
+            if (item.x < -margin) {
+                item.x = this.width + margin;
+            } else if (item.x > this.width + margin) {
+                item.x = -margin;
+            }
+
+            // Draw culinary element
+            this.drawFoodItem(item);
         }
     }
 
-    drawStar(cx, cy, r, angle, color) {
-        this.ctx.save();
-        this.ctx.translate(cx, cy);
-        this.ctx.rotate(angle);
-        this.ctx.fillStyle = color;
-        this.ctx.beginPath();
+    drawFoodItem(item) {
+        const ctx = this.ctx;
+        const color = item.colorPrefix;
+        const nutmeg = item.nutmegPrefix;
+        const alpha = Math.max(0.01, item.alpha);
+        const size = item.size * item.scale;
 
-        // 4-point culinary twinkle star
-        for (let i = 0; i < 4; i++) {
-            const rot = (Math.PI / 2) * i;
-            this.ctx.lineTo(Math.cos(rot) * r, Math.sin(rot) * r);
-            const halfRot = rot + Math.PI / 4;
-            this.ctx.lineTo(Math.cos(halfRot) * (r * 0.32), Math.sin(halfRot) * (r * 0.32));
+        ctx.save();
+        ctx.translate(item.x, item.y);
+        ctx.rotate(item.angle);
+
+        switch (item.type) {
+            case 0: // Pizza Slice
+                this.drawPizza(ctx, size, color, alpha);
+                break;
+            case 1: // Gourmet Burger
+                this.drawBurger(ctx, size, color, nutmeg, alpha);
+                break;
+            case 2: // Crisp Carrot
+                this.drawCarrot(ctx, size, color, alpha);
+                break;
+            case 3: // Avocado
+                this.drawAvocado(ctx, size, color, nutmeg, alpha);
+                break;
+            case 4: // Cherry Tomato
+                this.drawTomato(ctx, size, color, alpha);
+                break;
+            case 5: // Citrus / Lemon Slice
+                this.drawCitrus(ctx, size, color, alpha);
+                break;
+            case 6: // Apple
+                this.drawApple(ctx, size, color, alpha);
+                break;
+            case 7: // Twin Cherries
+                this.drawCherries(ctx, size, color, alpha);
+                break;
+            case 8: // Flaky Croissant
+                this.drawCroissant(ctx, size, color, alpha);
+                break;
+            case 9: // Fresh Herb Leaf
+                this.drawHerbLeaf(ctx, size, color, alpha);
+                break;
         }
 
-        this.ctx.closePath();
-        this.ctx.fill();
-        this.ctx.restore();
+        ctx.restore();
     }
 
-    drawCursorWake(dt) {
-        for (let i = this.cursorTrails.length - 1; i >= 0; i--) {
-            const trail = this.cursorTrails[i];
-            trail.alpha -= trail.decay;
-            trail.x += trail.vx;
-            trail.y += trail.vy;
+    // -------------------------------------------------------------------------
+    // PROCEDURAL MINIMAL FOOD VECTOR SILHOUETTES
+    // -------------------------------------------------------------------------
 
-            if (trail.alpha <= 0) {
-                this.cursorTrails.splice(i, 1);
-                continue;
-            }
+    // 1. Pizza Slice
+    drawPizza(ctx, size, color, alpha) {
+        const r = size * 0.9;
+        const halfAngle = 0.36; // ~20 deg wedge
 
-            this.ctx.beginPath();
-            this.ctx.arc(trail.x, trail.y, trail.radius, 0, Math.PI * 2);
-            this.ctx.fillStyle = `${trail.colorBase}${trail.alpha.toFixed(2)})`;
-            this.ctx.fill();
+        ctx.fillStyle = `${color}${alpha.toFixed(3)})`;
+        ctx.strokeStyle = `${color}${(alpha * 1.25).toFixed(3)})`;
+        ctx.lineWidth = 1.2;
+
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(r * Math.sin(halfAngle), -r * Math.cos(halfAngle));
+        ctx.arc(0, 0, r, -Math.PI / 2 + halfAngle, -Math.PI / 2 - halfAngle, true);
+        ctx.closePath();
+        ctx.fill();
+
+        // Crust edge
+        ctx.beginPath();
+        ctx.arc(0, 0, r, -Math.PI / 2 + halfAngle, -Math.PI / 2 - halfAngle, true);
+        ctx.lineWidth = 2.4;
+        ctx.stroke();
+
+        // Pepperoni spots
+        ctx.fillStyle = `${color}${(alpha * 1.5).toFixed(3)})`;
+        const pR = size * 0.12;
+        ctx.beginPath();
+        ctx.arc(0, -r * 0.55, pR, 0, Math.PI * 2);
+        ctx.arc(-r * 0.16, -r * 0.72, pR * 0.85, 0, Math.PI * 2);
+        ctx.arc(r * 0.15, -r * 0.36, pR * 0.9, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    // 2. Gourmet Burger
+    drawBurger(ctx, size, color, nutmeg, alpha) {
+        const w = size * 1.1;
+        const h = size * 0.85;
+
+        ctx.fillStyle = `${color}${alpha.toFixed(3)})`;
+        ctx.strokeStyle = `${color}${(alpha * 1.2).toFixed(3)})`;
+        ctx.lineWidth = 1.1;
+
+        // Top Bun (rounded dome)
+        ctx.beginPath();
+        ctx.arc(0, -h * 0.15, w * 0.48, Math.PI, 0);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Sesame seeds
+        ctx.fillStyle = `${color}${(alpha * 1.6).toFixed(3)})`;
+        ctx.beginPath();
+        ctx.arc(-w * 0.18, -h * 0.34, 1.1, 0, Math.PI * 2);
+        ctx.arc(0, -h * 0.44, 1.1, 0, Math.PI * 2);
+        ctx.arc(w * 0.2, -h * 0.32, 1.1, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Wavy lettuce line
+        ctx.beginPath();
+        ctx.moveTo(-w * 0.5, -h * 0.1);
+        ctx.quadraticCurveTo(-w * 0.25, -h * 0.02, 0, -h * 0.1);
+        ctx.quadraticCurveTo(w * 0.25, -h * 0.02, w * 0.5, -h * 0.1);
+        ctx.lineWidth = 1.8;
+        ctx.stroke();
+
+        // Patty
+        ctx.fillStyle = `${nutmeg}${(alpha * 1.35).toFixed(3)})`;
+        ctx.beginPath();
+        if (ctx.roundRect) {
+            ctx.roundRect(-w * 0.46, 0, w * 0.92, h * 0.20, 2.5);
+        } else {
+            ctx.rect(-w * 0.46, 0, w * 0.92, h * 0.20);
+        }
+        ctx.fill();
+
+        // Bottom bun
+        ctx.fillStyle = `${color}${alpha.toFixed(3)})`;
+        ctx.beginPath();
+        if (ctx.roundRect) {
+            ctx.roundRect(-w * 0.44, h * 0.24, w * 0.88, h * 0.18, [1, 1, 3, 3]);
+        } else {
+            ctx.rect(-w * 0.44, h * 0.24, w * 0.88, h * 0.18);
+        }
+        ctx.fill();
+        ctx.lineWidth = 1.0;
+        ctx.stroke();
+    }
+
+    // 3. Crisp Carrot
+    drawCarrot(ctx, size, color, alpha) {
+        const w = size * 0.7;
+        const h = size * 1.15;
+
+        ctx.fillStyle = `${color}${alpha.toFixed(3)})`;
+        ctx.strokeStyle = `${color}${(alpha * 1.25).toFixed(3)})`;
+        ctx.lineWidth = 1.1;
+
+        // Carrot body
+        ctx.beginPath();
+        ctx.moveTo(-w * 0.38, -h * 0.3);
+        ctx.quadraticCurveTo(0, -h * 0.38, w * 0.38, -h * 0.3);
+        ctx.quadraticCurveTo(w * 0.2, h * 0.2, 0, h * 0.55);
+        ctx.quadraticCurveTo(-w * 0.2, h * 0.2, -w * 0.38, -h * 0.3);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Accent ridges
+        ctx.strokeStyle = `${color}${(alpha * 1.35).toFixed(3)})`;
+        ctx.beginPath();
+        ctx.moveTo(-w * 0.22, -h * 0.1);
+        ctx.lineTo(w * 0.14, -h * 0.08);
+        ctx.moveTo(-w * 0.16, h * 0.12);
+        ctx.lineTo(w * 0.18, h * 0.14);
+        ctx.stroke();
+
+        // Green fronds top
+        ctx.beginPath();
+        ctx.moveTo(0, -h * 0.34);
+        ctx.quadraticCurveTo(-w * 0.25, -h * 0.55, -w * 0.4, -h * 0.5);
+        ctx.moveTo(0, -h * 0.34);
+        ctx.quadraticCurveTo(0, -h * 0.65, 0, -h * 0.6);
+        ctx.moveTo(0, -h * 0.34);
+        ctx.quadraticCurveTo(w * 0.25, -h * 0.55, w * 0.4, -h * 0.5);
+        ctx.stroke();
+    }
+
+    // 4. Avocado
+    drawAvocado(ctx, size, color, nutmeg, alpha) {
+        const w = size * 0.8;
+        const h = size * 1.05;
+
+        ctx.fillStyle = `${color}${alpha.toFixed(3)})`;
+        ctx.strokeStyle = `${color}${(alpha * 1.25).toFixed(3)})`;
+        ctx.lineWidth = 1.1;
+
+        // Pear contour
+        ctx.beginPath();
+        ctx.moveTo(0, -h * 0.5);
+        ctx.bezierCurveTo(w * 0.35, -h * 0.45, w * 0.55, 0, w * 0.45, h * 0.35);
+        ctx.bezierCurveTo(w * 0.35, h * 0.55, -w * 0.35, h * 0.55, -w * 0.45, h * 0.35);
+        ctx.bezierCurveTo(-w * 0.55, 0, -w * 0.35, -h * 0.45, 0, -h * 0.5);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Seed / Pit
+        ctx.fillStyle = `${nutmeg}${(alpha * 1.5).toFixed(3)})`;
+        ctx.beginPath();
+        ctx.arc(0, h * 0.15, w * 0.22, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    // 5. Cherry Tomato
+    drawTomato(ctx, size, color, alpha) {
+        const r = size * 0.48;
+
+        ctx.fillStyle = `${color}${alpha.toFixed(3)})`;
+        ctx.strokeStyle = `${color}${(alpha * 1.25).toFixed(3)})`;
+        ctx.lineWidth = 1.1;
+
+        // Plump tomato round
+        ctx.beginPath();
+        ctx.arc(0, r * 0.12, r * 0.88, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        // Star-like calyx / stem
+        ctx.strokeStyle = `${color}${(alpha * 1.45).toFixed(3)})`;
+        ctx.beginPath();
+        ctx.moveTo(0, -r * 0.65);
+        ctx.lineTo(-r * 0.38, -r * 0.52);
+        ctx.moveTo(0, -r * 0.65);
+        ctx.lineTo(r * 0.38, -r * 0.52);
+        ctx.moveTo(0, -r * 0.65);
+        ctx.lineTo(0, -r * 0.92);
+        ctx.stroke();
+    }
+
+    // 6. Citrus / Lemon Slice
+    drawCitrus(ctx, size, color, alpha) {
+        const r = size * 0.52;
+
+        ctx.strokeStyle = `${color}${(alpha * 1.3).toFixed(3)})`;
+        ctx.lineWidth = 1.3;
+
+        // Outer rind
+        ctx.beginPath();
+        ctx.arc(0, 0, r, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Segments
+        ctx.fillStyle = `${color}${alpha.toFixed(3)})`;
+        const innerR = r * 0.78;
+        const segments = 6;
+        for (let i = 0; i < segments; i++) {
+            const startA = (i * 2 * Math.PI) / segments + 0.12;
+            const endA = ((i + 1) * 2 * Math.PI) / segments - 0.12;
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.arc(0, 0, innerR, startA, endA);
+            ctx.closePath();
+            ctx.fill();
         }
     }
 
-    drawBurstParticles(dt) {
-        for (let i = this.burstParticles.length - 1; i >= 0; i--) {
-            const burst = this.burstParticles[i];
-            burst.x += burst.vx * 60 * dt;
-            burst.y += burst.vy * 60 * dt;
-            burst.vx *= 0.94; // damping
-            burst.vy *= 0.94;
-            burst.alpha -= burst.decay;
+    // 7. Apple
+    drawApple(ctx, size, color, alpha) {
+        const w = size * 0.82;
+        const h = size * 0.82;
 
-            if (burst.alpha <= 0) {
-                this.burstParticles.splice(i, 1);
-                continue;
-            }
+        ctx.fillStyle = `${color}${alpha.toFixed(3)})`;
+        ctx.strokeStyle = `${color}${(alpha * 1.25).toFixed(3)})`;
+        ctx.lineWidth = 1.1;
 
-            this.ctx.save();
-            this.ctx.globalAlpha = Math.max(0, burst.alpha);
-            this.ctx.beginPath();
-            this.ctx.arc(burst.x, burst.y, burst.radius, 0, Math.PI * 2);
-            this.ctx.fillStyle = burst.color;
-            this.ctx.fill();
-            this.ctx.restore();
-        }
+        // Apple lobes
+        ctx.beginPath();
+        ctx.moveTo(0, -h * 0.32);
+        ctx.bezierCurveTo(w * 0.45, -h * 0.52, w * 0.58, h * 0.25, w * 0.24, h * 0.5);
+        ctx.bezierCurveTo(w * 0.1, h * 0.55, -w * 0.1, h * 0.55, -w * 0.24, h * 0.5);
+        ctx.bezierCurveTo(-w * 0.58, h * 0.25, -w * 0.45, -h * 0.52, 0, -h * 0.32);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Apple stem
+        ctx.strokeStyle = `${color}${(alpha * 1.45).toFixed(3)})`;
+        ctx.lineWidth = 1.1;
+        ctx.beginPath();
+        ctx.moveTo(0, -h * 0.32);
+        ctx.quadraticCurveTo(w * 0.14, -h * 0.56, w * 0.08, -h * 0.68);
+        ctx.stroke();
+
+        // Tiny leaf
+        ctx.fillStyle = `${color}${(alpha * 1.35).toFixed(3)})`;
+        ctx.beginPath();
+        ctx.ellipse(w * 0.16, -h * 0.54, w * 0.11, h * 0.06, 0.4, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    // 8. Twin Cherries
+    drawCherries(ctx, size, color, alpha) {
+        const r = size * 0.24;
+        const w = size * 0.78;
+        const h = size * 0.88;
+
+        ctx.fillStyle = `${color}${alpha.toFixed(3)})`;
+        ctx.strokeStyle = `${color}${(alpha * 1.25).toFixed(3)})`;
+        ctx.lineWidth = 1.1;
+
+        // Left cherry
+        ctx.beginPath();
+        ctx.arc(-w * 0.25, h * 0.24, r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        // Right cherry
+        ctx.beginPath();
+        ctx.arc(w * 0.22, h * 0.16, r * 0.92, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        // Stems
+        ctx.strokeStyle = `${color}${(alpha * 1.4).toFixed(3)})`;
+        ctx.beginPath();
+        ctx.moveTo(-w * 0.25, h * 0.24 - r);
+        ctx.quadraticCurveTo(-w * 0.1, -h * 0.18, 0, -h * 0.38);
+        ctx.moveTo(w * 0.22, h * 0.16 - r * 0.92);
+        ctx.quadraticCurveTo(w * 0.14, -h * 0.12, 0, -h * 0.38);
+        ctx.stroke();
+
+        // Leaf at apex
+        ctx.fillStyle = `${color}${(alpha * 1.4).toFixed(3)})`;
+        ctx.beginPath();
+        ctx.ellipse(w * 0.12, -h * 0.42, w * 0.11, h * 0.06, -0.3, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    // 9. Flaky Croissant
+    drawCroissant(ctx, size, color, alpha) {
+        const w = size * 0.96;
+        const h = size * 0.62;
+
+        ctx.fillStyle = `${color}${alpha.toFixed(3)})`;
+        ctx.strokeStyle = `${color}${(alpha * 1.25).toFixed(3)})`;
+        ctx.lineWidth = 1.1;
+
+        // Crescent shape
+        ctx.beginPath();
+        ctx.moveTo(-w * 0.48, h * 0.24);
+        ctx.bezierCurveTo(-w * 0.34, -h * 0.52, w * 0.34, -h * 0.52, w * 0.48, h * 0.24);
+        ctx.bezierCurveTo(w * 0.28, -h * 0.12, -w * 0.28, -h * 0.12, -w * 0.48, h * 0.24);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Pastry seams
+        ctx.strokeStyle = `${color}${(alpha * 1.4).toFixed(3)})`;
+        ctx.beginPath();
+        ctx.moveTo(-w * 0.16, -h * 0.36);
+        ctx.lineTo(-w * 0.08, -h * 0.05);
+        ctx.moveTo(0, -h * 0.4);
+        ctx.lineTo(0, -h * 0.05);
+        ctx.moveTo(w * 0.16, -h * 0.36);
+        ctx.lineTo(w * 0.08, -h * 0.05);
+        ctx.stroke();
+    }
+
+    // 10. Fresh Herb Leaf
+    drawHerbLeaf(ctx, size, color, alpha) {
+        ctx.fillStyle = `${color}${alpha.toFixed(3)})`;
+        ctx.beginPath();
+        ctx.moveTo(0, size * 0.65);
+        ctx.bezierCurveTo(-size * 0.45, size * 0.2, -size * 0.42, -size * 0.45, 0, -size * 0.65);
+        ctx.bezierCurveTo(size * 0.42, -size * 0.45, size * 0.45, size * 0.2, 0, size * 0.65);
+        ctx.fill();
+
+        // Central vein
+        ctx.strokeStyle = `${color}${(alpha * 0.8).toFixed(3)})`;
+        ctx.lineWidth = 0.8;
+        ctx.beginPath();
+        ctx.moveTo(0, size * 0.55);
+        ctx.lineTo(0, -size * 0.45);
+        ctx.stroke();
     }
 }
 
-// Global initialization after class declaration
+// Global initialization
 (function initAmbientCulinaryBackground() {
     if (typeof window === 'undefined') return;
 
-    // Check user accessibility preference
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     function mountCanvas() {
