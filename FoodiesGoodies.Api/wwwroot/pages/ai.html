@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/global.css?v=5.6">
-    <link rel="stylesheet" href="../css/ai.css?v=8.1">
+    <link rel="stylesheet" href="../css/ai.css?v=10.1">
     <link rel="icon" type="image/png" href="../assets/images/fav.png">
     <script src="../js/ambient-bg.js?v=4.1" defer></script>
 
@@ -117,40 +117,32 @@
     <!-- MAIN AI DIETICIAN CONTAINER -->
     <main id="main-content" class="ai-page-container">
         <!-- Hero Banner -->
+        <!-- Hero Banner -->
         <section class="ai-hero-banner" aria-label="AI Dietician Intro">
             <div class="ai-hero-badge">
                 <ion-icon name="sparkles" aria-hidden="true"></ion-icon>
                 <span>AI Nutrition Intelligence</span>
             </div>
-            <h1>Your Personal <span>AI Dietician</span></h1>
+            <h1>Personalized <span>AI Nutrition</span> &amp; Meal Blueprint</h1>
             <p>
-                Eat what you love while hitting your fitness and vitality goals. Enter your biometric metrics below to receive a personalized daily calorie, macro, and curated meal blueprint.
+                Authoritative Mifflin-St Jeor metabolic calibration combined with cultural culinary intelligence. Enter your biometric metrics to generate your tailored macro distribution and curated 7-day schedule.
             </p>
-        </section>
-
-        <!-- Medical Disclaimer Banner -->
-        <div class="medical-disclaimer-banner" role="alert">
-            <ion-icon name="medkit-outline" aria-hidden="true"></ion-icon>
-            <div class="disclaimer-text">
-                <strong>Medical &amp; Dietary Advisory:</strong>
-                <p>The AI Dietician provides nutrition estimations and culinary suggestions for educational and lifestyle guidance only. It is not intended as medical advice, clinical nutrition diagnosis, or therapeutic treatment. Please consult a physician or registered dietitian before beginning any new caloric deficit, intense fitness program, or specialized dietary regimen.</p>
+            <div class="ai-advisory-pill" role="note">
+                <ion-icon name="shield-checkmark-outline" aria-hidden="true"></ion-icon>
+                <span>Lifestyle Guidance &bull; Mifflin-St Jeor &amp; WHO Standards</span>
             </div>
-        </div>
+        </section>
 
         <!-- Planner Grid -->
         <div class="ai-grid">
-            <!-- Planner Form Card (Left) -->
+            <!-- Planner Form Card -->
             <section class="ai-form-card" aria-label="Nutrition Calculator Form">
-                <h2>
-                    <ion-icon name="options" aria-hidden="true"></ion-icon>
-                    Calculate Your Blueprint
-                </h2>
-
-                <!-- Measurement System Toggle -->
-                <!-- Measurement System Toggle -->
-                <div class="unit-toggle-container">
-                    <span class="unit-toggle-label">Measurement System:</span>
-                    <div class="unit-toggle-buttons">
+                <div class="form-header-bar">
+                    <div class="form-header-text">
+                        <h2>Calculate Your Blueprint</h2>
+                        <span class="form-subline">Enter your metrics below to calculate BMI, caloric targets, and custom meals.</span>
+                    </div>
+                    <div class="unit-toggle-buttons" role="radiogroup" aria-label="Measurement system">
                         <button type="button" class="btn-unit-toggle active" id="btn-unit-metric" data-unit="metric">Metric (kg, cm)</button>
                         <button type="button" class="btn-unit-toggle" id="btn-unit-imperial" data-unit="imperial">Imperial (lbs, in)</button>
                     </div>
@@ -375,32 +367,33 @@
                         </div>
                     </div>
 
-                    <!-- Server-Side AI Status Banner -->
-                    <div class="ai-engine-banner">
-                        <div class="engine-info">
-                            <span class="engine-badge-pill">
-                                <span class="engine-pulse-dot" aria-hidden="true"></span>
-                                Server-Side Gemini AI Diet Planner
-                            </span>
-                            <span class="engine-subtext">Deterministic Nutrition • Cultural Intelligence • Server Security</span>
-                        </div>
+                    <!-- Server-Side AI Minimal Status Indicator -->
+                    <div class="engine-micro-hint">
+                        <span class="engine-pulse-dot" aria-hidden="true"></span>
+                        <span>Server-Side Gemini AI &bull; Cultural Intelligence &bull; Deterministic Accuracy</span>
                     </div>
 
-                    <button type="submit" class="btn-generate-plan" id="btnGeneratePlan">
-                        <ion-icon name="sparkles" aria-hidden="true"></ion-icon>
-                        Generate 7-Day Personalized Plan
-                    </button>
+                    <div class="form-actions-group">
+                        <button type="submit" class="btn-generate-plan" id="btnGeneratePlan">
+                            <ion-icon name="sparkles" aria-hidden="true"></ion-icon>
+                            <span>Generate 7-Day Personalized Plan</span>
+                        </button>
+                        <button type="button" class="btn-reset-plan" id="btnResetPlan" title="Reset all fields and clear saved plan">
+                            <ion-icon name="refresh-outline" aria-hidden="true"></ion-icon>
+                            <span>Reset to Defaults</span>
+                        </button>
+                    </div>
                 </form>
             </section>
 
             <!-- Results Card (Right) -->
-            <section id="aiResults" class="ai-results-card" aria-label="Nutrition Results" aria-live="polite">
+            <section id="aiResults" class="ai-results-card" aria-label="Nutrition Results & Diet Plan" aria-live="polite">
                 <div class="results-placeholder">
                     <div class="icon-placeholder" aria-hidden="true">
-                        <ion-icon name="nutrition"></ion-icon>
+                        <ion-icon name="speedometer-outline"></ion-icon>
                     </div>
-                    <h3>Ready for Your Tailored Nutrition Plan?</h3>
-                    <p>Adjust the biometric fields on the left and tap "Generate AI Meal Plan" to calculate your target calories, macronutrient split, and custom meals.</p>
+                    <h3>Ready for Your Tailored Nutrition Plan &amp; BMI Analysis?</h3>
+                    <p>Adjust your biometric parameters above and tap "Generate 7-Day Personalized Plan" to calculate your validated BMI assessment, target calories, macronutrient split, and personal meal schedule.</p>
                 </div>
             </section>
         </div>
@@ -409,7 +402,7 @@
         <section class="ai-features-section" aria-label="AI Dietician Benefits">
             <div class="ai-feature-card">
                 <div class="feature-icon" aria-hidden="true">
-                    <ion-icon name="calculator"></ion-icon>
+                    <ion-icon name="calculator-outline"></ion-icon>
                 </div>
                 <h3>Evidence-Based BMR</h3>
                 <p>Calculated with the renowned Mifflin-St Jeor equation to deliver precision caloric baseline metrics for your body type.</p>
@@ -417,7 +410,7 @@
 
             <div class="ai-feature-card">
                 <div class="feature-icon" aria-hidden="true">
-                    <ion-icon name="pie-chart"></ion-icon>
+                    <ion-icon name="pie-chart-outline"></ion-icon>
                 </div>
                 <h3>Optimal Macro Splits</h3>
                 <p>Balanced protein, clean carbohydrates, and healthy fats tailored to sustain your energy, whether gaining muscle or shedding fat.</p>
@@ -425,7 +418,7 @@
 
             <div class="ai-feature-card">
                 <div class="feature-icon" aria-hidden="true">
-                    <ion-icon name="restaurant"></ion-icon>
+                    <ion-icon name="restaurant-outline"></ion-icon>
                 </div>
                 <h3>Artisanal Culinary Recipes</h3>
                 <p>Designed to integrate effortlessly with Foodies Goodies gourmet recipes so healthy eating remains delicious every day.</p>
@@ -488,7 +481,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../js/nav.js?v=5.1"></script>
     <script src="../js/auth.js"></script>
-    <script src="../js/ai.js?v=8.0"></script>
+    <script src="../js/ai.js?v=10.1"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>

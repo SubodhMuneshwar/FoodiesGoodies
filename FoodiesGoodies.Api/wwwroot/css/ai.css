@@ -63,16 +63,40 @@ body {
   color: var(--text-muted);
   font-size: 1.05rem;
   line-height: 1.65;
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Subtle Lifestyle Advisory Pill */
+.ai-advisory-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  padding: 6px 18px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 18px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.ai-advisory-pill ion-icon {
+  color: #10B981;
+  font-size: 1.05rem;
 }
 
 /* --------------------------------------------------------------------------
    Calculator & Planner Grid
    -------------------------------------------------------------------------- */
 .ai-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
-  gap: clamp(28px, 4vw, 44px);
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(32px, 4vw, 48px);
+  max-width: 1080px;
+  margin: 0 auto;
   min-width: 0;
   width: 100%;
 }
@@ -83,22 +107,83 @@ body {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
-  padding: clamp(24px, 3vw, 36px);
+  padding: clamp(24px, 3.5vw, 40px);
   box-shadow: var(--shadow-sm);
   min-width: 0;
   width: 100%;
   box-sizing: border-box;
 }
 
-.ai-form-card h2 {
+/* Form Header Bar with Integrated Unit Segmented Switch */
+.form-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
+}
+
+.form-header-text h2 {
   font-family: var(--font-heading);
   font-size: 1.45rem;
   color: var(--text-primary);
-  margin-bottom: 20px;
+  margin: 0 0 4px 0;
   font-weight: 700;
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.form-subline {
+  font-size: 0.86rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+  display: block;
+}
+
+/* Segmented Pill Unit Switch */
+.unit-toggle-buttons {
+  display: inline-flex;
+  align-items: center;
+  background: var(--bg-alt);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  padding: 3px;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.btn-unit-toggle {
+  padding: 6px 14px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.btn-unit-toggle:hover {
+  color: var(--text-primary);
+}
+
+.btn-unit-toggle.active {
+  background: var(--bg-surface);
+  color: var(--primary);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  font-weight: 700;
+}
+
+[data-theme="dark"] .btn-unit-toggle.active {
+  background: var(--bg-surface-elevated);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 
 .form-row {
@@ -123,7 +208,7 @@ body {
 
 .ai-form-card label {
   display: block;
-  font-size: 0.86rem;
+  font-size: 0.84rem;
   color: var(--text-secondary);
   font-weight: 600;
   margin-bottom: 6px;
@@ -137,13 +222,13 @@ body {
   box-sizing: border-box;
   padding: 11px 14px;
   background: var(--bg-surface-elevated);
-  border: 1.5px solid var(--border-strong);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
   color: var(--text-primary);
   font-family: var(--font-body);
   font-size: 0.94rem;
   outline: none;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
 }
 
 .ai-form-card select option {
@@ -158,28 +243,74 @@ body {
   box-shadow: 0 0 0 3px var(--primary-subtle);
 }
 
-.btn-generate-plan {
+.form-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 18px;
   width: 100%;
-  padding: 13px;
+}
+
+.btn-generate-plan {
+  flex: 1;
+  padding: 14px 24px;
   background-color: var(--primary);
   color: #FFFFFF;
-  font-weight: 600;
-  font-size: 0.98rem;
+  font-weight: 700;
+  font-size: 1rem;
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: background-color var(--transition-fast), transform var(--transition-fast);
+  transition: all var(--transition-fast);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  margin-top: 14px;
+  gap: 10px;
+  box-shadow: 0 4px 14px rgba(194, 112, 58, 0.25);
+  min-height: 50px;
 }
 
 .btn-generate-plan:hover,
 .btn-generate-plan:focus {
   background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(194, 112, 58, 0.35);
+}
+
+.btn-reset-plan {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 20px;
+  background: var(--bg-alt);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  min-height: 50px;
+}
+
+.btn-reset-plan:hover {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border-color: var(--border-hover);
   transform: translateY(-1px);
+}
+
+@media (max-width: 600px) {
+  .form-actions-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .btn-reset-plan {
+    width: 100%;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -215,11 +346,335 @@ body {
   margin-bottom: 8px;
 }
 
-/* Active Results Display */
+/* ==========================================================================
+   BMI & Biometric Assessment (Minimalist Editorial Design)
+   ========================================================================== */
+.bmi-minimal-card,
+.bmi-assessment-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: clamp(20px, 3vw, 30px);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow-sm);
+  animation: fadeIn 0.4s ease-out;
+}
+
+.bmi-minimal-card::before,
+.bmi-assessment-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #3B82F6 0%, #10B981 35%, #F59E0B 70%, #EF4444 100%);
+}
+
+.bmi-minimal-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.bmi-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bmi-title-label {
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.bmi-verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--bg-alt);
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-subtle);
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.bmi-healthy-tag {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.bmi-healthy-tag strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+/* Minimal Hero Score & Spectrum */
+.bmi-minimal-hero {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 44px);
+  align-items: center;
+  padding-bottom: 22px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.bmi-hero-digits {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 170px;
+}
+
+.bmi-num-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.bmi-num {
+  font-family: var(--font-heading);
+  font-size: clamp(2.8rem, 4.5vw, 3.6rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.bmi-unit-sub {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.bmi-pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.category-underweight {
+  background: rgba(59, 130, 246, 0.1);
+  color: #2563EB;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+[data-theme="dark"] .category-underweight {
+  color: #60A5FA;
+  background: rgba(59, 130, 246, 0.18);
+  border-color: rgba(96, 165, 250, 0.35);
+}
+
+.category-normal {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+[data-theme="dark"] .category-normal {
+  color: #34D399;
+  background: rgba(16, 185, 129, 0.18);
+  border-color: rgba(52, 211, 153, 0.35);
+}
+
+.category-overweight {
+  background: rgba(245, 158, 11, 0.1);
+  color: #D97706;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+[data-theme="dark"] .category-overweight {
+  color: #FBBF24;
+  background: rgba(245, 158, 11, 0.18);
+  border-color: rgba(251, 191, 36, 0.35);
+}
+
+.category-obese {
+  background: rgba(239, 68, 68, 0.1);
+  color: #DC2626;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+[data-theme="dark"] .category-obese {
+  color: #F87171;
+  background: rgba(239, 68, 68, 0.18);
+  border-color: rgba(248, 113, 113, 0.35);
+}
+
+/* Minimal Hero Gauge */
+.bmi-hero-gauge {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.bmi-gauge-track {
+  position: relative;
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #60A5FA 0%, #34D399 35%, #FBBF24 70%, #F87171 100%);
+  margin-top: 14px;
+  margin-bottom: 8px;
+}
+
+.gauge-marker {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 3;
+  pointer-events: none;
+  transition: left 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.gauge-marker-pin {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  border: 3.5px solid var(--text-primary);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.gauge-marker-bubble {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  background: var(--text-primary);
+  color: var(--bg-surface);
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  box-shadow: var(--shadow-sm);
+}
+
+.bmi-gauge-scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 0 2px;
+}
+
+/* Seamless Minimal Stat Ribbon */
+.bmi-ribbon {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--bg-alt);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.ribbon-col {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border-subtle);
+  transition: background var(--transition-fast);
+}
+
+.ribbon-col:last-child {
+  border-right: none;
+}
+
+.ribbon-col.highlight {
+  background: var(--primary-subtle);
+}
+
+.ribbon-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.ribbon-col.highlight .ribbon-label {
+  color: var(--primary);
+}
+
+.ribbon-value {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.ribbon-unit {
+  font-size: 0.74rem;
+  font-family: var(--font-body);
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.ribbon-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Minimal Insight Line */
+.bmi-minimal-insight {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 16px;
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.bmi-minimal-insight ion-icon {
+  font-size: 1.15rem;
+  color: var(--primary);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.bmi-minimal-insight strong {
+  color: var(--text-primary);
+}
+
+/* Active Results Display Header */
 .results-header {
   border-bottom: 1px solid var(--border-subtle);
   padding-bottom: 18px;
-  margin-bottom: 24px;
+  margin-bottom: 22px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -243,7 +698,100 @@ body {
   font-weight: 600;
 }
 
-/* Macro Metrics Dashboard */
+/* Minimalist Macro Distribution Split Bar */
+.macro-minimal-section {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin-bottom: 24px;
+}
+
+.macro-bar-wrap {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.macro-bar {
+  display: flex;
+  height: 8px;
+  width: 100%;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  background: var(--bg-alt);
+}
+
+.macro-seg {
+  height: 100%;
+  transition: width 0.6s ease;
+}
+
+.seg-protein {
+  background: #10B981;
+}
+
+.seg-carbs {
+  background: #F59E0B;
+}
+
+.seg-fats {
+  background: #3B82F6;
+}
+
+.macro-legend-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(10px, 2vw, 20px);
+  font-size: 0.82rem;
+}
+
+.macro-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+}
+
+.macro-legend-item strong {
+  color: var(--text-primary);
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-cal {
+  background: var(--primary);
+}
+
+.dot-protein {
+  background: #10B981;
+}
+
+.dot-carbs {
+  background: #F59E0B;
+}
+
+.dot-fats {
+  background: #3B82F6;
+}
+
+.legend-name {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.legend-pct,
+.legend-sub {
+  color: var(--text-muted);
+  font-size: 0.74rem;
+}
+
+/* Macro Dashboard Fallback */
 .macro-dashboard {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -490,7 +1038,20 @@ body {
   box-shadow: 0 2px 6px rgba(194, 112, 58, 0.25);
 }
 
-/* AI Dual Engine Status & Key Settings */
+/* AI Dual Engine Status & Micro Hint */
+.engine-micro-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  padding: 10px 0;
+  margin-top: 6px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
 .ai-engine-banner {
   display: flex;
   align-items: center;
@@ -1186,6 +1747,61 @@ body {
 }
 
 /* ==========================================================================
+   Features Showcase (Desktop & Global)
+   ========================================================================== */
+.ai-features-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 56px;
+  margin-bottom: 24px;
+}
+
+.ai-feature-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+}
+
+.ai-feature-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.feature-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--primary-subtle);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.45rem;
+  margin-bottom: 16px;
+}
+
+.ai-feature-card h3 {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  color: var(--text-primary);
+  margin: 0 0 8px 0;
+  font-weight: 700;
+}
+
+.ai-feature-card p {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* ==========================================================================
    Responsive Layout & Breakpoints (Bottom of Cascade - High Precedence)
    ========================================================================== */
 
@@ -1197,8 +1813,24 @@ body {
   }
 
   .ai-grid {
-    grid-template-columns: minmax(0, 1fr) !important;
-    gap: 32px;
+    gap: 28px;
+  }
+
+  .bmi-ribbon {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ribbon-col:nth-child(2) {
+    border-right: none;
+  }
+
+  .ribbon-col:nth-child(1),
+  .ribbon-col:nth-child(2) {
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .macro-legend-row {
+    gap: 10px 18px;
   }
 
   .macro-dashboard {
@@ -1228,10 +1860,9 @@ body {
     line-height: 1.55;
   }
 
-  .medical-disclaimer-banner {
-    padding: 12px 14px;
-    font-size: 0.82rem;
-    margin-bottom: 20px;
+  .ai-advisory-pill {
+    padding: 6px 14px;
+    font-size: 0.78rem;
   }
 
   .ai-form-card,
@@ -1240,8 +1871,24 @@ body {
     border-radius: var(--radius-md);
   }
 
+  .form-header-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .unit-toggle-buttons {
+    width: 100%;
+    display: flex;
+  }
+
+  .btn-unit-toggle {
+    flex: 1;
+    text-align: center;
+  }
+
   .form-section-title {
-    font-size: 1rem;
+    font-size: 0.85rem;
   }
 
   /* Force single-column form rows on screens <= 768px */
@@ -1266,28 +1913,13 @@ body {
     font-size: 0.9rem;
   }
 
-  .unit-toggle-container {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 10px 12px;
+  .bmi-minimal-hero {
+    grid-template-columns: 1fr;
+    gap: 18px;
   }
 
-  .unit-toggle-buttons {
-    width: 100%;
-    display: flex;
-    gap: 8px;
-  }
-
-  .btn-unit-toggle {
-    flex: 1;
-    text-align: center;
-    padding: 8px 10px;
-    font-size: 0.82rem;
-    white-space: nowrap;
-    min-height: 38px;
+  .bmi-hero-digits {
+    min-width: 0;
   }
 
   .cultural-header-card {
@@ -1377,19 +2009,39 @@ body {
 
   .ai-form-card,
   .ai-results-card {
-    padding: 16px 12px;
+    padding: 16px 14px;
     border-radius: var(--radius-sm);
   }
 
   .unit-toggle-buttons {
-    flex-direction: column;
+    display: flex;
     width: 100%;
-    gap: 6px;
+    gap: 3px;
   }
 
   .btn-unit-toggle {
-    width: 100%;
-    padding: 9px 12px;
+    flex: 1;
+    text-align: center;
+    padding: 7px 10px;
+  }
+
+  .bmi-ribbon {
+    grid-template-columns: 1fr;
+  }
+
+  .ribbon-col {
+    border-right: none !important;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .ribbon-col:last-child {
+    border-bottom: none;
+  }
+
+  .macro-legend-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
   }
 
   .days-tabs-nav {
@@ -1472,6 +2124,7 @@ body {
   .footer-mpa,
   .ai-form-card,
   .ai-hero-banner,
+  .ai-advisory-pill,
   .medical-disclaimer-banner,
   .ai-features-section,
   .days-tabs-nav,

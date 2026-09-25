@@ -26,11 +26,45 @@ document.addEventListener('DOMContentLoaded', () => {
     const cuisineSelect = document.getElementById('cuisine');
     const mealCountSelect = document.getElementById('mealCount');
     const allergyChips = document.querySelectorAll('.allergy-chip');
+    const btnResetPlan = document.getElementById('btnResetPlan');
+
+    const STORAGE_KEY_INPUTS = 'foodies_diet_inputs';
+    const STORAGE_KEY_PLAN = 'foodies_diet_plan';
+    const STORAGE_KEY_UNIT = 'foodies_diet_unit_system';
 
     let currentUnitSystem = 'metric'; // 'metric' or 'imperial'
     let currentPlanData = null;       // Cached active 7-day plan
     let activeDayIndex = 0;           // Current visible day (0 = Day 1)
     let currentRequestPayload = null; // Stored user constraints for meal swaps
+
+    // Reset button handler to clear saved plan and restore initial state
+    if (btnResetPlan) {
+        btnResetPlan.addEventListener('click', () => {
+            try {
+                localStorage.removeItem(STORAGE_KEY_INPUTS);
+                localStorage.removeItem(STORAGE_KEY_PLAN);
+                localStorage.removeItem(STORAGE_KEY_UNIT);
+            } catch (e) {}
+
+            currentPlanData = null;
+            currentRequestPayload = null;
+            aiForm.reset();
+            allergyChips.forEach(chip => chip.classList.remove('selected'));
+            if (btnMetric) btnMetric.click();
+
+            resultsContainer.innerHTML = `
+                <div class="results-placeholder">
+                    <div class="icon-placeholder" aria-hidden="true">
+                        <ion-icon name="speedometer-outline"></ion-icon>
+                    </div>
+                    <h3>Ready for Your Tailored Nutrition Plan &amp; BMI Analysis?</h3>
+                    <p>Adjust your biometric parameters above and tap "Generate 7-Day Personalized Plan" to calculate your validated BMI assessment, target calories, macronutrient split, and personal meal schedule.</p>
+                </div>
+            `;
+            showNotification('Form reset and saved plan cleared.', 'info');
+            window.scrollTo({ top: aiForm.offsetTop - 80, behavior: 'smooth' });
+        });
+    }
 
     // 1. Country & Region Dynamic Recommendations (Preserves independent cuisine selection)
     const countryPresets = {
@@ -256,8 +290,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             currentPlanData = plan;
             activeDayIndex = 0;
+            savePlanToStorage(requestPayload, currentUnitSystem, plan);
             renderCompleteDietPlan(plan);
-            showNotification('Your 7-day personalized plan is ready! 🥗', 'success');
+            showNotification('Your personalized diet plan & BMI analysis are ready! 🥗', 'success');
         } catch (err) {
             clearInterval(loaderInterval);
             console.error('Diet Planner error:', err);
@@ -333,6 +368,9 @@ document.addEventListener('DOMContentLoaded', () => {
         ` : '';
 
         resultsContainer.innerHTML = `
+            <!-- 1. Biometric Validation & Authoritative BMI Assessment Card -->
+            ${renderBmiAssessmentCard(plan)}
+
             <div class="results-header">
                 <div>
                     <h2 style="margin:0; font-size:1.55rem; color:var(--text-primary); font-family:var(--font-heading);">
@@ -361,27 +399,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
 
-            <!-- Authoritative Deterministic Macro Dashboard -->
-            <div class="macro-dashboard">
-                <div class="macro-box">
-                    <span class="macro-label">Daily Target</span>
-                    <div class="macro-value">${bio.targetCalories}</div>
-                    <div class="macro-unit" style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">kcal / day (TDEE: ${bio.tdee})</div>
+            <!-- Minimalist Macro Nutrition Split Bar -->
+            <div class="macro-minimal-section">
+                <div class="macro-bar-wrap">
+                    <div class="macro-bar">
+                        <div class="macro-seg seg-protein" style="width: ${proteinCalPct}%;" title="Protein: ${bio.proteinGrams}g (${proteinCalPct}%)"></div>
+                        <div class="macro-seg seg-carbs" style="width: ${carbsCalPct}%;" title="Carbohydrates: ${bio.carbsGrams}g (${carbsCalPct}%)"></div>
+                        <div class="macro-seg seg-fats" style="width: ${fatCalPct}%;" title="Fats: ${bio.fatGrams}g (${fatCalPct}%)"></div>
+                    </div>
                 </div>
-                <div class="macro-box">
-                    <span class="macro-label">Protein</span>
-                    <div class="macro-value">${bio.proteinGrams}g</div>
-                    <div class="macro-unit" style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">${proteinCalPct}% energy</div>
-                </div>
-                <div class="macro-box">
-                    <span class="macro-label">Carbohydrates</span>
-                    <div class="macro-value">${bio.carbsGrams}g</div>
-                    <div class="macro-unit" style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">${carbsCalPct}% energy</div>
-                </div>
-                <div class="macro-box">
-                    <span class="macro-label">Healthy Fats</span>
-                    <div class="macro-value">${bio.fatGrams}g</div>
-                    <div class="macro-unit" style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">${fatCalPct}% energy</div>
+                <div class="macro-legend-row">
+                    <div class="macro-legend-item">
+                        <span class="legend-dot dot-cal"></span>
+                        <span class="legend-name">Daily Target:</span>
+                        <strong>${bio.targetCalories} kcal</strong>
+                        <span class="legend-sub">(TDEE ${bio.tdee})</span>
+                    </div>
+                    <div class="macro-legend-item">
+                        <span class="legend-dot dot-protein"></span>
+                        <span class="legend-name">Protein:</span>
+                        <strong>${bio.proteinGrams}g</strong>
+                        <span class="legend-pct">(${proteinCalPct}%)</span>
+                    </div>
+                    <div class="macro-legend-item">
+                        <span class="legend-dot dot-carbs"></span>
+                        <span class="legend-name">Carbs:</span>
+                        <strong>${bio.carbsGrams}g</strong>
+                        <span class="legend-pct">(${carbsCalPct}%)</span>
+                    </div>
+                    <div class="macro-legend-item">
+                        <span class="legend-dot dot-fats"></span>
+                        <span class="legend-name">Fats:</span>
+                        <strong>${bio.fatGrams}g</strong>
+                        <span class="legend-pct">(${fatCalPct}%)</span>
+                    </div>
                 </div>
             </div>
 
@@ -589,6 +640,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (currentPlanData.days[activeDayIndex] && currentPlanData.days[activeDayIndex].meals[mealIdx]) {
                         currentPlanData.days[activeDayIndex].meals[mealIdx] = newMeal;
 
+                        // Persist updated plan with swapped meal
+                        savePlanToStorage(currentRequestPayload, currentUnitSystem, currentPlanData);
+
                         // Re-render day meals
                         const mealsContainer = document.getElementById('mealsContainer');
                         if (mealsContainer) {
@@ -624,6 +678,234 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // 7. Render Authoritative Minimalist BMI Assessment Card
+    function renderBmiAssessmentCard(plan) {
+        const bio = plan.nutrition || {};
+        let bmi = typeof bio.bmi === 'number' && bio.bmi > 0 ? bio.bmi : null;
+        let bmiCategory = bio.bmiCategory || '';
+
+        // Fallback calculation if not provided by backend
+        if (!bmi) {
+            let w = currentRequestPayload?.weightKg || parseFloat(weightInput?.value) || 70;
+            let h = currentRequestPayload?.heightCm || parseFloat(heightInput?.value) || 175;
+            if (currentUnitSystem === 'imperial') {
+                w = w * 0.453592;
+                h = h * 2.54;
+            }
+            if (w > 0 && h > 0) {
+                const hm = h / 100;
+                bmi = Math.round((w / (hm * hm)) * 10) / 10;
+            } else {
+                bmi = 22.9;
+            }
+        }
+
+        if (!bmiCategory) {
+            if (bmi < 18.5) bmiCategory = 'Underweight';
+            else if (bmi < 25.0) bmiCategory = 'Normal Weight';
+            else if (bmi < 30.0) bmiCategory = 'Overweight';
+            else bmiCategory = 'Obese';
+        }
+
+        let categoryClass = 'normal';
+        let dotColor = '#10B981';
+        if (bmi < 18.5) { categoryClass = 'underweight'; dotColor = '#3B82F6'; }
+        else if (bmi < 25.0) { categoryClass = 'normal'; dotColor = '#10B981'; }
+        else if (bmi < 30.0) { categoryClass = 'overweight'; dotColor = '#F59E0B'; }
+        else { categoryClass = 'obese'; dotColor = '#EF4444'; }
+
+        // Scale marker position across 14 to 36 BMI range
+        let meterPercent = Math.min(97, Math.max(3, ((bmi - 14) / 22) * 100));
+
+        // Healthy weight range display string
+        const healthyRangeStr = currentUnitSystem === 'imperial' && bio.healthyWeightRangeLbs
+            ? bio.healthyWeightRangeLbs
+            : (bio.healthyWeightRangeKg || '18.5 – 24.9 BMI');
+
+        const goalLabel = bio.goalLabel || 'Optimal Health & Vitality';
+        const weightDisplay = currentUnitSystem === 'imperial'
+            ? `${Math.round((currentRequestPayload?.weightKg || 70) * 2.20462)} lbs`
+            : `${currentRequestPayload?.weightKg || 70} kg`;
+        const heightDisplay = currentUnitSystem === 'imperial'
+            ? `${Math.round((currentRequestPayload?.heightCm || 175) / 2.54)} in`
+            : `${currentRequestPayload?.heightCm || 175} cm`;
+
+        let insightAdvice = '';
+        if (bmi < 18.5) {
+            insightAdvice = `Your validated BMI indicates you are in the <strong>Underweight</strong> spectrum. Calibrated with nutrient-dense complex foods for safe mass increase.`;
+        } else if (bmi < 25.0) {
+            insightAdvice = `Your validated BMI is in the <strong>Healthy Weight</strong> range. Calibrated specifically to sustain energy and hit your <strong>${escapeHtml(goalLabel)}</strong> goal.`;
+        } else if (bmi < 30.0) {
+            insightAdvice = `Your validated BMI indicates you are in the <strong>Overweight</strong> spectrum. Calibrated with high-satiety fiber and a safe metabolic deficit.`;
+        } else {
+            insightAdvice = `Your validated BMI falls in the <strong>Obese</strong> category. Calibrated with anti-inflammatory staples and structured portion pacing for cardiovascular health.`;
+        }
+
+        return `
+            <div class="bmi-minimal-card" id="bmiAssessmentCard">
+                <div class="bmi-minimal-topbar">
+                    <div class="bmi-topbar-left">
+                        <span class="bmi-title-label">Biometric Analysis</span>
+                        <span class="bmi-verified-badge"><span class="badge-dot" style="background:${dotColor}"></span> Validated Baseline</span>
+                    </div>
+                    <div class="bmi-healthy-tag">
+                        <span>Healthy Range: <strong>${escapeHtml(healthyRangeStr)}</strong></span>
+                    </div>
+                </div>
+
+                <!-- Main Score & Spectrum Row -->
+                <div class="bmi-minimal-hero">
+                    <div class="bmi-hero-digits">
+                        <div class="bmi-num-wrap">
+                            <span class="bmi-num">${bmi.toFixed(1)}</span>
+                            <span class="bmi-unit-sub">kg/m²</span>
+                        </div>
+                        <span class="bmi-pill-badge category-${categoryClass}">
+                            <span class="pill-dot"></span>
+                            ${escapeHtml(bmiCategory)}
+                        </span>
+                    </div>
+
+                    <div class="bmi-hero-gauge">
+                        <div class="bmi-gauge-track" role="meter" aria-valuenow="${bmi.toFixed(1)}" aria-valuemin="14" aria-valuemax="36" aria-label="BMI spectrum gauge">
+                            <div class="gauge-marker" style="left: ${meterPercent.toFixed(1)}%;" title="Your BMI: ${bmi.toFixed(1)}">
+                                <div class="gauge-marker-pin"></div>
+                                <span class="gauge-marker-bubble">${bmi.toFixed(1)}</span>
+                            </div>
+                        </div>
+                        <div class="bmi-gauge-scale">
+                            <span>&lt;18.5 Under</span>
+                            <span>18.5–24.9 Normal</span>
+                            <span>25–29.9 Over</span>
+                            <span>&ge;30 Obese</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seamless Minimal Stat Ribbon -->
+                <div class="bmi-ribbon">
+                    <div class="ribbon-col">
+                        <span class="ribbon-label">Basal Metabolic Rate</span>
+                        <div class="ribbon-value">${bio.bmr || '--'} <span class="ribbon-unit">kcal</span></div>
+                        <span class="ribbon-sub">Resting energy</span>
+                    </div>
+                    <div class="ribbon-col">
+                        <span class="ribbon-label">Active Burn (TDEE)</span>
+                        <div class="ribbon-value">${bio.tdee || '--'} <span class="ribbon-unit">kcal</span></div>
+                        <span class="ribbon-sub">Daily expenditure</span>
+                    </div>
+                    <div class="ribbon-col highlight">
+                        <span class="ribbon-label">Target Intake</span>
+                        <div class="ribbon-value">${bio.targetCalories || '--'} <span class="ribbon-unit">kcal</span></div>
+                        <span class="ribbon-sub">${escapeHtml(goalLabel)}</span>
+                    </div>
+                    <div class="ribbon-col">
+                        <span class="ribbon-label">Hydration</span>
+                        <div class="ribbon-value">${bio.hydrationLiters || bio.waterLiters || '2.5'} <span class="ribbon-unit">L</span></div>
+                        <span class="ribbon-sub">~${bio.hydrationOz || bio.waterOz || '84'} fl oz</span>
+                    </div>
+                </div>
+
+                <!-- Minimal Insight Line -->
+                <div class="bmi-minimal-insight">
+                    <ion-icon name="sparkles-outline"></ion-icon>
+                    <p><strong>${escapeHtml(weightDisplay)}, ${escapeHtml(heightDisplay)}:</strong> ${insightAdvice}</p>
+                </div>
+            </div>
+        `;
+    }
+
+    // 8. Storage Persistence Helpers
+    function savePlanToStorage(requestPayload, unitSystem, plan) {
+        try {
+            localStorage.setItem(STORAGE_KEY_INPUTS, JSON.stringify(requestPayload));
+            localStorage.setItem(STORAGE_KEY_UNIT, unitSystem);
+            localStorage.setItem(STORAGE_KEY_PLAN, JSON.stringify(plan));
+        } catch (e) {
+            console.warn('Unable to persist diet plan to localStorage', e);
+        }
+    }
+
+    function restoreSavedPlanIfAvailable() {
+        try {
+            const savedPlanRaw = localStorage.getItem(STORAGE_KEY_PLAN);
+            if (!savedPlanRaw) return;
+
+            const plan = JSON.parse(savedPlanRaw);
+            if (!plan || !plan.days || plan.days.length === 0) return;
+
+            const savedUnit = localStorage.getItem(STORAGE_KEY_UNIT);
+            const savedInputsRaw = localStorage.getItem(STORAGE_KEY_INPUTS);
+
+            // Restore Unit System
+            if (savedUnit && savedUnit !== currentUnitSystem) {
+                if (savedUnit === 'imperial' && btnImperial) {
+                    btnImperial.click();
+                } else if (savedUnit === 'metric' && btnMetric) {
+                    btnMetric.click();
+                }
+            }
+
+            // Restore Input Fields if available
+            if (savedInputsRaw) {
+                const inputs = JSON.parse(savedInputsRaw);
+                currentRequestPayload = inputs;
+
+                if (inputs.age && document.querySelector('#age')) document.querySelector('#age').value = inputs.age;
+                if (inputs.gender && document.querySelector('#gender')) document.querySelector('#gender').value = inputs.gender;
+
+                if (currentUnitSystem === 'imperial') {
+                    if (inputs.weightKg && weightInput) weightInput.value = Math.round(inputs.weightKg * 2.20462);
+                    if (inputs.heightCm && heightInput) heightInput.value = Math.round(inputs.heightCm / 2.54);
+                } else {
+                    if (inputs.weightKg && weightInput) weightInput.value = inputs.weightKg;
+                    if (inputs.heightCm && heightInput) heightInput.value = inputs.heightCm;
+                }
+
+                if (inputs.country && countrySelect) countrySelect.value = inputs.country;
+                if (inputs.region && regionInput) regionInput.value = inputs.region;
+                if (inputs.goal && document.querySelector('#goal')) document.querySelector('#goal').value = inputs.goal;
+                if (inputs.activity && document.querySelector('#activity')) document.querySelector('#activity').value = inputs.activity;
+                if (inputs.diet && document.querySelector('#diet')) document.querySelector('#diet').value = inputs.diet;
+                if (inputs.cuisine && cuisineSelect) cuisineSelect.value = inputs.cuisine;
+                if (inputs.mealCount && mealCountSelect) mealCountSelect.value = inputs.mealCount;
+                if (inputs.maxCookingTimeMinutes && document.querySelector('#maxCookingTime')) {
+                    document.querySelector('#maxCookingTime').value = inputs.maxCookingTimeMinutes;
+                }
+                if (inputs.budget && document.querySelector('#budget')) {
+                    document.querySelector('#budget').value = inputs.budget;
+                }
+                if (inputs.cookingSkill && document.querySelector('#cookingSkill')) {
+                    document.querySelector('#cookingSkill').value = inputs.cookingSkill;
+                }
+                if (inputs.favoriteFoods && document.querySelector('#favoriteFoods')) {
+                    document.querySelector('#favoriteFoods').value = Array.isArray(inputs.favoriteFoods) ? inputs.favoriteFoods.join(', ') : inputs.favoriteFoods;
+                }
+                if (inputs.foodsToAvoid && document.querySelector('#foodsToAvoid')) {
+                    document.querySelector('#foodsToAvoid').value = Array.isArray(inputs.foodsToAvoid) ? inputs.foodsToAvoid.join(', ') : inputs.foodsToAvoid;
+                }
+
+                // Restore Allergies chips
+                if (inputs.allergies && Array.isArray(inputs.allergies)) {
+                    allergyChips.forEach(chip => {
+                        const val = chip.getAttribute('data-value');
+                        if (inputs.allergies.includes(val)) {
+                            chip.classList.add('selected');
+                        } else {
+                            chip.classList.remove('selected');
+                        }
+                    });
+                }
+            }
+
+            currentPlanData = plan;
+            activeDayIndex = 0;
+            renderCompleteDietPlan(plan);
+        } catch (e) {
+            console.error('Error restoring saved diet plan:', e);
+        }
+    }
+
     function escapeHtml(str) {
         if (!str) return '';
         return String(str)
@@ -633,4 +915,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .replace(/"/g, '&quot;')
             .replace(/'/g, '&#39;');
     }
+
+    // 9. Initial Load Check: Restore saved plan if available after page refresh
+    restoreSavedPlanIfAvailable();
 });

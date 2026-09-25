@@ -87,6 +87,25 @@ public class NutritionCalculatorService : INutritionCalculatorService
         double waterLiters = Math.Round(weightKg * 0.035, 1);
         int waterOz = (int)Math.Round(weightKg * 0.035 * 33.814);
 
+        // 7. BMI & Healthy Weight Range
+        double heightM = heightCm / 100.0;
+        double bmi = Math.Round(weightKg / (heightM * heightM), 1);
+        string bmiCategory = bmi switch
+        {
+            < 18.5 => "Underweight",
+            < 25.0 => "Normal Weight",
+            < 30.0 => "Overweight",
+            _ => "Obese"
+        };
+
+        double minHealthyKg = Math.Round(18.5 * heightM * heightM, 1);
+        double maxHealthyKg = Math.Round(24.9 * heightM * heightM, 1);
+        string healthyKgStr = $"{minHealthyKg} - {maxHealthyKg} kg";
+
+        double minHealthyLbs = Math.Round(minHealthyKg * 2.20462, 0);
+        double maxHealthyLbs = Math.Round(maxHealthyKg * 2.20462, 0);
+        string healthyLbsStr = $"{minHealthyLbs} - {maxHealthyLbs} lbs";
+
         return new NutritionTargetsDto
         {
             Bmr = (int)Math.Round(bmr),
@@ -97,7 +116,11 @@ public class NutritionCalculatorService : INutritionCalculatorService
             FatGrams = fatGrams,
             HydrationLiters = waterLiters,
             HydrationOz = waterOz,
-            GoalLabel = goalLabel
+            GoalLabel = goalLabel,
+            Bmi = bmi,
+            BmiCategory = bmiCategory,
+            HealthyWeightRangeKg = healthyKgStr,
+            HealthyWeightRangeLbs = healthyLbsStr
         };
     }
 

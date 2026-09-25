@@ -135,4 +135,29 @@ public class NutritionCalculatorServiceTests
         Assert.True(targets.Bmr > 0);
         Assert.True(targets.TargetCalories >= 1200);
     }
+
+    [Theory]
+    [InlineData(50, 175, 16.3, "Underweight")]
+    [InlineData(70, 175, 22.9, "Normal Weight")]
+    [InlineData(85, 175, 27.8, "Overweight")]
+    [InlineData(105, 175, 34.3, "Obese")]
+    public void CalculateTargets_ComputesAuthoritativeBmiAndCategories(double weightKg, double heightCm, double expectedBmi, string expectedCategory)
+    {
+        var request = new DietPlanRequest
+        {
+            Age = 25,
+            Gender = "male",
+            WeightKg = weightKg,
+            HeightCm = heightCm,
+            ActivityLevel = "moderate",
+            Goal = "maintenance"
+        };
+
+        var targets = _calculator.CalculateTargets(request);
+
+        Assert.Equal(expectedBmi, targets.Bmi);
+        Assert.Equal(expectedCategory, targets.BmiCategory);
+        Assert.False(string.IsNullOrWhiteSpace(targets.HealthyWeightRangeKg));
+        Assert.False(string.IsNullOrWhiteSpace(targets.HealthyWeightRangeLbs));
+    }
 }

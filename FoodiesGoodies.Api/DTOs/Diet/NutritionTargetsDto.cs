@@ -30,4 +30,16 @@ public class NutritionTargetsDto
 
     [JsonPropertyName("goalLabel")]
     public string GoalLabel { get; set; } = string.Empty;
+
+    [JsonPropertyName("bmi")]
+    public double Bmi { get; set; }
+
+    [JsonPropertyName("bmiCategory")]
+    public string BmiCategory { get; set; } = string.Empty;
+
+    [JsonPropertyName("healthyWeightRangeKg")]
+    public string HealthyWeightRangeKg { get; set; } = string.Empty;
+
+    [JsonPropertyName("healthyWeightRangeLbs")]
+    public string HealthyWeightRangeLbs { get; set; } = string.Empty;
 }
