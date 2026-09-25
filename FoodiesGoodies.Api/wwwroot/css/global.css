@@ -698,13 +698,17 @@ html.theme-lighting-transition *::after {
    Small Vintage Pendant Bulb (Responsive Mobile / Tablet Luminaire)
    Replaces the long horizontal tubelight on viewports <= 992px
    -------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------
+   Small Vintage Pendant Bulb (Responsive Mobile / Tablet Luminaire)
+   Replaces the long horizontal tubelight on viewports <= 992px
+   -------------------------------------------------------------------------- */
 .navbar-bulb-fixture {
   display: none;
   flex-direction: column;
   align-items: center;
   position: relative;
   width: 32px;
-  height: 48px;
+  height: 50px;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   pointer-events: auto;
@@ -726,183 +730,191 @@ html.theme-lighting-transition *::after {
   border-radius: var(--radius-sm);
 }
 
-/* Ceiling rosette */
-.navbar-bulb-fixture .bulb-rosette {
-  width: 12px;
-  height: 3px;
-  background: radial-gradient(ellipse at 50% 30%, #F7E7A9 0%, #D4AF37 40%, #8C6D37 75%, #4A3515 100%);
-  border-radius: 0 0 3px 3px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
-}
-
-/* Braided cord */
-.navbar-bulb-fixture .bulb-wire {
-  width: 1.5px;
-  height: 9px;
-  background: linear-gradient(180deg, #F7E7A9 0%, #D4AF37 30%, #8C6D37 70%, #5A451E 100%);
-  box-shadow: 0.5px 0 1px rgba(0, 0, 0, 0.25);
-}
-
-/* Antique brass screw socket */
-.navbar-bulb-fixture .bulb-socket {
-  width: 9px;
-  height: 6px;
-  background: linear-gradient(90deg, 
-    #3D2A10 0%, 
-    #694C1D 15%, 
-    #B38F39 35%, 
-    #F3E5AB 50%, 
-    #B38F39 65%, 
-    #694C1D 85%, 
-    #3D2A10 100%
-  );
-  border-radius: 2px 2px 1px 1px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
-  position: relative;
-  z-index: 2;
-}
-
-/* Edison glass teardrop contour */
-.navbar-bulb-fixture .bulb-glass {
-  position: relative;
-  width: 18px;
-  height: 24px;
-  margin-top: -1px;
-  border-radius: 50% 50% 40% 40% / 60% 60% 35% 35%;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow: hidden;
-  z-index: 1;
-}
-
-/* Glass specular gleam */
-.navbar-bulb-fixture .bulb-specular {
-  position: absolute;
-  top: 4px;
-  left: 3px;
-  width: 3.5px;
-  height: 7px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.65);
-  transform: rotate(-25deg);
-  pointer-events: none;
-  z-index: 4;
-}
-
-/* Filament loop */
-.navbar-bulb-fixture .bulb-filament {
-  position: absolute;
-  top: 4px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 7px;
-  height: 11px;
-  border: 1.4px solid;
-  border-bottom: none;
-  border-radius: 4px 4px 0 0;
-  transition: all 0.35s ease;
-  z-index: 3;
-}
-
-/* Warm ambient halo */
-.navbar-bulb-fixture .bulb-halo {
+/* --------------------------------------------------------------------------
+   SMOOTH LIGHT AURA & AMBIENT WASH (Silky, Feather-Soft 360° Light Bath)
+   -------------------------------------------------------------------------- */
+/* Smooth 360° feather-soft radial light halo centered on the bulb globe */
+.navbar-bulb-fixture .bulb-smooth-aura {
   position: absolute;
   top: 14px;
   left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 45px;
-  background: radial-gradient(ellipse at 50% 20%, rgba(251, 191, 36, 0.45) 0%, rgba(245, 158, 11, 0.2) 45%, transparent 75%);
+  transform: translateX(-50%) scale(0.9);
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, 
+    rgba(255, 245, 180, 0.70) 0%, 
+    rgba(254, 215, 90, 0.45) 28%, 
+    rgba(245, 158, 11, 0.22) 52%, 
+    rgba(217, 119, 6, 0.08) 72%, 
+    transparent 100%
+  );
+  filter: blur(8px);
   pointer-events: none;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 0;
+  opacity: 0;
+}
+
+/* Wide atmospheric light bloom cast downward onto the navbar */
+.navbar-bulb-fixture .bulb-smooth-wash {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 20%, 
+    rgba(254, 240, 138, 0.42) 0%, 
+    rgba(245, 158, 11, 0.20) 40%, 
+    rgba(217, 119, 6, 0.06) 65%, 
+    transparent 100%
+  );
+  filter: blur(12px);
+  pointer-events: none;
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 0;
   opacity: 0;
 }
 
 /* --------------------------------------------------------------------------
-   LIGHT THEME STATE (Bulb Powered On - Warm Incandescent Glow)
+   AUTHENTIC VECTOR LIGHT BULB (SVG)
    -------------------------------------------------------------------------- */
-[data-theme="light"] .navbar-tubelight .bulb-glass,
-.navbar-tubelight.is-on .bulb-glass {
-  background: radial-gradient(circle at 50% 35%, 
-    rgba(255, 255, 245, 0.98) 0%, 
-    rgba(254, 240, 138, 0.92) 40%, 
-    rgba(245, 158, 11, 0.82) 75%, 
-    rgba(217, 119, 6, 0.88) 100%
-  );
-  box-shadow: 
-    0 0 10px 2px rgba(251, 191, 36, 0.8),
-    0 0 24px 6px rgba(245, 158, 11, 0.45),
-    inset 0 0 4px rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(255, 248, 220, 0.85);
+.navbar-bulb-fixture .bulb-svg {
+  position: relative;
+  width: 32px;
+  height: 50px;
+  z-index: 2;
+  overflow: visible;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
+  transition: filter 0.4s ease;
 }
 
-[data-theme="light"] .navbar-tubelight .bulb-filament,
-.navbar-tubelight.is-on .bulb-filament {
-  border-color: #fffdf5;
-  box-shadow: 0 0 6px 1.5px #ffb703, inset 0 0 3px #ff9800;
-}
-
-[data-theme="light"] .navbar-tubelight .bulb-halo,
-.navbar-tubelight.is-on .bulb-halo {
+/* In Light Mode: Smooth Light is fully radiant and warm */
+[data-theme="light"] .navbar-tubelight .bulb-smooth-aura,
+.navbar-tubelight.is-on .bulb-smooth-aura {
   opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+[data-theme="light"] .navbar-tubelight .bulb-smooth-wash,
+.navbar-tubelight.is-on .bulb-smooth-wash {
+  opacity: 1;
+}
+
+[data-theme="light"] .navbar-tubelight .bulb-svg-glass,
+.navbar-tubelight.is-on .bulb-svg-glass {
+  fill: url(#bulbGlassLightGrad);
+  stroke: rgba(255, 248, 220, 0.9);
+  stroke-width: 0.9;
+  filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.85)) drop-shadow(0 0 16px rgba(245, 158, 11, 0.45));
+  transition: all 0.45s ease;
+}
+
+[data-theme="light"] .navbar-tubelight .bulb-svg-filament,
+.navbar-tubelight.is-on .bulb-svg-filament {
+  stroke: #FFFDF5;
+  stroke-width: 1.4;
+  filter: drop-shadow(0 0 3px #FFB703) drop-shadow(0 0 6px #FF9800);
+  transition: all 0.35s ease;
+}
+
+[data-theme="light"] .navbar-tubelight .bulb-svg-stem {
+  fill: rgba(255, 255, 255, 0.65);
+}
+
+[data-theme="light"] .navbar-tubelight .bulb-svg-lead-wires {
+  stroke: rgba(255, 220, 140, 0.8);
+}
+
+[data-theme="light"] .navbar-tubelight .bulb-svg-specular {
+  stroke-opacity: 0.9;
 }
 
 /* --------------------------------------------------------------------------
    DARK THEME STATE (Bulb Powered Off - Smoked Vintage Glass)
    -------------------------------------------------------------------------- */
-[data-theme="dark"] .navbar-tubelight .bulb-glass,
-.navbar-tubelight.is-off .bulb-glass {
-  background: radial-gradient(circle at 50% 35%, 
-    rgba(55, 45, 35, 0.35) 0%, 
-    rgba(30, 24, 18, 0.6) 65%, 
-    rgba(18, 14, 10, 0.85) 100%
-  );
-  box-shadow: 
-    inset 0 1px 2px rgba(255, 255, 255, 0.12),
-    0 1px 3px rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(160, 130, 95, 0.25);
-}
-
-[data-theme="dark"] .navbar-tubelight .bulb-filament,
-.navbar-tubelight.is-off .bulb-filament {
-  border-color: rgba(160, 130, 95, 0.3);
-  box-shadow: none;
-}
-
-[data-theme="dark"] .navbar-tubelight .bulb-halo,
-.navbar-tubelight.is-off .bulb-halo {
+[data-theme="dark"] .navbar-tubelight .bulb-smooth-aura,
+.navbar-tubelight.is-off .bulb-smooth-aura,
+[data-theme="dark"] .navbar-tubelight .bulb-smooth-wash,
+.navbar-tubelight.is-off .bulb-smooth-wash {
   opacity: 0;
+  transform: translateX(-50%) scale(0.85);
+}
+
+[data-theme="dark"] .navbar-tubelight .bulb-svg-glass,
+.navbar-tubelight.is-off .bulb-svg-glass {
+  fill: url(#bulbGlassDarkGrad);
+  stroke: rgba(160, 130, 95, 0.35);
+  stroke-width: 0.8;
+  filter: none;
+  transition: all 0.45s ease;
+}
+
+[data-theme="dark"] .navbar-tubelight .bulb-svg-filament,
+.navbar-tubelight.is-off .bulb-svg-filament {
+  stroke: rgba(160, 130, 95, 0.45);
+  stroke-width: 1.1;
+  filter: none;
+  transition: all 0.35s ease;
+}
+
+[data-theme="dark"] .navbar-tubelight .bulb-svg-stem {
+  fill: rgba(60, 50, 40, 0.6);
+}
+
+[data-theme="dark"] .navbar-tubelight .bulb-svg-lead-wires {
+  stroke: rgba(140, 110, 80, 0.4);
+}
+
+[data-theme="dark"] .navbar-tubelight .bulb-svg-specular {
+  stroke-opacity: 0.35;
 }
 
 /* --------------------------------------------------------------------------
    IGNITION FLICKER ANIMATION (Authentic Strike on Light Mode Activation)
    -------------------------------------------------------------------------- */
-.navbar-tubelight.is-igniting .bulb-glass {
-  animation: bulbIgniteStrike 0.54s steps(1, end) forwards;
+.navbar-tubelight.is-igniting .bulb-svg-glass {
+  animation: bulbSvgGlassStrike 0.54s steps(1, end) forwards;
 }
 
-.navbar-tubelight.is-igniting .bulb-filament {
-  animation: bulbFilamentStrike 0.54s steps(1, end) forwards;
+.navbar-tubelight.is-igniting .bulb-svg-filament {
+  animation: bulbSvgFilamentStrike 0.54s steps(1, end) forwards;
 }
 
-@keyframes bulbIgniteStrike {
-  0%   { background: rgba(45, 35, 25, 0.5); box-shadow: none; }
-  12%  { background: rgba(254, 240, 138, 0.95); box-shadow: 0 0 16px rgba(251, 191, 36, 0.9); }
-  22%  { background: rgba(45, 35, 25, 0.4); box-shadow: none; }
-  34%  { background: rgba(254, 240, 138, 0.95); box-shadow: 0 0 20px rgba(251, 191, 36, 0.95); }
-  46%  { background: rgba(217, 119, 6, 0.6); box-shadow: 0 0 6px rgba(245, 158, 11, 0.4); }
-  60%  { background: radial-gradient(circle at 50% 35%, rgba(255,255,245,0.98), rgba(245,158,11,0.85)); box-shadow: 0 0 12px rgba(251,191,36,0.8); }
-  100% { background: radial-gradient(circle at 50% 35%, rgba(255,255,245,0.98), rgba(245,158,11,0.85)); box-shadow: 0 0 12px rgba(251,191,36,0.8); }
+.navbar-tubelight.is-igniting .bulb-smooth-aura {
+  animation: bulbAuraStrike 0.54s steps(1, end) forwards;
 }
 
-@keyframes bulbFilamentStrike {
-  0%   { border-color: rgba(160, 130, 95, 0.3); box-shadow: none; }
-  12%  { border-color: #fff; box-shadow: 0 0 8px #ffb703; }
-  22%  { border-color: rgba(160, 130, 95, 0.3); box-shadow: none; }
-  34%  { border-color: #fff; box-shadow: 0 0 10px #ffb703; }
-  46%  { border-color: #ff9800; box-shadow: 0 0 4px #ff9800; }
-  60%  { border-color: #fffdf5; box-shadow: 0 0 6px #ffb703; }
-  100% { border-color: #fffdf5; box-shadow: 0 0 6px #ffb703; }
+@keyframes bulbSvgGlassStrike {
+  0%   { fill: url(#bulbGlassDarkGrad); filter: none; }
+  12%  { fill: url(#bulbGlassLightGrad); filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.9)); }
+  22%  { fill: url(#bulbGlassDarkGrad); filter: none; }
+  34%  { fill: url(#bulbGlassLightGrad); filter: drop-shadow(0 0 18px rgba(251, 191, 36, 0.95)); }
+  46%  { fill: url(#bulbGlassDarkGrad); filter: none; }
+  60%  { fill: url(#bulbGlassLightGrad); filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.85)); }
+  100% { fill: url(#bulbGlassLightGrad); filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.85)); }
+}
+
+@keyframes bulbSvgFilamentStrike {
+  0%   { stroke: rgba(160, 130, 95, 0.45); filter: none; }
+  12%  { stroke: #FFFFFF; filter: drop-shadow(0 0 6px #FFB703); }
+  22%  { stroke: rgba(160, 130, 95, 0.45); filter: none; }
+  34%  { stroke: #FFFFFF; filter: drop-shadow(0 0 8px #FFB703); }
+  46%  { stroke: rgba(160, 130, 95, 0.45); filter: none; }
+  60%  { stroke: #FFFDF5; filter: drop-shadow(0 0 4px #FFB703); }
+  100% { stroke: #FFFDF5; filter: drop-shadow(0 0 4px #FFB703); }
+}
+
+@keyframes bulbAuraStrike {
+  0%   { opacity: 0; }
+  12%  { opacity: 0.9; }
+  22%  { opacity: 0.1; }
+  34%  { opacity: 1; }
+  46%  { opacity: 0.2; }
+  60%  { opacity: 1; }
+  100% { opacity: 1; }
 }
 
 /* --------------------------------------------------------------------------
@@ -934,8 +946,8 @@ html.theme-lighting-transition *::after {
 
   /* Compact top-center container for small bulb */
   .navbar-tubelight {
-    width: 44px !important;
-    height: 48px !important;
+    width: 48px !important;
+    height: 52px !important;
     top: 0 !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
@@ -945,6 +957,7 @@ html.theme-lighting-transition *::after {
     display: flex !important;
     align-items: center !important;
     justify-content: flex-start !important;
+    overflow: visible !important;
   }
 
   /* SHOW the small hanging vintage bulb */
