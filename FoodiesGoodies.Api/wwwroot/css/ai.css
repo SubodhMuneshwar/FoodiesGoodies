@@ -552,3 +552,554 @@ body {
     text-align: center;
   }
 }
+
+/* --------------------------------------------------------------------------
+   Cultural Food Heritage & Enhanced Form Controls
+   -------------------------------------------------------------------------- */
+.label-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.label-with-icon ion-icon {
+  color: var(--primary);
+  font-size: 1.05rem;
+}
+
+.form-helper-text {
+  display: block;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin-top: 5px;
+}
+
+/* Allergy & Dietary Restriction Multi-Select Chips */
+.allergy-chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 6px;
+}
+
+.allergy-chip {
+  padding: 6px 12px;
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.allergy-chip:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.allergy-chip.selected {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #FFFFFF;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(194, 112, 58, 0.25);
+}
+
+/* AI Dual Engine Status & Key Settings */
+.ai-engine-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-bottom: 16px;
+}
+
+.engine-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.engine-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.engine-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #10B981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+  animation: enginePulse 2s infinite ease-in-out;
+}
+
+@keyframes enginePulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 0.75;
+  }
+}
+
+.engine-subtext {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.btn-toggle-key-drawer {
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  padding: 5px 11px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all var(--transition-fast);
+}
+
+.btn-toggle-key-drawer:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.api-key-drawer {
+  background: var(--bg-surface-elevated);
+  border: 1.5px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  margin-bottom: 16px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.api-key-field label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.api-key-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.api-key-input-row input {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 0.86rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xs);
+  color: var(--text-primary);
+}
+
+.btn-save-key {
+  padding: 8px 14px;
+  background: var(--primary);
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--radius-xs);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.btn-save-key:hover {
+  background: var(--primary-hover);
+}
+
+.api-key-help {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin-top: 6px;
+}
+
+.api-key-help a {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+/* --------------------------------------------------------------------------
+   Cultural Blueprint Results Display
+   -------------------------------------------------------------------------- */
+.source-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.gemini-badge {
+  background: rgba(37, 99, 235, 0.1);
+  color: #2563EB;
+  border: 1px solid rgba(37, 99, 235, 0.25);
+}
+
+[data-theme="dark"] .gemini-badge {
+  background: rgba(96, 165, 250, 0.15);
+  color: #93C5FD;
+  border-color: rgba(96, 165, 250, 0.3);
+}
+
+.cultural-engine-badge {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+[data-theme="dark"] .cultural-engine-badge {
+  background: rgba(52, 211, 153, 0.15);
+  color: #6EE7B7;
+  border-color: rgba(52, 211, 153, 0.3);
+}
+
+/* Cultural Philosophy Card */
+.cultural-header-card {
+  background: linear-gradient(135deg, rgba(194, 112, 58, 0.08), rgba(95, 111, 82, 0.08));
+  border: 1px solid rgba(194, 112, 58, 0.2);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+  margin-bottom: 22px;
+}
+
+.cultural-flag-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.cultural-flag {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.cultural-flag-row h3 {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.cultural-country-label {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+}
+
+.cultural-desc-text {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin: 0 0 10px 0;
+}
+
+.cultural-staples-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.staple-chip {
+  font-size: 0.74rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  padding: 3px 10px;
+  color: var(--text-muted);
+}
+
+.staple-chip strong {
+  color: var(--text-primary);
+}
+
+/* Enhanced Meal Card */
+.meal-item {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  padding: 18px 20px;
+  border-radius: var(--radius-md);
+  margin-bottom: 14px;
+  transition: all var(--transition-fast);
+}
+
+.meal-item:hover {
+  border-color: rgba(194, 112, 58, 0.4);
+  box-shadow: var(--shadow-sm);
+}
+
+.meal-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.meal-title-group h4 {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.meal-category-tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 2px;
+}
+
+.meal-cals-badge {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--primary);
+  background: var(--primary-subtle);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(194, 112, 58, 0.2);
+  white-space: nowrap;
+}
+
+.meal-desc {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0 0 10px 0;
+}
+
+.meal-macro-mini-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 10px;
+  background: var(--bg-surface);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.meal-macro-mini-row span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.meal-macro-mini-row strong {
+  color: var(--text-primary);
+}
+
+.meal-ingredients-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.ingredient-pill {
+  font-size: 0.74rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  padding: 2px 8px;
+  color: var(--text-secondary);
+}
+
+.meal-chef-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: rgba(194, 112, 58, 0.06);
+  border-left: 3px solid var(--primary);
+  padding: 8px 12px;
+  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.meal-chef-tip ion-icon {
+  color: var(--primary);
+  font-size: 1rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Categorized Grocery List */
+.grocery-basket-section {
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.grocery-basket-section h3 {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.grocery-basket-section h3 ion-icon {
+  color: var(--primary);
+}
+
+.grocery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.grocery-card {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+}
+
+.grocery-card-title {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.grocery-items-ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.grocery-items-ul li {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.grocery-items-ul li::before {
+  content: "•";
+  color: var(--primary);
+  font-weight: bold;
+}
+
+/* Digestive & Vitality Wisdom */
+.digestive-wisdom-box {
+  margin-top: 20px;
+  background: linear-gradient(135deg, rgba(95, 111, 82, 0.09), rgba(194, 112, 58, 0.06));
+  border: 1px solid rgba(95, 111, 82, 0.25);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.digestive-wisdom-box ion-icon {
+  color: var(--accent-olive);
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.digestive-wisdom-box p {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Print Stylesheet for Kitchen & Fridge */
+@media print {
+  .header,
+  .footer-mpa,
+  .ai-form-card,
+  .ai-hero-banner,
+  .medical-disclaimer-banner,
+  .ai-features-section,
+  .pro-paywall-card,
+  .btn-pdf-print,
+  .btn-upgrade-pro,
+  .btn-toggle-key-drawer,
+  .api-key-drawer {
+    display: none !important;
+  }
+
+  .ai-page-container {
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .ai-grid {
+    display: block !important;
+  }
+
+  .ai-results-card {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+
+  .meal-item {
+    page-break-inside: avoid;
+    border: 1px solid #ccc !important;
+  }
+}

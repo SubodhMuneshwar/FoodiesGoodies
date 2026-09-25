@@ -128,6 +128,14 @@ builder.Services.AddHttpClient<IRecipeService, RecipeService>(client =>
     client.DefaultRequestHeaders.Add("User-Agent", "FoodiesGoodies-Api/1.0");
 });
 
+// 4.1 Typed HttpClient for Google Gemini AI Dietician Agent
+builder.Services.Configure<GeminiOptions>(builder.Configuration.GetSection(GeminiOptions.SectionName));
+builder.Services.AddHttpClient<IAiDietService, GeminiDietAgentService>(client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(30);
+    client.DefaultRequestHeaders.Add("User-Agent", "FoodiesGoodies-AiAgent/1.0");
+});
+
 // 5. Application Services
 builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection(SmtpOptions.SectionName));
 builder.Services.AddScoped<IContactService, ContactService>();

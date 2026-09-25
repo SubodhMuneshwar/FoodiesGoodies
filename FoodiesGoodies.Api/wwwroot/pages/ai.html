@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/global.css?v=5.3">
-    <link rel="stylesheet" href="../css/ai.css">
+    <link rel="stylesheet" href="../css/ai.css?v=6.0">
     <link rel="icon" type="image/png" href="../assets/images/fav.png">
     <script src="../js/ambient-bg.js?v=4.1" defer></script>
 
@@ -210,13 +210,106 @@
                                 <option value="vegetarian">Vegetarian</option>
                                 <option value="vegan">100% Plant-Based / Vegan</option>
                                 <option value="keto">Low-Carb / Ketogenic</option>
+                                <option value="pescatarian">Pescatarian</option>
                             </select>
                         </div>
                     </div>
 
-                    <button type="submit" class="btn-generate-plan">
-                        <ion-icon name="flash" aria-hidden="true"></ion-icon>
-                        Generate AI Meal Plan
+                    <!-- Country & Food Culture Selector -->
+                    <div class="form-group-full">
+                        <label for="cuisineRegion" class="label-with-icon">
+                            <ion-icon name="earth-outline" aria-hidden="true"></ion-icon>
+                            Country &amp; Regional Food Culture
+                        </label>
+                        <select id="cuisineRegion" required>
+                            <optgroup label="🇮🇳 India (Authentic Regional Heritage)">
+                                <option value="india-pan">🇮🇳 Pan-Indian Balanced Thali (Dal, Roti, Sabzi, Dahi)</option>
+                                <option value="india-north" selected>🇮🇳 North Indian (Paneer, Chana, Dal Makhani/Tadka, Phulka)</option>
+                                <option value="india-south">🇮🇳 South Indian (Idli, Sambar, Rasam, Curd Rice, Ragi)</option>
+                                <option value="india-sattvic">🌿 Ayurvedic / Sattvic (Pure Veg, Mung Dal, Ghee, No Onion/Garlic)</option>
+                            </optgroup>
+                            <optgroup label="🇬🇷 🇮🇹 Mediterranean &amp; Southern Europe">
+                                <option value="mediterranean">🇬🇷 🇮🇹 Mediterranean Blue Zone (Olive Oil, Feta, Legumes, Wild Fish)</option>
+                            </optgroup>
+                            <optgroup label="🇯🇵 🇰🇷 East Asia (Longevity &amp; Fermentation)">
+                                <option value="japan">🇯🇵 Japanese Washoku (Miso, Steamed Salmon, Tofu, Dashi, Seaweed)</option>
+                                <option value="korea">🇰🇷 Korean Hansik (Kimchi, Fermented Doenjang, Brown Rice, Banchan)</option>
+                            </optgroup>
+                            <optgroup label="🇲🇽 Latin America">
+                                <option value="mexico">🇲🇽 Mexican Traditional (Black Beans, Salsa Verde, Corn, Avocado)</option>
+                            </optgroup>
+                            <optgroup label="🇱🇧 Middle East &amp; Levant">
+                                <option value="middle-east">🇱🇧 Middle Eastern (Hummus, Tahini, Lentils, Tabbouleh, Olive Oil)</option>
+                            </optgroup>
+                            <optgroup label="🇺🇸 North America">
+                                <option value="north-america">🇺🇸 American Farm-to-Table (Whole Grains, Lean Proteins, Greens)</option>
+                            </optgroup>
+                            <optgroup label="🌍 Global Modern">
+                                <option value="global">🌍 Global Superfood Fusion (Quinoa, Edamame, Avocado, Colorful Bowls)</option>
+                            </optgroup>
+                        </select>
+                        <span class="form-helper-text">Meals and recipes will be tailored to authentic cultural ingredients, staple grains, and traditional spices.</span>
+                    </div>
+
+                    <!-- Dietary Restrictions & Allergies Multi-Select Chips -->
+                    <div class="form-group-full">
+                        <label class="label-with-icon">
+                            <ion-icon name="shield-checkmark-outline" aria-hidden="true"></ion-icon>
+                            Dietary Exclusions &amp; Sensitivities (Optional)
+                        </label>
+                        <div class="allergy-chips-container" id="allergyChips" role="group" aria-label="Dietary exclusions">
+                            <button type="button" class="allergy-chip" data-value="Gluten-Free">🌾 Gluten-Free</button>
+                            <button type="button" class="allergy-chip" data-value="Dairy-Free">🥛 Dairy-Free</button>
+                            <button type="button" class="allergy-chip" data-value="Nut-Free">🥜 Nut-Free</button>
+                            <button type="button" class="allergy-chip" data-value="Jain">🙏 Jain (No Root Veg)</button>
+                            <button type="button" class="allergy-chip" data-value="Halal">🌙 Halal</button>
+                            <button type="button" class="allergy-chip" data-value="Kosher">✡️ Kosher</button>
+                            <button type="button" class="allergy-chip" data-value="Low-Sodium">🧂 Low-Sodium</button>
+                        </div>
+                    </div>
+
+                    <!-- Meal Cadence -->
+                    <div class="form-group-full">
+                        <label for="mealCount" class="label-with-icon">
+                            <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+                            Daily Meal Cadence
+                        </label>
+                        <select id="mealCount" required>
+                            <option value="4" selected>4 Meals (Breakfast, Lunch, Afternoon Fuel Snack, Dinner)</option>
+                            <option value="3">3 Meals (Breakfast, Lunch, Dinner)</option>
+                            <option value="2">2 Meals (Intermittent Fasting 16:8 Window)</option>
+                        </select>
+                    </div>
+
+                    <!-- AI Engine Settings & Drawer -->
+                    <div class="ai-engine-banner">
+                        <div class="engine-info">
+                            <span class="engine-badge-pill">
+                                <span class="engine-pulse-dot" aria-hidden="true"></span>
+                                Gemini 1.5 Flash + Cultural Engine
+                            </span>
+                            <span class="engine-subtext">Dual Engine Architecture</span>
+                        </div>
+                        <button type="button" class="btn-toggle-key-drawer" id="btnToggleKeyDrawer" aria-expanded="false" title="Configure custom Gemini API Key">
+                            <ion-icon name="key-outline"></ion-icon>
+                            <span>API Key</span>
+                        </button>
+                    </div>
+
+                    <div class="api-key-drawer" id="apiKeyDrawer" hidden>
+                        <div class="api-key-field">
+                            <label for="clientApiKey">Personal Gemini API Key (Saved in browser localStorage)</label>
+                            <div class="api-key-input-row">
+                                <input type="password" id="clientApiKey" placeholder="AIzaSy... (Leave blank to use server key / knowledge engine)" autocomplete="off">
+                                <button type="button" id="btnSaveApiKey" class="btn-save-key">Save</button>
+                            </div>
+                            <span class="api-key-help">Get a free key from <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer">Google AI Studio</a>. If left blank, our built-in Cultural Knowledge Engine generates authentic plans automatically.</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-generate-plan" id="btnGeneratePlan">
+                        <ion-icon name="sparkles" aria-hidden="true"></ion-icon>
+                        Generate Cultural AI Meal Plan
                     </button>
                 </form>
             </section>
@@ -316,7 +409,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../js/nav.js?v=5.1"></script>
     <script src="../js/auth.js"></script>
-    <script src="../js/ai.js"></script>
+    <script src="../js/ai.js?v=6.0"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
