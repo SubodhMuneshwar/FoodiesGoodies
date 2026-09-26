@@ -2346,7 +2346,7 @@ select:focus.form-control {
 }
 
 /* ==========================================================================
-   Authentic Social Media Brand Colors on Hover
+   Authentic Social Media Brand Colors on Hover (Color Only - No Pop Up)
    Twitter (#1DA1F2), YouTube (#FF0000), Instagram (#E1306C), Facebook (#1877F2)
    ========================================================================== */
 .footer-social-links a[href*="instagram"]:hover,
@@ -2360,8 +2360,8 @@ select:focus.form-control {
   color: #E1306C !important;
   background: rgba(225, 48, 108, 0.14) !important;
   border-color: #E1306C !important;
-  box-shadow: 0 4px 16px rgba(225, 48, 108, 0.35) !important;
-  transform: translateY(-3px) scale(1.08) !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .footer-social-links a[href*="instagram"]:hover ion-icon,
@@ -2384,8 +2384,8 @@ select:focus.form-control {
   color: #1DA1F2 !important;
   background: rgba(29, 161, 242, 0.14) !important;
   border-color: #1DA1F2 !important;
-  box-shadow: 0 4px 16px rgba(29, 161, 242, 0.35) !important;
-  transform: translateY(-3px) scale(1.08) !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .footer-social-links a[href*="twitter"]:hover ion-icon,
@@ -2405,8 +2405,8 @@ select:focus.form-control {
   color: #FF0000 !important;
   background: rgba(255, 0, 0, 0.14) !important;
   border-color: #FF0000 !important;
-  box-shadow: 0 4px 16px rgba(255, 0, 0, 0.35) !important;
-  transform: translateY(-3px) scale(1.08) !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .footer-social-links a[href*="youtube"]:hover ion-icon,
@@ -2425,8 +2425,8 @@ select:focus.form-control {
   color: #1877F2 !important;
   background: rgba(24, 119, 242, 0.14) !important;
   border-color: #1877F2 !important;
-  box-shadow: 0 4px 16px rgba(24, 119, 242, 0.35) !important;
-  transform: translateY(-3px) scale(1.08) !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .footer-social-links a[href*="facebook"]:hover ion-icon,

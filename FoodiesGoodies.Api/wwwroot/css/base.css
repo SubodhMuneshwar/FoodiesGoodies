@@ -285,22 +285,19 @@ footer.footer-mpa {
   color: var(--text-muted);
   font-size: 1.15rem;
   text-decoration: none;
-  transition: color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              background 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: color 0.22s ease, background 0.22s ease, border-color 0.22s ease;
   -webkit-tap-highlight-color: transparent;
+  transform: none !important;
 }
 
 .footer-social-links a:hover,
 .footer-social-links a:focus-visible {
   color: var(--primary);
   border-color: var(--primary);
-  transform: translateY(-2px);
+  transform: none !important;
 }
 
-/* Authentic Brand Hover Colors */
+/* Authentic Brand Hover Colors - Pure Color Change (No Pop Up) */
 /* Instagram: Signature Magenta / Rose (#E1306C) */
 .footer-social-links a[href*="instagram"]:hover,
 .footer-social-links a[href*="instagram"]:focus,
@@ -313,8 +310,8 @@ footer.footer-mpa {
   color: #E1306C !important;
   background: rgba(225, 48, 108, 0.12) !important;
   border-color: #E1306C !important;
-  box-shadow: 0 4px 14px rgba(225, 48, 108, 0.3) !important;
-  transform: translateY(-3px) scale(1.08) !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .footer-social-links a[href*="instagram"]:hover ion-icon,
@@ -338,8 +335,8 @@ footer.footer-mpa {
   color: #1DA1F2 !important;
   background: rgba(29, 161, 242, 0.12) !important;
   border-color: #1DA1F2 !important;
-  box-shadow: 0 4px 14px rgba(29, 161, 242, 0.3) !important;
-  transform: translateY(-3px) scale(1.08) !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .footer-social-links a[href*="twitter"]:hover ion-icon,
@@ -360,8 +357,8 @@ footer.footer-mpa {
   color: #FF0000 !important;
   background: rgba(255, 0, 0, 0.12) !important;
   border-color: #FF0000 !important;
-  box-shadow: 0 4px 14px rgba(255, 0, 0, 0.3) !important;
-  transform: translateY(-3px) scale(1.08) !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .footer-social-links a[href*="youtube"]:hover ion-icon,
@@ -381,8 +378,8 @@ footer.footer-mpa {
   color: #1877F2 !important;
   background: rgba(24, 119, 242, 0.12) !important;
   border-color: #1877F2 !important;
-  box-shadow: 0 4px 14px rgba(24, 119, 242, 0.3) !important;
-  transform: translateY(-3px) scale(1.08) !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .footer-social-links a[href*="facebook"]:hover ion-icon,

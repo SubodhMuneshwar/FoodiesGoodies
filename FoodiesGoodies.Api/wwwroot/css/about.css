@@ -309,7 +309,7 @@ body {
 
 .chef-socials a:hover,
 .chef-socials a:focus-visible {
-  transform: translateY(-2px);
+  transform: none !important;
 }
 
 .chef-socials a.insta:hover,
@@ -317,9 +317,9 @@ body {
 .chef-socials a:has(ion-icon[name="logo-instagram"]):hover {
   color: #E1306C !important;
   background: rgba(225, 48, 108, 0.12) !important;
-  border-color: rgba(225, 48, 108, 0.5) !important;
-  box-shadow: 0 4px 14px rgba(225, 48, 108, 0.25) !important;
-  transform: translateY(-3px) scale(1.08) !important;
+  border-color: #E1306C !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .chef-socials a.twitter:hover,
@@ -327,9 +327,9 @@ body {
 .chef-socials a:has(ion-icon[name="logo-twitter"]):hover {
   color: #1DA1F2 !important;
   background: rgba(29, 161, 242, 0.12) !important;
-  border-color: rgba(29, 161, 242, 0.5) !important;
-  box-shadow: 0 4px 14px rgba(29, 161, 242, 0.25) !important;
-  transform: translateY(-3px) scale(1.08) !important;
+  border-color: #1DA1F2 !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 /* --------------------------------------------------------------------------
