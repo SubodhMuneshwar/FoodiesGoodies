@@ -168,12 +168,12 @@ class AmbientCulinaryEngine {
     }
 
     initItems() {
-        // Minimal watermark density: sparse, balanced, never cluttered
-        let count = 11;
+        // Balanced minimal density: clearly visible elements without cluttering
+        let count = 15;
         if (this.width < 768) {
-            count = 4;
+            count = 5;
         } else if (this.width < 1024) {
-            count = 7;
+            count = 9;
         }
 
         const palettes = this.getPalettes();
@@ -196,16 +196,16 @@ class AmbientCulinaryEngine {
         const x = Math.random() * this.width;
         const y = initialScatter ? Math.random() * this.height : this.height + 40 + Math.random() * 60;
 
-        // Elegant, minimal size scaling
-        const baseSize = isMobile ? 15 : (isTablet ? 18 : 22);
+        // Recognizable, clean minimal size scaling
+        const baseSize = isMobile ? 18 : (isTablet ? 22 : 26);
         const sizeVariance = isMobile ? 3 : 5;
         const size = baseSize + Math.random() * sizeVariance;
 
         const def = FOOD_DEFINITIONS.find(d => d.type === type) || FOOD_DEFINITIONS[0];
 
-        // Whisper-soft opacity: true minimalist watermark that stays in the background
-        const baseAlpha = this.isDark ? (0.035 + Math.random() * 0.015) : (0.025 + Math.random() * 0.012);
-        const baseVy = -0.12 - Math.random() * 0.12; // Slow, tranquil thermal rise
+        // Calibrated visibility: clearly visible culinary shapes while remaining refined and minimal
+        const baseAlpha = this.isDark ? (0.085 + Math.random() * 0.02) : (0.07 + Math.random() * 0.015);
+        const baseVy = -0.14 - Math.random() * 0.12; // Slow, tranquil thermal rise
 
         return {
             type: def.type,
@@ -248,7 +248,7 @@ class AmbientCulinaryEngine {
             item.orangePrefix = palettes.orange;
             item.berryPrefix = palettes.berry;
             item.creamPrefix = palettes.cream;
-            item.baseAlpha = this.isDark ? (0.035 + Math.random() * 0.015) : (0.025 + Math.random() * 0.012);
+            item.baseAlpha = this.isDark ? (0.085 + Math.random() * 0.02) : (0.07 + Math.random() * 0.015);
             item.alpha = item.baseAlpha;
             item.targetAlpha = item.baseAlpha;
         });
@@ -347,8 +347,8 @@ class AmbientCulinaryEngine {
             }
 
             // Subtle target scale & alpha response: quiet and unobtrusive
-            item.targetScale = isNearCursor ? 1.06 : 1.0;
-            item.targetAlpha = isNearCursor ? (item.baseAlpha + 0.035) : item.baseAlpha;
+            item.targetScale = isNearCursor ? 1.08 : 1.0;
+            item.targetAlpha = isNearCursor ? (item.baseAlpha + 0.05) : item.baseAlpha;
 
             item.scale += (item.targetScale - item.scale) * 0.10;
             item.alpha += (item.targetAlpha - item.alpha) * 0.10;
