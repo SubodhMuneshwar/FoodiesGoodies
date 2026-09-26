@@ -200,21 +200,33 @@ img[loading="lazy"] {
     display: none !important;
   }
 
-  /* Position the mobile bulb hint below the center bulb */
+  /* Position the mobile bulb hint strictly centered below the center bulb */
   .bulb-discovery-hint {
-    top: 60px;
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
-    white-space: nowrap;
-    font-size: 0.73rem;
+    top: 58px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    white-space: nowrap !important;
+    font-size: 0.73rem !important;
+    animation: bulbHintFloat 3s ease-in-out infinite !important;
   }
 
   .bulb-discovery-hint::before {
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%) rotate(45deg);
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) rotate(45deg) !important;
   }
+}
+
+@keyframes bulbHintFloat {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, -4px); }
+}
+
+.cord-discovery-hint.bulb-discovery-hint.hidden {
+  opacity: 0 !important;
+  transform: translate(-50%, -8px) !important;
+  pointer-events: none !important;
 }
 
 /* --------------------------------------------------------------------------
@@ -302,11 +314,13 @@ img[loading="lazy"] {
    4.2 Architectural Centered Navbar Tubelight Fixture & Gradual Radiance
    Old Money Vintage Heirloom Luminaire with Burnished Antique Brass Accents
    -------------------------------------------------------------------------- */
-/* By default, hide the heavy horizontal tubelight fixture so the editorial navbar remains clean and open */
+/* By default, hide the tubelight fixture so the editorial navbar remains clean and open */
+#navbar-tubelight,
 .navbar-tubelight,
 .tubelight-fixture,
 .tubelight-beam,
-.tubelight-ambient-wash {
+.tubelight-ambient-wash,
+.navbar-bulb-fixture {
   display: none !important;
 }
 
@@ -1002,8 +1016,10 @@ html.theme-lighting-transition *::after {
    RESPONSIVE SWITCH: Desktop Tubelight vs Mobile Small Bulb
    -------------------------------------------------------------------------- */
 @media (min-width: 993px) {
-  /* On desktop: hide horizontal tubelight fixture completely to maintain an immaculate, minimal editorial navbar */
-  .navbar-tubelight {
+  /* On desktop: hide horizontal tubelight and bulb fixture completely to maintain an immaculate, minimal editorial navbar */
+  #navbar-tubelight,
+  .navbar-tubelight,
+  .navbar-bulb-fixture {
     display: none !important;
   }
 }
@@ -1016,25 +1032,37 @@ html.theme-lighting-transition *::after {
     display: none !important;
   }
 
-  /* Compact top-center container for small bulb */
+  /* Compact top-center container for small bulb - strictly and immaculately centered in the header */
+  #navbar-tubelight,
   .navbar-tubelight {
-    width: 48px !important;
-    height: 52px !important;
+    position: absolute !important;
     top: 0 !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
+    width: 48px !important;
+    height: 52px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
     pointer-events: auto !important;
     cursor: pointer !important;
-    z-index: 10005 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
+    z-index: 10006 !important;
     overflow: visible !important;
   }
 
   /* SHOW the small hanging vintage bulb on responsive — it IS the theme toggle */
   .navbar-bulb-fixture {
     display: flex !important;
+    position: relative !important;
+    margin: 0 auto !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 32px !important;
+    height: 50px !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
   }
 }
 
@@ -1176,14 +1204,20 @@ html.theme-lighting-transition *::after {
   }
 
   body.mobile-nav-active header .logo,
-  body.mobile-nav-active header .header-actions-wrap {
-    opacity: 0.15;
-    transition: opacity 0.25s ease;
-    pointer-events: none;
+  body.mobile-nav-active header .header-actions-wrap,
+  body.mobile-nav-active #navbar-tubelight {
+    opacity: 0.15 !important;
+    transition: opacity 0.25s ease !important;
+    pointer-events: none !important;
   }
 
   .header .logo {
-    font-size: 1.22rem !important;
+    font-size: clamp(1rem, 4.2vw, 1.22rem) !important;
+    max-width: calc(50vw - 32px) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    z-index: 10004 !important;
   }
 
   .header-actions-wrap {

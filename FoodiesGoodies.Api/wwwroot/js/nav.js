@@ -236,15 +236,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Wire interactive click & keydown on small bulb
-        const bulbFixture = tubelight ? tubelight.querySelector('.navbar-bulb-fixture') : null;
-        if (bulbFixture && !bulbFixture.dataset.wired) {
-            bulbFixture.dataset.wired = 'true';
-            bulbFixture.addEventListener('click', (e) => {
+        // Wire interactive click & keydown on small bulb & its centered touch fixture
+        if (tubelight && !tubelight.dataset.wired) {
+            tubelight.dataset.wired = 'true';
+            tubelight.addEventListener('click', (e) => {
                 e.stopPropagation();
                 toggleTheme();
             });
-            bulbFixture.addEventListener('keydown', (e) => {
+            tubelight.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
                     e.stopPropagation();
@@ -325,6 +324,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (hint) {
             hint.classList.add('hidden');
             sessionStorage.setItem('foodies_cord_hint_dismissed', 'true');
+        }
+
+        const bulbHint = document.getElementById('bulb-discovery-hint');
+        if (bulbHint) {
+            bulbHint.classList.add('hidden');
+            sessionStorage.setItem('foodies_bulb_hint_dismissed', 'true');
         }
     }
 
