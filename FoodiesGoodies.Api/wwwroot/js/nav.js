@@ -417,7 +417,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3.3.2 Ensure Ambient Interactive Culinary Canvas is active
     if (!document.getElementById('ambient-culinary-canvas')) {
         const isSubfolder = window.location.pathname.includes('/pages/');
-        const scriptPath = isSubfolder ? '../js/ambient-bg.js?v=4.1' : 'js/ambient-bg.js?v=4.1';
+        const scriptPath = isSubfolder ? '../js/ambient-bg.js?v=7.0' : 'js/ambient-bg.js?v=7.0';
         const existingScript = document.querySelector('script[src*="ambient-bg.js"]');
         if (!existingScript) {
             const bgScript = document.createElement('script');
