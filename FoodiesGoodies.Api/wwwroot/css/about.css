@@ -307,11 +307,29 @@ body {
   transition: all var(--transition-fast);
 }
 
-.chef-socials a:hover {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: #FFFFFF;
+.chef-socials a:hover,
+.chef-socials a:focus-visible {
   transform: translateY(-2px);
+}
+
+.chef-socials a.insta:hover,
+.chef-socials a[href*="instagram.com"]:hover,
+.chef-socials a:has(ion-icon[name="logo-instagram"]):hover {
+  color: #E1306C !important;
+  background: rgba(225, 48, 108, 0.12) !important;
+  border-color: rgba(225, 48, 108, 0.5) !important;
+  box-shadow: 0 4px 14px rgba(225, 48, 108, 0.25) !important;
+  transform: translateY(-3px) scale(1.08) !important;
+}
+
+.chef-socials a.twitter:hover,
+.chef-socials a[href*="twitter.com"]:hover,
+.chef-socials a:has(ion-icon[name="logo-twitter"]):hover {
+  color: #1DA1F2 !important;
+  background: rgba(29, 161, 242, 0.12) !important;
+  border-color: rgba(29, 161, 242, 0.5) !important;
+  box-shadow: 0 4px 14px rgba(29, 161, 242, 0.25) !important;
+  transform: translateY(-3px) scale(1.08) !important;
 }
 
 /* --------------------------------------------------------------------------

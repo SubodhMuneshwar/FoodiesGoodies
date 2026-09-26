@@ -277,21 +277,118 @@ footer.footer-mpa {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: var(--bg-surface-elevated);
   border: 1px solid var(--border-subtle);
   color: var(--text-muted);
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   text-decoration: none;
-  transition: all 0.25s ease;
+  transition: color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-tap-highlight-color: transparent;
 }
 
-.footer-social-links a:hover {
+.footer-social-links a:hover,
+.footer-social-links a:focus-visible {
   color: var(--primary);
   border-color: var(--primary);
   transform: translateY(-2px);
+}
+
+/* Authentic Brand Hover Colors */
+/* Instagram: Signature Magenta / Rose (#E1306C) */
+.footer-social-links a[href*="instagram"]:hover,
+.footer-social-links a[href*="instagram"]:focus,
+.footer-social-links a[aria-label="Instagram"]:hover,
+.footer-social-links a[aria-label="Instagram"]:focus,
+.footer-social-links a.social-link--instagram:hover,
+.footer-social-links a.social-link--instagram:focus,
+.chef-socials a.insta:hover,
+.chef-socials a[href*="instagram"]:hover {
+  color: #E1306C !important;
+  background: rgba(225, 48, 108, 0.12) !important;
+  border-color: #E1306C !important;
+  box-shadow: 0 4px 14px rgba(225, 48, 108, 0.3) !important;
+  transform: translateY(-3px) scale(1.08) !important;
+}
+
+.footer-social-links a[href*="instagram"]:hover ion-icon,
+.footer-social-links a[aria-label="Instagram"]:hover ion-icon,
+.footer-social-links a.social-link--instagram:hover ion-icon,
+.chef-socials a.insta:hover ion-icon {
+  color: #E1306C !important;
+}
+
+/* Twitter / X: Signature Cyan-Blue (#1DA1F2) */
+.footer-social-links a[href*="twitter"]:hover,
+.footer-social-links a[href*="twitter"]:focus,
+.footer-social-links a[href*="x.com"]:hover,
+.footer-social-links a[href*="x.com"]:focus,
+.footer-social-links a[aria-label="Twitter"]:hover,
+.footer-social-links a[aria-label="Twitter"]:focus,
+.footer-social-links a.social-link--twitter:hover,
+.footer-social-links a.social-link--twitter:focus,
+.chef-socials a.twitter:hover,
+.chef-socials a[href*="twitter"]:hover {
+  color: #1DA1F2 !important;
+  background: rgba(29, 161, 242, 0.12) !important;
+  border-color: #1DA1F2 !important;
+  box-shadow: 0 4px 14px rgba(29, 161, 242, 0.3) !important;
+  transform: translateY(-3px) scale(1.08) !important;
+}
+
+.footer-social-links a[href*="twitter"]:hover ion-icon,
+.footer-social-links a[aria-label="Twitter"]:hover ion-icon,
+.footer-social-links a.social-link--twitter:hover ion-icon,
+.chef-socials a.twitter:hover ion-icon {
+  color: #1DA1F2 !important;
+}
+
+/* YouTube: Signature Pure Red (#FF0000) */
+.footer-social-links a[href*="youtube"]:hover,
+.footer-social-links a[href*="youtube"]:focus,
+.footer-social-links a[aria-label="YouTube"]:hover,
+.footer-social-links a[aria-label="YouTube"]:focus,
+.footer-social-links a.social-link--youtube:hover,
+.footer-social-links a.social-link--youtube:focus,
+.chef-socials a[href*="youtube"]:hover {
+  color: #FF0000 !important;
+  background: rgba(255, 0, 0, 0.12) !important;
+  border-color: #FF0000 !important;
+  box-shadow: 0 4px 14px rgba(255, 0, 0, 0.3) !important;
+  transform: translateY(-3px) scale(1.08) !important;
+}
+
+.footer-social-links a[href*="youtube"]:hover ion-icon,
+.footer-social-links a[aria-label="YouTube"]:hover ion-icon,
+.footer-social-links a.social-link--youtube:hover ion-icon {
+  color: #FF0000 !important;
+}
+
+/* Facebook: Signature Blue (#1877F2) */
+.footer-social-links a[href*="facebook"]:hover,
+.footer-social-links a[href*="facebook"]:focus,
+.footer-social-links a[aria-label="Facebook"]:hover,
+.footer-social-links a[aria-label="Facebook"]:focus,
+.footer-social-links a.social-link--facebook:hover,
+.footer-social-links a.social-link--facebook:focus,
+.chef-socials a[href*="facebook"]:hover {
+  color: #1877F2 !important;
+  background: rgba(24, 119, 242, 0.12) !important;
+  border-color: #1877F2 !important;
+  box-shadow: 0 4px 14px rgba(24, 119, 242, 0.3) !important;
+  transform: translateY(-3px) scale(1.08) !important;
+}
+
+.footer-social-links a[href*="facebook"]:hover ion-icon,
+.footer-social-links a[aria-label="Facebook"]:hover ion-icon,
+.footer-social-links a.social-link--facebook:hover ion-icon {
+  color: #1877F2 !important;
 }
 
 .footer-bottom {
