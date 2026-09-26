@@ -302,29 +302,12 @@ img[loading="lazy"] {
    4.2 Architectural Centered Navbar Tubelight Fixture & Gradual Radiance
    Old Money Vintage Heirloom Luminaire with Burnished Antique Brass Accents
    -------------------------------------------------------------------------- */
-.navbar-tubelight {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(580px, 54vw);
-  height: 18px;
-  z-index: 1005;
-  pointer-events: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  transition: opacity 0.4s ease;
-}
-
-/* Fixture framework */
-.tubelight-fixture {
-  position: relative;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* By default, hide the heavy horizontal tubelight fixture so the editorial navbar remains clean and open */
+.navbar-tubelight,
+.tubelight-fixture,
+.tubelight-beam,
+.tubelight-ambient-wash {
+  display: none !important;
 }
 
 /* Antique brass ceiling mounting rosettes */
@@ -1019,17 +1002,8 @@ html.theme-lighting-transition *::after {
    RESPONSIVE SWITCH: Desktop Tubelight vs Mobile Small Bulb
    -------------------------------------------------------------------------- */
 @media (min-width: 993px) {
-  /* On desktop: ensure horizontal tubelight is visible, hide small bulb */
-  .navbar-tubelight .tubelight-fixture {
-    display: flex !important;
-  }
-  .navbar-tubelight .tubelight-beam {
-    display: block !important;
-  }
-  .navbar-tubelight .tubelight-ambient-wash {
-    display: block !important;
-  }
-  .navbar-bulb-fixture {
+  /* On desktop: hide horizontal tubelight fixture completely to maintain an immaculate, minimal editorial navbar */
+  .navbar-tubelight {
     display: none !important;
   }
 }

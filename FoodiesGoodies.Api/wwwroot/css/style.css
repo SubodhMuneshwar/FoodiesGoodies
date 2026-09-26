@@ -37,8 +37,9 @@
 .hero-overlay-scrim {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(28, 25, 23, 0.35) 0%, rgba(28, 25, 23, 0.72) 100%);
+  background: linear-gradient(180deg, rgba(20, 16, 14, 0.45) 0%, rgba(20, 16, 14, 0.72) 58%, var(--bg-canvas) 100%);
   z-index: 2;
+  pointer-events: none;
 }
 
 .hero-content {
@@ -522,7 +523,7 @@
 .trending-recipe-card {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   overflow: hidden;
   display: flex;
@@ -531,15 +532,15 @@
 }
 
 .trending-recipe-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-card-hover);
   border-color: rgba(194, 112, 58, 0.35);
 }
 
 .trending-card-media {
   position: relative;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 10;
   overflow: hidden;
   background: var(--bg-surface-elevated);
 }
@@ -548,25 +549,28 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .trending-recipe-card:hover .trending-card-media img {
-  transform: scale(1.04);
+  transform: scale(1.06);
 }
 
 .trending-cuisine-badge {
   position: absolute;
   top: 14px;
   left: 14px;
-  background: rgba(28, 25, 23, 0.78);
+  background: rgba(28, 25, 23, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: #FFFFFF;
-  padding: 4px 10px;
+  padding: 4px 12px;
   border-radius: var(--radius-pill);
   font-size: 0.72rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .trending-card-body {
@@ -980,41 +984,35 @@
    FoodiesGoodies Modern Interactive UI/UX Enhancements (style.css v4.5)
    ========================================================================== */
 
-/* 1. Hero Floating Glass Chips & Glow */
-.hero-floating-chip {
-  position: absolute;
-  background: rgba(28, 25, 23, 0.72);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+/* 1. Hero Central Trust Pill Badge */
+.hero-pill-badge {
+  background: rgba(28, 25, 23, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   color: #FFFFFF;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
-  padding: 10px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+  padding: 8px 18px;
   border-radius: var(--radius-pill);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  z-index: 3;
-  animation: chipFloat 4.5s ease-in-out infinite;
+  margin-bottom: 20px;
+  letter-spacing: 0.02em;
   user-select: none;
+  animation: chipFloat 4.5s ease-in-out infinite;
 }
 
-.hero-floating-chip.chip-left {
-  top: 25%;
-  left: clamp(24px, 5vw, 80px);
-}
-
-.hero-floating-chip.chip-right {
-  bottom: 22%;
-  right: clamp(24px, 5vw, 80px);
-  animation-delay: -2.25s;
+.pill-dot {
+  opacity: 0.45;
+  font-size: 0.9em;
 }
 
 @keyframes chipFloat {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+  50% { transform: translateY(-5px); }
 }
 
 .chip-pulse {
@@ -1037,12 +1035,6 @@
   font-size: 1.05rem;
 }
 
-@media (max-width: 992px) {
-  .hero-floating-chip {
-    display: none;
-  }
-}
-
 /* 2. Hero Quick-Search Pills */
 .hero-quick-tags {
   display: flex;
@@ -1056,18 +1048,18 @@
 
 .quick-tags-label {
   font-size: 0.82rem;
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(255, 255, 255, 0.85);
   font-weight: 600;
   margin-right: 4px;
 }
 
 .hero-tag-btn {
-  background: rgba(255, 255, 255, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.24);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   color: #FFFFFF;
-  padding: 5px 14px;
+  padding: 6px 15px;
   border-radius: var(--radius-pill);
   font-size: 0.82rem;
   font-weight: 600;
@@ -1080,7 +1072,7 @@
   background: var(--primary);
   border-color: var(--primary);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(194, 112, 58, 0.35);
+  box-shadow: 0 4px 14px rgba(194, 112, 58, 0.45);
 }
 
 /* 3. Hero Statistics Ticker Bar */

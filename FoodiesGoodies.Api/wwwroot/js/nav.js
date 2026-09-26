@@ -365,20 +365,21 @@ document.addEventListener('DOMContentLoaded', () => {
             hint = document.createElement('div');
             hint.id = 'cord-discovery-hint';
             hint.className = 'cord-discovery-hint';
-            hint.innerHTML = '<span>🪢</span> <span>Pull the wire to toggle light / dark</span>';
+            hint.innerHTML = '<span>🪢</span> <span>Pull wire to toggle light / dark</span>';
             hint.addEventListener('click', () => {
                 hint.classList.add('hidden');
                 sessionStorage.setItem('foodies_cord_hint_dismissed', 'true');
+                setTimeout(() => hint.remove(), 400);
             });
             document.body.appendChild(hint);
 
-            // Auto-hide after 8 seconds
+            // Auto-hide after 4 seconds
             setTimeout(() => {
                 if (hint && !hint.classList.contains('hidden')) {
                     hint.classList.add('hidden');
-                    setTimeout(() => hint.remove(), 500);
+                    setTimeout(() => hint.remove(), 400);
                 }
-            }, 8000);
+            }, 4000);
         }
     }
 
@@ -389,20 +390,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const bulbHint = document.createElement('div');
             bulbHint.id = 'bulb-discovery-hint';
             bulbHint.className = 'cord-discovery-hint bulb-discovery-hint';
-            bulbHint.innerHTML = '<span>💡</span> <span>Tap the bulb to switch light / dark</span>';
+            bulbHint.innerHTML = '<span>💡</span> <span>Tap the bulb to switch mode</span>';
             bulbHint.addEventListener('click', () => {
                 bulbHint.classList.add('hidden');
                 sessionStorage.setItem('foodies_bulb_hint_dismissed', 'true');
+                setTimeout(() => bulbHint.remove(), 400);
             });
             document.body.appendChild(bulbHint);
 
-            // Auto-hide after 6 seconds
+            // Auto-hide after 4 seconds
             setTimeout(() => {
                 if (bulbHint && !bulbHint.classList.contains('hidden')) {
                     bulbHint.classList.add('hidden');
-                    setTimeout(() => bulbHint.remove(), 500);
+                    setTimeout(() => bulbHint.remove(), 400);
                 }
-            }, 6000);
+            }, 4000);
         }
     }
 

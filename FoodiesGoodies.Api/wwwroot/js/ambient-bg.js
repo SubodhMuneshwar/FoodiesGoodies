@@ -139,12 +139,12 @@ class AmbientCulinaryEngine {
     }
 
     initItems() {
-        // Responsive item count: 22-26 on desktop, 16 on tablet, 10-12 on mobile
-        let count = 22;
+        // Subtle, minimalist watermark density: 10 on desktop, 6 on tablet, 4 on mobile
+        let count = 10;
         if (this.width < 768) {
-            count = 11;
+            count = 4;
         } else if (this.width < 1024) {
-            count = 16;
+            count = 6;
         }
 
         const palettes = this.getPalettes();
@@ -178,8 +178,8 @@ class AmbientCulinaryEngine {
         const y = initialScatter ? Math.random() * this.height : this.height + 40 + Math.random() * 40;
 
         // Responsive size scaling
-        let baseSize = isMobile ? 16 : (isTablet ? 20 : 25);
-        let sizeVariance = isMobile ? 4 : 7;
+        let baseSize = isMobile ? 14 : (isTablet ? 18 : 22);
+        let sizeVariance = isMobile ? 3 : 5;
         const size = baseSize + Math.random() * sizeVariance;
 
         let colorKey = 'terracotta';
@@ -196,8 +196,9 @@ class AmbientCulinaryEngine {
             case 9: colorKey = 'sage'; break;       // Herb Leaf
         }
 
-        const baseAlpha = this.isDark ? (0.10 + Math.random() * 0.06) : (0.08 + Math.random() * 0.05);
-        const baseVy = -0.16 - Math.random() * 0.16; // Gentle thermal rise
+        // Whisper-thin opacity so it acts as an elegant watermark that never interferes with text
+        const baseAlpha = this.isDark ? (0.025 + Math.random() * 0.015) : (0.018 + Math.random() * 0.012);
+        const baseVy = -0.12 - Math.random() * 0.12; // Gentle thermal rise
 
         return {
             type,
@@ -216,10 +217,10 @@ class AmbientCulinaryEngine {
             vy: baseVy,
             baseVy,
             angle: Math.random() * Math.PI * 2,
-            rotSpeed: (Math.random() - 0.5) * 0.005,
+            rotSpeed: (Math.random() - 0.5) * 0.003,
             wobble: Math.random() * Math.PI * 2,
-            wobbleSpeed: 0.014 + Math.random() * 0.012,
-            wobbleWidth: 0.22 + Math.random() * 0.28,
+            wobbleSpeed: 0.012 + Math.random() * 0.010,
+            wobbleWidth: 0.20 + Math.random() * 0.25,
             interactiveSpin: 0
         };
     }
@@ -229,7 +230,7 @@ class AmbientCulinaryEngine {
         this.items.forEach(item => {
             item.colorPrefix = palettes[item.colorKey];
             item.nutmegPrefix = palettes.nutmeg;
-            item.baseAlpha = this.isDark ? 0.12 : 0.09;
+            item.baseAlpha = this.isDark ? 0.03 : 0.018;
             item.alpha = item.baseAlpha;
             item.targetAlpha = item.baseAlpha;
         });

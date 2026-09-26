@@ -29,11 +29,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/variables.css">
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/global.css?v=5.6">
-    <link rel="stylesheet" href="css/style.css?v=5.1">
-    <script src="js/ambient-bg.js?v=4.1" defer></script>
+    <link rel="stylesheet" href="css/variables.css?v=6.2">
+    <link rel="stylesheet" href="css/base.css?v=6.2">
+    <link rel="stylesheet" href="css/global.css?v=6.2">
+    <link rel="stylesheet" href="css/style.css?v=6.2">
+    <script src="js/ambient-bg.js?v=6.2" defer></script>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -121,18 +121,14 @@
             <div class="hero-backdrop" style="background-image: url('assets/images/todd-quackenbush-x5SRhkFajrA-unsplash.jpg');"></div>
             <div class="hero-overlay-scrim"></div>
 
-            <!-- Floating Decorative Glass Badges -->
-            <div class="hero-floating-chip chip-left" aria-hidden="true">
-                <span class="chip-pulse"></span>
-                <span><strong>2.3M+</strong> Curated Dishes</span>
-            </div>
-            <div class="hero-floating-chip chip-right" aria-hidden="true">
-                <span class="chip-star">★</span>
-                <span><strong>4.9/5</strong> Chef Endorsed</span>
-            </div>
-
             <div class="hero-content">
-                <span class="hero-eyebrow">Curated Culinary Journal &bull; Live Intelligence</span>
+                <div class="hero-pill-badge" aria-label="Curated Platform Stats">
+                    <span class="chip-pulse" aria-hidden="true"></span>
+                    <span><strong>2.3M+</strong> Curated Dishes</span>
+                    <span class="pill-dot" aria-hidden="true">&bull;</span>
+                    <span class="chip-star" aria-hidden="true">★</span>
+                    <span><strong>4.9/5</strong> Chef Endorsed</span>
+                </div>
                 <h1 class="hero-heading">Discover Recipes That <em>Inspire</em> Your Kitchen.</h1>
                 <p class="hero-subtext">Over 2.3 million chef-tested recipes, authentic global culinary cultures, and intelligent macro-balanced meal planning.</p>
                 
@@ -141,7 +137,7 @@
                     <div class="hero-search-wrapper">
                         <span class="hero-search-icon" aria-hidden="true">🔍</span>
                         <label for="home-search-input" class="visually-hidden" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;">Search recipes</label>
-                        <input type="text" id="home-search-input" name="q" placeholder="Search by dish, ingredient, or cuisine..." required autocomplete="off">
+                        <input type="text" id="home-search-input" name="q" placeholder="Discover dishes, ingredients, or cuisines (e.g. Truffle Pasta, Tacos)..." required autocomplete="off">
                         <button type="submit" class="hero-search-btn">Search Recipes</button>
                     </div>
 
@@ -151,8 +147,8 @@
                         <button type="button" class="hero-tag-btn" data-query="Truffle Pasta">🍝 Truffle Pasta</button>
                         <button type="button" class="hero-tag-btn" data-query="Margherita Pizza">🍕 Artisan Pizza</button>
                         <button type="button" class="hero-tag-btn" data-query="Ramen">🍜 Tokyo Ramen</button>
-                        <button type="button" class="hero-tag-btn" data-query="Avocado Bowl">🥑 Superfood Bowls</button>
-                        <button type="button" class="hero-tag-btn" data-query="Blueberry Donuts">🫐 French Bakery</button>
+                        <button type="button" class="hero-tag-btn" data-query="Avocado Bowl">🥑 Harvest Bowls</button>
+                        <button type="button" class="hero-tag-btn" data-query="Berry Tart">🫐 French Bakery</button>
                     </div>
                 </form>
 
@@ -296,18 +292,18 @@
 
                 <!-- CARD 2 -->
                 <article class="trending-recipe-card" data-category="bakery"
-                    data-title="Blueberry Lemon Glazed Donuts"
-                    data-image="assets/images/blueberry.png"
-                    data-cuisine="Bakery"
-                    data-time="30 mins"
-                    data-calories="280 kcal"
-                    data-desc="Baked organic whole wheat donuts infused with fresh berries and zesty citrus glaze."
-                    data-ingredients="2 cups Whole Wheat Pastry Flour|1 cup Fresh Blueberries|1/2 cup Organic Cane Sugar|1/4 cup Greek Yogurt|1 Lemon (zest and juice)|Powdered Sugar Glaze"
-                    data-cook-url="pages/search.html?q=Blueberry+Donuts">
+                    data-title="Artisanal French Wild Berry Tart"
+                    data-image="assets/images/tamara-gak-PwTDa6ngq_E-unsplash.jpg"
+                    data-cuisine="French Patisserie"
+                    data-time="35 mins"
+                    data-calories="295 kcal"
+                    data-desc="Golden flaky butter crust filled with silky vanilla bean diplomat cream and glistening seasonal wild berries."
+                    data-ingredients="1 Pre-Baked Sweet Pastry Crust|1.5 cups Heavy Cream &amp; Whole Milk|3 Egg Yolks &amp; 1/3 cup Cane Sugar|1 tsp Bourbon Vanilla Bean Paste|2 cups Fresh Seasonal Berries|Warm Apricot Glaze"
+                    data-cook-url="pages/search.html?q=French+Berry+Tart">
                     <div class="trending-card-media">
-                        <img src="assets/images/blueberry.png" alt="Artisanal Blueberry Lemon Glazed Donut" loading="lazy" decoding="async">
-                        <span class="trending-cuisine-badge">Bakery</span>
-                        <button type="button" class="btn-favorite-heart" data-recipe-id="trend-blueberry-donuts" aria-label="Save to favorites" title="Save to favorites">
+                        <img src="assets/images/tamara-gak-PwTDa6ngq_E-unsplash.jpg" alt="Artisanal French Wild Berry Tart with diplomat cream" loading="lazy" decoding="async">
+                        <span class="trending-cuisine-badge">Patisserie</span>
+                        <button type="button" class="btn-favorite-heart" data-recipe-id="trend-french-berry-tart" aria-label="Save to favorites" title="Save to favorites">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                             </svg>
@@ -315,14 +311,14 @@
                     </div>
                     <div class="trending-card-body">
                         <div class="trending-metrics">
-                            <span>⏱ 30 mins</span>
-                            <span>🔥 280 kcal</span>
+                            <span>⏱ 35 mins</span>
+                            <span>🔥 295 kcal</span>
                         </div>
-                        <h3 class="trending-card-title">Blueberry Lemon Glazed Donuts</h3>
-                        <p class="trending-desc">Baked organic whole wheat donuts infused with fresh berries and zesty citrus glaze.</p>
+                        <h3 class="trending-card-title">Artisanal French Wild Berry Tart</h3>
+                        <p class="trending-desc">Golden flaky butter crust filled with silky vanilla bean diplomat cream and glistening wild berries.</p>
                         <div class="trending-card-actions">
                             <button type="button" class="btn-card-quickview">Quick View</button>
-                            <a href="pages/search.html?q=Blueberry+Donuts" class="btn-card-cook">Cook &rarr;</a>
+                            <a href="pages/search.html?q=French+Berry+Tart" class="btn-card-cook">Cook &rarr;</a>
                         </div>
                     </div>
                 </article>
@@ -361,19 +357,19 @@
                 </article>
 
                 <!-- CARD 4 -->
-                <article class="trending-recipe-card" data-category="bakery"
-                    data-title="Golden Salted Caramel Donuts"
-                    data-image="assets/images/caramel.png"
-                    data-cuisine="Bakery"
-                    data-time="35 mins"
-                    data-calories="310 kcal"
-                    data-desc="Fluffy yeast dough dipped in browned-butter caramel and topped with flaky sea salt."
-                    data-ingredients="2.5 cups All-Purpose Flour|1 packet Active Dry Yeast|1/2 cup Warm Whole Milk|4 tbsp Browned Butter|1/2 cup Salted Caramel Sauce|Maldon Flaky Sea Salt"
-                    data-cook-url="pages/search.html?q=Caramel+Donuts">
+                <article class="trending-recipe-card" data-category="healthy quick"
+                    data-title="Harvest Quinoa &amp; Avocado Power Bowl"
+                    data-image="assets/images/dan-gold-5O1ddenSM4g-unsplash.jpg"
+                    data-cuisine="Clean Eating"
+                    data-time="20 mins"
+                    data-calories="340 kcal"
+                    data-desc="Nutrient-dense warm tricolor quinoa, sliced Hass avocado, baby greens, and lemon-tahini drizzle."
+                    data-ingredients="1 cup Cooked Tricolor Quinoa|1 Ripe Hass Avocado, sliced|2 cups Baby Kale &amp; Arugula|1/2 cup Roasted Chickpeas|1/4 cup Pomegranate Arils|2 tbsp Lemon Garlic Tahini Dressing"
+                    data-cook-url="pages/search.html?q=Quinoa+Avocado+Bowl">
                     <div class="trending-card-media">
-                        <img src="assets/images/caramel.png" alt="Golden Salted Butter Caramel Donut" loading="lazy" decoding="async">
-                        <span class="trending-cuisine-badge">Bakery</span>
-                        <button type="button" class="btn-favorite-heart" data-recipe-id="trend-caramel-donuts" aria-label="Save to favorites" title="Save to favorites">
+                        <img src="assets/images/dan-gold-5O1ddenSM4g-unsplash.jpg" alt="Harvest Quinoa and Avocado Power Bowl with greens" loading="lazy" decoding="async">
+                        <span class="trending-cuisine-badge">Healthy</span>
+                        <button type="button" class="btn-favorite-heart" data-recipe-id="trend-quinoa-bowl" aria-label="Save to favorites" title="Save to favorites">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                             </svg>
@@ -381,14 +377,14 @@
                     </div>
                     <div class="trending-card-body">
                         <div class="trending-metrics">
-                            <span>⏱ 35 mins</span>
-                            <span>🔥 310 kcal</span>
+                            <span>⏱ 20 mins</span>
+                            <span>🔥 340 kcal</span>
                         </div>
-                        <h3 class="trending-card-title">Golden Salted Caramel Donuts</h3>
-                        <p class="trending-desc">Fluffy yeast dough dipped in browned-butter caramel and topped with flaky sea salt.</p>
+                        <h3 class="trending-card-title">Harvest Quinoa &amp; Avocado Bowl</h3>
+                        <p class="trending-desc">Nutrient-dense warm tricolor quinoa, sliced Hass avocado, baby greens, and lemon-tahini drizzle.</p>
                         <div class="trending-card-actions">
                             <button type="button" class="btn-card-quickview">Quick View</button>
-                            <a href="pages/search.html?q=Caramel+Donuts" class="btn-card-cook">Cook &rarr;</a>
+                            <a href="pages/search.html?q=Quinoa+Avocado+Bowl" class="btn-card-cook">Cook &rarr;</a>
                         </div>
                     </div>
                 </article>
@@ -428,18 +424,18 @@
 
                 <!-- CARD 6 -->
                 <article class="trending-recipe-card" data-category="bakery"
-                    data-title="Fresh Strawberry Glazed Cronuts"
-                    data-image="assets/images/strawberry.png"
-                    data-cuisine="Patisserie"
-                    data-time="40 mins"
-                    data-calories="290 kcal"
-                    data-desc="Flaky laminated croissant-donut pastry filled with sweet strawberry puree and cream."
-                    data-ingredients="1 sheet Laminated Puff Pastry Dough|1 cup Fresh Strawberry Reduction|1/2 cup Vanilla Bean Mascarpone Cream|1/4 cup Powdered Sugar|Neutral Oil for Frying|Organic Freeze-Dried Strawberry Dust"
-                    data-cook-url="pages/search.html?q=Strawberry+Donuts">
+                    data-title="Rustic Wild Blackberry Galette"
+                    data-image="assets/images/annie-spratt-R3LcfTvcGWY-unsplash.jpg"
+                    data-cuisine="Artisan Bakery"
+                    data-time="45 mins"
+                    data-calories="310 kcal"
+                    data-desc="Free-form rustic whole wheat crust folded over fresh juicy wild blackberries and lemon thyme."
+                    data-ingredients="1.5 cups Stoneground Pastry Flour|1/2 cup European Cold Butter, cubed|3 cups Fresh Wild Blackberries|3 tbsp Raw Demerara Cane Sugar|1 tbsp Fresh Lemon Juice &amp; Zest|1 Egg for egg wash &amp; coarse sugar"
+                    data-cook-url="pages/search.html?q=Wild+Blackberry+Galette">
                     <div class="trending-card-media">
-                        <img src="assets/images/strawberry.png" alt="Fresh Strawberry Glazed Cronut" loading="lazy" decoding="async">
-                        <span class="trending-cuisine-badge">Patisserie</span>
-                        <button type="button" class="btn-favorite-heart" data-recipe-id="trend-strawberry-donuts" aria-label="Save to favorites" title="Save to favorites">
+                        <img src="assets/images/annie-spratt-R3LcfTvcGWY-unsplash.jpg" alt="Rustic Golden Wild Blackberry Galette" loading="lazy" decoding="async">
+                        <span class="trending-cuisine-badge">Bakery</span>
+                        <button type="button" class="btn-favorite-heart" data-recipe-id="trend-blackberry-galette" aria-label="Save to favorites" title="Save to favorites">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                             </svg>
@@ -447,14 +443,14 @@
                     </div>
                     <div class="trending-card-body">
                         <div class="trending-metrics">
-                            <span>⏱ 40 mins</span>
-                            <span>🔥 290 kcal</span>
+                            <span>⏱ 45 mins</span>
+                            <span>🔥 310 kcal</span>
                         </div>
-                        <h3 class="trending-card-title">Fresh Strawberry Glazed Cronuts</h3>
-                        <p class="trending-desc">Flaky laminated croissant-donut pastry filled with sweet strawberry puree and cream.</p>
+                        <h3 class="trending-card-title">Rustic Wild Blackberry Galette</h3>
+                        <p class="trending-desc">Free-form rustic whole wheat crust folded over fresh juicy wild blackberries and lemon thyme.</p>
                         <div class="trending-card-actions">
                             <button type="button" class="btn-card-quickview">Quick View</button>
-                            <a href="pages/search.html?q=Strawberry+Donuts" class="btn-card-cook">Cook &rarr;</a>
+                            <a href="pages/search.html?q=Wild+Blackberry+Galette" class="btn-card-cook">Cook &rarr;</a>
                         </div>
                     </div>
                 </article>

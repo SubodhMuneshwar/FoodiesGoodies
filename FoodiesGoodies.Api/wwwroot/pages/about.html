@@ -19,10 +19,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="../css/variables.css">
-    <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/global.css?v=5.6">
-    <link rel="stylesheet" href="../css/about.css">
+    <link rel="stylesheet" href="../css/variables.css?v=6.2">
+    <link rel="stylesheet" href="../css/base.css?v=6.2">
+    <link rel="stylesheet" href="../css/global.css?v=6.2">
+    <link rel="stylesheet" href="../css/about.css?v=6.2">
     <link rel="icon" type="image/png" href="../assets/images/fav.png">
 
     <!-- Open Graph & Social Cards -->
@@ -86,40 +86,67 @@
 
     <!-- MAIN ABOUT CONTENT -->
     <main id="main-content" class="about-page-container">
-        <!-- WELCOME SECTION -->
-        <section class="about-card-section" aria-labelledby="welcome-heading">
-            <h1 id="welcome-heading">Welcome to Foodies Goodies!</h1>
-            <p>
-                We are passionate food enthusiasts dedicated to sharing our love for cooking and exploring culinary delights with you. At Foodies Goodies, we believe that everyone deserves access to delicious recipes, fresh cooking techniques, and inspiring culinary ideas.
+        <!-- EDITORIAL STORY HERO -->
+        <section class="about-story-hero" aria-labelledby="about-hero-title">
+            <span class="about-eyebrow">The FoodiesGoodies Philosophy</span>
+            <h1 id="about-hero-title" class="about-title">Where Culinary Tradition Meets <em>Intelligent</em> Gastronomy.</h1>
+            <p class="about-lead">
+                We believe that every dish tells a story. FoodiesGoodies was created to bridge timeless culinary heritage with modern nutritional science — empowering home cooks, food artisans, and culinary explorers to craft extraordinary meals with confidence.
             </p>
+        </section>
+
+        <!-- THREE PILLARS OF CRAFT -->
+        <section class="about-pillars" aria-label="Our Core Pillars">
+            <div class="pillar-card">
+                <div class="pillar-icon" aria-hidden="true">📖</div>
+                <h3>2.3M+ Curated Dishes</h3>
+                <p>Access our vast collection of chef-tested recipes with complete ingredient proportions, cooking methods, and allergen disclosures.</p>
+            </div>
+            <div class="pillar-card">
+                <div class="pillar-icon" aria-hidden="true">🌍</div>
+                <h3>180+ Global Cuisines</h3>
+                <p>From slow-simmered Tuscan ragù to spicy Tokyo ramen and vibrant Latin street tacos, celebrate authentic gastronomic cultures.</p>
+            </div>
+            <div class="pillar-card">
+                <div class="pillar-icon" aria-hidden="true">🧠</div>
+                <h3>Intelligent Diet Planning</h3>
+                <p>Personalized macro-balanced nutritional recommendations powered by cutting-edge dietary algorithms and BMI analysis.</p>
+            </div>
         </section>
 
         <!-- CULINARY GALLERY -->
         <section class="culinary-gallery" aria-label="Culinary Creations Gallery">
-            <img src="../assets/images/2.jpeg" alt="Artisanal pasta with roasted cherry tomatoes and herbs" loading="lazy" decoding="async">
-            <img src="../assets/images/flame.jpeg" alt="Chef flaming gourmet pan dish over kitchen flame" loading="lazy" decoding="async">
-            <img src="../assets/images/3.jpeg" alt="Rustic wood-fired artisanal pizza" loading="lazy" decoding="async">
-        </section>
-
-        <!-- WHAT WE OFFER -->
-        <section class="about-card-section" aria-labelledby="offer-heading">
-            <h2 id="offer-heading">What We Offer</h2>
-            <p>
-                Explore our extensive collection of recipes ranging from quick and easy weekday dinners to elaborate gourmet meals for special occasions. We also feature articles on ingredient spotlights, cooking techniques, and kitchen hacks to enhance your culinary skills.
-            </p>
+            <div class="gallery-item">
+                <img src="../assets/images/2.jpeg" alt="Artisanal pasta with roasted cherry tomatoes and herbs" loading="lazy" decoding="async">
+                <div class="gallery-caption">Artisanal Mediterranean Pasta with Slow-Roasted Tomatoes</div>
+            </div>
+            <div class="gallery-item">
+                <img src="../assets/images/flame.jpeg" alt="Chef flaming gourmet pan dish over kitchen flame" loading="lazy" decoding="async">
+                <div class="gallery-caption">Precision Searing &amp; High-Flame Gastronomy</div>
+            </div>
+            <div class="gallery-item">
+                <img src="../assets/images/3.jpeg" alt="Rustic wood-fired artisanal pizza" loading="lazy" decoding="async">
+                <div class="gallery-caption">48-Hour Fermented Wood-Fired Neapolitan Crusts</div>
+            </div>
         </section>
 
         <!-- CHEFS SHOWCASE -->
-        <section class="about-card-section" aria-labelledby="chefs-heading">
-            <h2 id="chefs-heading">Meet Our Master Chefs</h2>
-            <p>Our team of culinary artists brings passion, tradition, and modern gastronomy right to your kitchen.</p>
+        <section class="about-chefs-section" aria-labelledby="chefs-heading">
+            <div class="section-header-compact">
+                <span class="section-tag">Culinary Masters</span>
+                <h2 id="chefs-heading">Meet Our Master Chefs</h2>
+                <p>The culinary artists guiding our recipes, technique masterclasses, and gastronomic standards.</p>
+            </div>
 
             <div class="chefs-grid">
                 <!-- CHEF 1 -->
                 <article class="chef-card">
-                    <img src="../assets/images/chef1.jpeg" alt="Portrait of Chef Gabriella Russo" loading="lazy" decoding="async">
+                    <div class="chef-avatar-wrapper">
+                        <img src="../assets/images/chef1.jpeg" alt="Portrait of Chef Gabriella Russo" loading="lazy" decoding="async">
+                    </div>
                     <h3>Chef Gabriella Russo</h3>
-                    <div class="chef-specialty">Italian &amp; Mediterranean Cuisine</div>
+                    <div class="chef-specialty">Italian &amp; Mediterranean Specialist</div>
+                    <p class="chef-bio">Master of slow-fermented doughs, rustic pasta, and cold-pressed olive oils from southern Italy.</p>
                     <div class="chef-socials">
                         <a href="https://instagram.com" class="insta" target="_blank" rel="noopener noreferrer" aria-label="Gabriella Russo on Instagram">
                             <ion-icon name="logo-instagram"></ion-icon>
@@ -132,9 +159,12 @@
 
                 <!-- CHEF 2 -->
                 <article class="chef-card">
-                    <img src="../assets/images/chef2.jpeg" alt="Portrait of Chef Javier Morales" loading="lazy" decoding="async">
+                    <div class="chef-avatar-wrapper">
+                        <img src="../assets/images/chef2.jpeg" alt="Portrait of Chef Javier Morales" loading="lazy" decoding="async">
+                    </div>
                     <h3>Chef Javier Morales</h3>
                     <div class="chef-specialty">Latin Grill &amp; Tapas Master</div>
+                    <p class="chef-bio">Pioneer of open-flame charcoal grilling, vibrant chimichurri, and contemporary Iberian tapas.</p>
                     <div class="chef-socials">
                         <a href="https://instagram.com" class="insta" target="_blank" rel="noopener noreferrer" aria-label="Javier Morales on Instagram">
                             <ion-icon name="logo-instagram"></ion-icon>
@@ -147,9 +177,12 @@
 
                 <!-- CHEF 3 -->
                 <article class="chef-card">
-                    <img src="../assets/images/chef3.jpeg" alt="Portrait of Chef Luca Bianchi" loading="lazy" decoding="async">
+                    <div class="chef-avatar-wrapper">
+                        <img src="../assets/images/chef3.jpeg" alt="Portrait of Chef Luca Bianchi" loading="lazy" decoding="async">
+                    </div>
                     <h3>Chef Luca Bianchi</h3>
                     <div class="chef-specialty">Pastry Chef &amp; Artisanal Baker</div>
+                    <p class="chef-bio">Dedicated to French lamination, heritage sourdough grains, and delicate seasonal fruit tarts.</p>
                     <div class="chef-socials">
                         <a href="https://instagram.com" class="insta" target="_blank" rel="noopener noreferrer" aria-label="Luca Bianchi on Instagram">
                             <ion-icon name="logo-instagram"></ion-icon>
@@ -162,9 +195,12 @@
 
                 <!-- CHEF 4 -->
                 <article class="chef-card">
-                    <img src="../assets/images/chef4.jpeg" alt="Portrait of Chef Aisha Patel" loading="lazy" decoding="async">
+                    <div class="chef-avatar-wrapper">
+                        <img src="../assets/images/chef4.jpeg" alt="Portrait of Chef Aisha Patel" loading="lazy" decoding="async">
+                    </div>
                     <h3>Chef Aisha Patel</h3>
                     <div class="chef-specialty">Spice Fusion &amp; Holistic Nutrition</div>
+                    <p class="chef-bio">Blending Ayurvedic herbal balance with modern plant-forward nutrition and bold spice profiles.</p>
                     <div class="chef-socials">
                         <a href="https://instagram.com" class="insta" target="_blank" rel="noopener noreferrer" aria-label="Aisha Patel on Instagram">
                             <ion-icon name="logo-instagram"></ion-icon>
@@ -177,12 +213,16 @@
             </div>
         </section>
 
-        <!-- GET COOKING CALLOUT -->
-        <section class="about-card-section" aria-labelledby="cooking-heading">
-            <h2 id="cooking-heading">Get Cooking Today!</h2>
+        <!-- CALL TO ACTION BANNER -->
+        <section class="about-cta-banner" aria-labelledby="cooking-heading">
+            <h2 id="cooking-heading">Begin Your Culinary Journey</h2>
             <p>
-                Ready to embark on a culinary adventure? Browse our recipe catalog, get personalized advice from our AI Dietician, and let's craft mouthwatering meals together!
+                Browse over 2.3 million chef-vetted recipes, get intelligent macro-balanced guidance from our AI Dietician, and bring Michelin-level inspiration to your home.
             </p>
+            <div class="about-cta-buttons">
+                <a href="search.html" class="btn-about-primary">Explore 2.3M+ Recipes &rarr;</a>
+                <a href="ai.html" class="btn-about-secondary">Consult AI Dietician</a>
+            </div>
         </section>
     </main>
 

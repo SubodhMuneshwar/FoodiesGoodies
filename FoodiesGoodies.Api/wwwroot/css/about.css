@@ -1,6 +1,6 @@
 /* ==========================================================================
    FoodiesGoodies About Us Styles (about.css)
-   Clean, Modern, Editorial Food Publication Styling
+   Clean, Modern, Editorial Food Publication Styling (NYT / Kinfolk Inspired)
    ========================================================================== */
 
 @import url('base.css');
@@ -16,207 +16,427 @@ body {
    -------------------------------------------------------------------------- */
 .about-page-container {
   flex: 1;
-  max-width: 1140px;
+  max-width: 1160px;
   width: 90%;
-  margin: calc(var(--header-height) + 40px) auto 80px;
+  margin: calc(var(--header-height) + 40px) auto 90px;
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  gap: 56px;
   animation: fadeInUp 0.5s ease-out;
 }
 
-.about-card-section {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  padding: clamp(36px, 5vw, 60px) clamp(24px, 4vw, 54px);
-  box-shadow: var(--shadow-sm);
+/* --------------------------------------------------------------------------
+   Editorial Story Hero
+   -------------------------------------------------------------------------- */
+.about-story-hero {
   text-align: center;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 20px 0 10px;
 }
 
-.about-card-section h1 {
-  font-family: var(--font-heading);
-  font-size: clamp(2.4rem, 4.5vw, 3.4rem);
-  font-weight: 800;
-  color: var(--text-primary);
+.about-eyebrow {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--primary);
   margin-bottom: 16px;
-  letter-spacing: -0.02em;
 }
 
-.about-card-section h2 {
+.about-title {
   font-family: var(--font-heading);
-  font-size: clamp(1.8rem, 3.2vw, 2.4rem);
+  font-size: clamp(2.4rem, 4.8vw, 3.6rem);
   font-weight: 800;
   color: var(--text-primary);
-  margin-bottom: 14px;
-  letter-spacing: -0.015em;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
 }
 
-.about-card-section p {
-  font-size: 1.1rem;
+.about-title em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--primary);
+}
+
+.about-lead {
+  font-size: clamp(1.05rem, 1.8vw, 1.22rem);
   line-height: 1.75;
   color: var(--text-secondary);
-  max-width: 840px;
+  max-width: 780px;
   margin: 0 auto;
 }
 
 /* --------------------------------------------------------------------------
-   Food Culinary Gallery
+   Three Pillars of Craft
+   -------------------------------------------------------------------------- */
+.about-pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.pillar-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 36px 28px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+}
+
+.pillar-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: rgba(194, 112, 58, 0.35);
+}
+
+.pillar-icon {
+  font-size: 2rem;
+  margin-bottom: 16px;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface-elevated);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-subtle);
+}
+
+.pillar-card h3 {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.pillar-card p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Culinary Artistry Gallery
    -------------------------------------------------------------------------- */
 .culinary-gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
-  margin: 10px 0;
 }
 
-.culinary-gallery img {
-  width: 100%;
-  height: 280px;
-  object-fit: cover;
-  border-radius: var(--radius-md);
+.gallery-item {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
   border: 1px solid var(--border-subtle);
   box-shadow: var(--shadow-sm);
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  background: var(--bg-surface);
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
 }
 
-.culinary-gallery img:hover {
+.gallery-item:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-md);
 }
 
+.gallery-item img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gallery-item:hover img {
+  transform: scale(1.05);
+}
+
+.gallery-caption {
+  padding: 14px 18px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+}
+
 /* --------------------------------------------------------------------------
-   Chefs Grid
+   Chefs Section
    -------------------------------------------------------------------------- */
+.about-chefs-section {
+  padding-top: 10px;
+}
+
+.section-header-compact {
+  text-align: center;
+  margin-bottom: 40px;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-header-compact .section-tag {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+
+.section-header-compact h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 3.5vw, 2.6rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  letter-spacing: -0.015em;
+}
+
+.section-header-compact p {
+  color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
 .chefs-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 32px;
-  margin-top: 36px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
 }
 
 .chef-card {
-  background: var(--bg-surface-elevated);
+  background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   padding: 32px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
 }
 
 .chef-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: rgba(194, 112, 58, 0.35);
 }
 
-.chef-card img {
-  width: 150px;
-  height: 150px;
+.chef-avatar-wrapper {
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid var(--bg-surface);
+  overflow: hidden;
   margin-bottom: 18px;
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.4s ease;
+  border: 3px solid var(--bg-surface-elevated);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
-.chef-card:hover img {
-  transform: scale(1.05);
+.chef-avatar-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.chef-card:hover .chef-avatar-wrapper img {
+  transform: scale(1.08);
 }
 
 .chef-card h3 {
   font-family: var(--font-heading);
-  font-size: 1.25rem;
+  font-size: 1.18rem;
   color: var(--text-primary);
   font-weight: 700;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .chef-card .chef-specialty {
+  display: inline-block;
+  background: var(--primary-subtle);
+  color: var(--primary);
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 12px;
+}
+
+.chef-card .chef-bio {
+  font-size: 0.86rem;
+  line-height: 1.55;
   color: var(--text-muted);
-  font-size: 0.88rem;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
+  flex: 1;
 }
 
 .chef-socials {
   display: flex;
   justify-content: center;
-  gap: 14px;
+  gap: 12px;
   margin-top: auto;
 }
 
 .chef-socials a {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
   color: var(--text-muted);
-  font-size: 18px;
+  font-size: 16px;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   text-decoration: none;
-  transition: color var(--transition-fast);
+  transition: all var(--transition-fast);
 }
 
 .chef-socials a:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #FFFFFF;
+  transform: translateY(-2px);
+}
+
+/* --------------------------------------------------------------------------
+   About Call to Action Banner
+   -------------------------------------------------------------------------- */
+.about-cta-banner {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  padding: clamp(40px, 6vw, 68px) clamp(24px, 4vw, 48px);
+  text-align: center;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.about-cta-banner::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 280px;
+  background: radial-gradient(ellipse, var(--primary-subtle) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.about-cta-banner h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 3.6vw, 2.8rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 14px;
+  letter-spacing: -0.015em;
+  position: relative;
+}
+
+.about-cta-banner p {
+  color: var(--text-secondary);
+  font-size: 1.08rem;
+  line-height: 1.7;
+  max-width: 680px;
+  margin: 0 auto 30px;
+  position: relative;
+}
+
+.about-cta-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.btn-about-primary {
+  padding: 13px 28px;
+  background: var(--primary);
+  color: #FFFFFF !important;
+  font-weight: 600;
+  font-size: 0.96rem;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.btn-about-primary:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-about-secondary {
+  padding: 13px 26px;
+  background: var(--bg-surface-elevated);
+  border: 1.5px solid var(--border-strong);
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.96rem;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.btn-about-secondary:hover {
+  border-color: var(--primary);
   color: var(--primary);
+  transform: translateY(-2px);
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Breakpoints
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .about-pillars {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .culinary-gallery {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .chefs-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
 }
 
 @media (max-width: 650px) {
   .about-page-container {
-    width: 94%;
-    gap: 28px;
+    width: 92%;
+    gap: 36px;
   }
-
-  .about-card-section {
-    padding: 28px 18px;
-  }
-
-  .culinary-gallery {
-    grid-template-columns: 1fr;
-  }
-
   .chefs-grid {
     grid-template-columns: 1fr;
   }
+  .about-cta-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  .btn-about-primary,
+  .btn-about-secondary {
+    width: 100%;
+    text-align: center;
+  }
 }
-
-/* --------------------------------------------------------------------------
-   Legal & Policy Document Styles (privacy.html, terms.html)
-   -------------------------------------------------------------------------- */
-.legal-content {
-  text-align: left;
-}
-
-.legal-content h2 {
-  margin-top: 36px;
-  font-size: 1.45rem;
-  text-align: left;
-  font-family: var(--font-heading);
-  color: var(--text-primary);
-  font-weight: 700;
-}
-
-.legal-content p,
-.legal-content ul {
-  margin-bottom: 16px;
-  font-size: 1.02rem;
-  line-height: 1.8;
-  color: var(--text-secondary);
-}
-
-.legal-content ul {
-  padding-left: 24px;
-}
-
-.legal-content li {
-  margin-bottom: 8px;
-}
-
-.last-updated {
-  font-size: 0.92rem;
-  color: var(--primary);
-  margin-bottom: 24px;
-  font-style: italic;
-  font-weight: 500;
-}
-
