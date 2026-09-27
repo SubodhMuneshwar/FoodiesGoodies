@@ -142,9 +142,11 @@
                         <h2>Calculate Your Blueprint</h2>
                         <span class="form-subline">Enter your metrics below to calculate BMI, caloric targets, and custom meals.</span>
                     </div>
-                    <div class="unit-toggle-buttons" role="radiogroup" aria-label="Measurement system">
-                        <button type="button" class="btn-unit-toggle active" id="btn-unit-metric" data-unit="metric">Metric (kg, cm)</button>
-                        <button type="button" class="btn-unit-toggle" id="btn-unit-imperial" data-unit="imperial">Imperial (lbs, in)</button>
+                    <div class="unit-header-status">
+                        <span class="unit-custom-badge">
+                            <ion-icon name="options-outline" aria-hidden="true"></ion-icon>
+                            Independent Biometrics
+                        </span>
                     </div>
                 </div>
 
@@ -171,14 +173,92 @@
                             </div>
                         </div>
 
-                        <div class="form-row">
-                            <div>
-                                <label for="height" id="label-height">Height (cm)</label>
-                                <input type="number" id="height" min="80" max="250" value="175" required>
+                        <div class="form-row biometric-measurements-row">
+                            <!-- Height Field -->
+                            <div class="biometric-field-box" id="heightFieldBox">
+                                <div class="biometric-label-bar">
+                                    <label for="height" class="biometric-label" id="label-height">
+                                        <ion-icon name="resize-outline" aria-hidden="true"></ion-icon>
+                                        <span>Height</span>
+                                    </label>
+                                    <div class="unit-selector-wrapper">
+                                        <label for="heightUnit" class="unit-selector-text">Unit:</label>
+                                        <select id="heightUnit" class="metric-select-dropdown" aria-label="Height measurement unit">
+                                            <option value="cm" selected>cm (Centimeters)</option>
+                                            <option value="ft_in">ft + in (Feet &amp; Inches)</option>
+                                            <option value="m">m (Meters)</option>
+                                            <option value="in">in (Inches)</option>
+                                            <option value="ft">ft (Decimal Feet)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Single input container (cm, m, in, ft) -->
+                                <div class="input-with-affix" id="heightSingleContainer">
+                                    <input type="number" id="height" min="60" max="260" step="any" value="175" placeholder="175" required>
+                                    <span class="input-affix-badge" id="heightAffixBadge">cm</span>
+                                </div>
+
+                                <!-- Dual input container (ft + in) -->
+                                <div class="dual-inputs-container" id="heightDualContainer" style="display: none;">
+                                    <div class="input-with-affix">
+                                        <input type="number" id="heightFt" min="2" max="8" step="1" value="5" placeholder="5" aria-label="Height in feet">
+                                        <span class="input-affix-badge">ft</span>
+                                    </div>
+                                    <div class="input-with-affix">
+                                        <input type="number" id="heightIn" min="0" max="11.9" step="any" value="9" placeholder="9" aria-label="Height in inches">
+                                        <span class="input-affix-badge">in</span>
+                                    </div>
+                                </div>
+
+                                <!-- Live Conversion Subtext -->
+                                <div class="metric-conversion-hint" id="heightConversionHint">
+                                    <ion-icon name="swap-horizontal-outline" aria-hidden="true"></ion-icon>
+                                    <span id="heightConversionText">175 cm ≈ 5 ft 8.9 in (1.75 m)</span>
+                                </div>
                             </div>
-                            <div>
-                                <label for="weight" id="label-weight">Weight (kg)</label>
-                                <input type="number" id="weight" min="25" max="350" value="75" required>
+
+                            <!-- Weight Field -->
+                            <div class="biometric-field-box" id="weightFieldBox">
+                                <div class="biometric-label-bar">
+                                    <label for="weight" class="biometric-label" id="label-weight">
+                                        <ion-icon name="scale-outline" aria-hidden="true"></ion-icon>
+                                        <span>Weight</span>
+                                    </label>
+                                    <div class="unit-selector-wrapper">
+                                        <label for="weightUnit" class="unit-selector-text">Unit:</label>
+                                        <select id="weightUnit" class="metric-select-dropdown" aria-label="Weight measurement unit">
+                                            <option value="kg" selected>kg (Kilograms)</option>
+                                            <option value="lbs">lbs (Pounds)</option>
+                                            <option value="st_lbs">st + lbs (Stone &amp; Pounds)</option>
+                                            <option value="st">st (Stone)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Single input container (kg, lbs, st) -->
+                                <div class="input-with-affix" id="weightSingleContainer">
+                                    <input type="number" id="weight" min="20" max="350" step="any" value="75" placeholder="75" required>
+                                    <span class="input-affix-badge" id="weightAffixBadge">kg</span>
+                                </div>
+
+                                <!-- Dual input container (st + lbs) -->
+                                <div class="dual-inputs-container" id="weightDualContainer" style="display: none;">
+                                    <div class="input-with-affix">
+                                        <input type="number" id="weightSt" min="3" max="55" step="1" value="11" placeholder="11" aria-label="Weight in stone">
+                                        <span class="input-affix-badge">st</span>
+                                    </div>
+                                    <div class="input-with-affix">
+                                        <input type="number" id="weightLbs" min="0" max="13.9" step="any" value="11.3" placeholder="11.3" aria-label="Weight in pounds">
+                                        <span class="input-affix-badge">lbs</span>
+                                    </div>
+                                </div>
+
+                                <!-- Live Conversion Subtext -->
+                                <div class="metric-conversion-hint" id="weightConversionHint">
+                                    <ion-icon name="swap-horizontal-outline" aria-hidden="true"></ion-icon>
+                                    <span id="weightConversionText">75 kg ≈ 165.3 lbs (11 st 11.3 lbs)</span>
+                                </div>
                             </div>
                         </div>
 

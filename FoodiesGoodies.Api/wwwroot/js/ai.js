@@ -15,12 +15,23 @@
 document.addEventListener('DOMContentLoaded', () => {
     const aiForm = document.querySelector('#aiDieticianForm');
     const resultsContainer = document.querySelector('#aiResults');
-    const btnMetric = document.getElementById('btn-unit-metric');
-    const btnImperial = document.getElementById('btn-unit-imperial');
-    const labelHeight = document.getElementById('label-height');
-    const labelWeight = document.getElementById('label-weight');
+    const heightUnitSelect = document.getElementById('heightUnit');
+    const weightUnitSelect = document.getElementById('weightUnit');
     const heightInput = document.getElementById('height');
     const weightInput = document.getElementById('weight');
+    const heightFtInput = document.getElementById('heightFt');
+    const heightInInput = document.getElementById('heightIn');
+    const weightStInput = document.getElementById('weightSt');
+    const weightLbsInput = document.getElementById('weightLbs');
+    const heightSingleContainer = document.getElementById('heightSingleContainer');
+    const heightDualContainer = document.getElementById('heightDualContainer');
+    const weightSingleContainer = document.getElementById('weightSingleContainer');
+    const weightDualContainer = document.getElementById('weightDualContainer');
+    const heightAffixBadge = document.getElementById('heightAffixBadge');
+    const weightAffixBadge = document.getElementById('weightAffixBadge');
+    const heightConversionText = document.getElementById('heightConversionText');
+    const weightConversionText = document.getElementById('weightConversionText');
+
     const countrySelect = document.getElementById('country');
     const regionInput = document.getElementById('region');
     const cuisineSelect = document.getElementById('cuisine');
@@ -30,9 +41,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const STORAGE_KEY_INPUTS = 'foodies_diet_inputs';
     const STORAGE_KEY_PLAN = 'foodies_diet_plan';
-    const STORAGE_KEY_UNIT = 'foodies_diet_unit_system';
+    const STORAGE_KEY_HEIGHT_UNIT = 'foodies_diet_height_unit';
+    const STORAGE_KEY_WEIGHT_UNIT = 'foodies_diet_weight_unit';
 
-    let currentUnitSystem = 'metric'; // 'metric' or 'imperial'
+    let currentHeightUnit = 'cm'; // 'cm', 'ft_in', 'm', 'in', 'ft'
+    let currentWeightUnit = 'kg'; // 'kg', 'lbs', 'st_lbs', 'st'
+    let canonicalHeightCm = 175;
+    let canonicalWeightKg = 75;
+
     let currentPlanData = null;       // Cached active 7-day plan
     let activeDayIndex = 0;           // Current visible day (0 = Day 1)
     let currentRequestPayload = null; // Stored user constraints for meal swaps
@@ -43,14 +59,20 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 localStorage.removeItem(STORAGE_KEY_INPUTS);
                 localStorage.removeItem(STORAGE_KEY_PLAN);
-                localStorage.removeItem(STORAGE_KEY_UNIT);
+                localStorage.removeItem(STORAGE_KEY_HEIGHT_UNIT);
+                localStorage.removeItem(STORAGE_KEY_WEIGHT_UNIT);
+                localStorage.removeItem('foodies_diet_unit_system');
             } catch (e) {}
 
             currentPlanData = null;
             currentRequestPayload = null;
             aiForm.reset();
             allergyChips.forEach(chip => chip.classList.remove('selected'));
-            if (btnMetric) btnMetric.click();
+
+            canonicalHeightCm = 175;
+            canonicalWeightKg = 75;
+            applyHeightUnit('cm', false);
+            applyWeightUnit('kg', false);
 
             resultsContainer.innerHTML = `
                 <div class="results-placeholder">
@@ -113,64 +135,246 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 3. Metric / Imperial Unit Switcher
-    if (btnMetric && btnImperial && heightInput && weightInput) {
-        btnMetric.addEventListener('click', () => {
-            if (currentUnitSystem === 'metric') return;
-            currentUnitSystem = 'metric';
-            btnMetric.classList.add('active');
-            btnImperial.classList.remove('active');
+    // 3. Independent Biometric Metrics Engine (Separate Height & Weight Units)
+    function getCanonicalHeightCm() {
+        if (currentHeightUnit === 'cm') {
+            const v = parseFloat(heightInput?.value);
+            return (!isNaN(v) && v > 0) ? v : 175;
+        } else if (currentHeightUnit === 'm') {
+            const v = parseFloat(heightInput?.value);
+            return (!isNaN(v) && v > 0) ? v * 100 : 175;
+        } else if (currentHeightUnit === 'in') {
+            const v = parseFloat(heightInput?.value);
+            return (!isNaN(v) && v > 0) ? v * 2.54 : 175;
+        } else if (currentHeightUnit === 'ft') {
+            const v = parseFloat(heightInput?.value);
+            return (!isNaN(v) && v > 0) ? v * 30.48 : 175;
+        } else if (currentHeightUnit === 'ft_in') {
+            const ft = parseFloat(heightFtInput?.value) || 0;
+            const inc = parseFloat(heightInInput?.value) || 0;
+            const totalInches = (ft * 12) + inc;
+            return totalInches > 0 ? totalInches * 2.54 : 175;
+        }
+        return 175;
+    }
 
-            if (labelHeight) labelHeight.textContent = 'Height (cm)';
-            if (labelWeight) labelWeight.textContent = 'Weight (kg)';
+    function getCanonicalWeightKg() {
+        if (currentWeightUnit === 'kg') {
+            const v = parseFloat(weightInput?.value);
+            return (!isNaN(v) && v > 0) ? v : 75;
+        } else if (currentWeightUnit === 'lbs') {
+            const v = parseFloat(weightInput?.value);
+            return (!isNaN(v) && v > 0) ? v * 0.45359237 : 75;
+        } else if (currentWeightUnit === 'st') {
+            const v = parseFloat(weightInput?.value);
+            return (!isNaN(v) && v > 0) ? v * 6.35029318 : 75;
+        } else if (currentWeightUnit === 'st_lbs') {
+            const st = parseFloat(weightStInput?.value) || 0;
+            const lbs = parseFloat(weightLbsInput?.value) || 0;
+            const totalLbs = (st * 14) + lbs;
+            return totalLbs > 0 ? totalLbs * 0.45359237 : 75;
+        }
+        return 75;
+    }
 
-            const inches = parseFloat(heightInput.value);
-            if (!isNaN(inches) && inches > 0) {
-                heightInput.value = Math.round(inches * 2.54);
-            } else {
-                heightInput.value = 175;
+    function updateHeightHint(hCm) {
+        if (!heightConversionText) return;
+        const totalInches = hCm / 2.54;
+        let ft = Math.floor(totalInches / 12);
+        let inc = Math.round((totalInches % 12) * 10) / 10;
+        if (inc >= 12) { ft += 1; inc = 0; }
+        const m = (hCm / 100).toFixed(2);
+        const inTot = (hCm / 2.54).toFixed(1);
+        const cmRound = Math.round(hCm * 10) / 10;
+
+        if (currentHeightUnit === 'cm') {
+            heightConversionText.textContent = `${cmRound} cm ≈ ${ft} ft ${inc} in (${m} m)`;
+        } else if (currentHeightUnit === 'ft_in') {
+            heightConversionText.textContent = `${ft} ft ${inc} in ≈ ${cmRound} cm (${m} m)`;
+        } else if (currentHeightUnit === 'm') {
+            heightConversionText.textContent = `${m} m ≈ ${cmRound} cm (${ft} ft ${inc} in)`;
+        } else if (currentHeightUnit === 'in') {
+            heightConversionText.textContent = `${inTot} in ≈ ${cmRound} cm (${ft} ft ${inc} in)`;
+        } else if (currentHeightUnit === 'ft') {
+            const decFt = (hCm / 30.48).toFixed(2);
+            heightConversionText.textContent = `${decFt} ft ≈ ${cmRound} cm (${ft} ft ${inc} in)`;
+        }
+    }
+
+    function updateWeightHint(wKg) {
+        if (!weightConversionText) return;
+        const totalLbs = wKg * 2.20462262;
+        let st = Math.floor(totalLbs / 14);
+        let lbs = Math.round((totalLbs % 14) * 10) / 10;
+        if (lbs >= 14) { st += 1; lbs = 0; }
+        const lbsRound = Math.round(totalLbs * 10) / 10;
+        const kgRound = Math.round(wKg * 10) / 10;
+        const stDec = (wKg * 0.157473).toFixed(1);
+
+        if (currentWeightUnit === 'kg') {
+            weightConversionText.textContent = `${kgRound} kg ≈ ${lbsRound} lbs (${st} st ${lbs} lbs)`;
+        } else if (currentWeightUnit === 'lbs') {
+            weightConversionText.textContent = `${lbsRound} lbs ≈ ${kgRound} kg (${st} st ${lbs} lbs)`;
+        } else if (currentWeightUnit === 'st_lbs') {
+            weightConversionText.textContent = `${st} st ${lbs} lbs ≈ ${kgRound} kg (${lbsRound} lbs)`;
+        } else if (currentWeightUnit === 'st') {
+            weightConversionText.textContent = `${stDec} st ≈ ${kgRound} kg (${lbsRound} lbs)`;
+        }
+    }
+
+    function applyHeightUnit(newUnit, preserveCurrentValues = true) {
+        if (preserveCurrentValues) {
+            canonicalHeightCm = getCanonicalHeightCm();
+        }
+        currentHeightUnit = newUnit;
+        if (heightUnitSelect) heightUnitSelect.value = newUnit;
+
+        if (newUnit === 'ft_in') {
+            if (heightSingleContainer) heightSingleContainer.style.display = 'none';
+            if (heightDualContainer) heightDualContainer.style.display = 'grid';
+            if (heightInput) heightInput.removeAttribute('required');
+            if (heightFtInput) heightFtInput.setAttribute('required', 'required');
+            if (heightInInput) heightInInput.setAttribute('required', 'required');
+
+            const totalInches = canonicalHeightCm / 2.54;
+            let ft = Math.floor(totalInches / 12);
+            let inc = Math.round((totalInches % 12) * 10) / 10;
+            if (inc >= 12) { ft += 1; inc = 0; }
+            if (heightFtInput) heightFtInput.value = ft;
+            if (heightInInput) heightInInput.value = inc;
+        } else {
+            if (heightSingleContainer) heightSingleContainer.style.display = 'flex';
+            if (heightDualContainer) heightDualContainer.style.display = 'none';
+            if (heightInput) heightInput.setAttribute('required', 'required');
+            if (heightFtInput) heightFtInput.removeAttribute('required');
+            if (heightInInput) heightInInput.removeAttribute('required');
+
+            if (newUnit === 'cm') {
+                if (heightInput) {
+                    heightInput.value = Math.round(canonicalHeightCm * 10) / 10;
+                    heightInput.min = "60";
+                    heightInput.max = "260";
+                    heightInput.step = "any";
+                }
+                if (heightAffixBadge) heightAffixBadge.textContent = 'cm';
+            } else if (newUnit === 'm') {
+                if (heightInput) {
+                    heightInput.value = (canonicalHeightCm / 100).toFixed(2);
+                    heightInput.min = "0.60";
+                    heightInput.max = "2.60";
+                    heightInput.step = "0.01";
+                }
+                if (heightAffixBadge) heightAffixBadge.textContent = 'm';
+            } else if (newUnit === 'in') {
+                if (heightInput) {
+                    heightInput.value = (canonicalHeightCm / 2.54).toFixed(1);
+                    heightInput.min = "24";
+                    heightInput.max = "102";
+                    heightInput.step = "0.1";
+                }
+                if (heightAffixBadge) heightAffixBadge.textContent = 'in';
+            } else if (newUnit === 'ft') {
+                if (heightInput) {
+                    heightInput.value = (canonicalHeightCm / 30.48).toFixed(2);
+                    heightInput.min = "2.0";
+                    heightInput.max = "8.5";
+                    heightInput.step = "0.01";
+                }
+                if (heightAffixBadge) heightAffixBadge.textContent = 'ft';
             }
-            heightInput.min = "60";
-            heightInput.max = "260";
+        }
+        updateHeightHint(canonicalHeightCm);
+    }
 
-            const lbs = parseFloat(weightInput.value);
-            if (!isNaN(lbs) && lbs > 0) {
-                weightInput.value = Math.round(lbs / 2.20462);
-            } else {
-                weightInput.value = 75;
+    function applyWeightUnit(newUnit, preserveCurrentValues = true) {
+        if (preserveCurrentValues) {
+            canonicalWeightKg = getCanonicalWeightKg();
+        }
+        currentWeightUnit = newUnit;
+        if (weightUnitSelect) weightUnitSelect.value = newUnit;
+
+        if (newUnit === 'st_lbs') {
+            if (weightSingleContainer) weightSingleContainer.style.display = 'none';
+            if (weightDualContainer) weightDualContainer.style.display = 'grid';
+            if (weightInput) weightInput.removeAttribute('required');
+            if (weightStInput) weightStInput.setAttribute('required', 'required');
+            if (weightLbsInput) weightLbsInput.setAttribute('required', 'required');
+
+            const totalLbs = canonicalWeightKg * 2.20462262;
+            let st = Math.floor(totalLbs / 14);
+            let lbs = Math.round((totalLbs % 14) * 10) / 10;
+            if (lbs >= 14) { st += 1; lbs = 0; }
+            if (weightStInput) weightStInput.value = st;
+            if (weightLbsInput) weightLbsInput.value = lbs;
+        } else {
+            if (weightSingleContainer) weightSingleContainer.style.display = 'flex';
+            if (weightDualContainer) weightDualContainer.style.display = 'none';
+            if (weightInput) weightInput.setAttribute('required', 'required');
+            if (weightStInput) weightStInput.removeAttribute('required');
+            if (weightLbsInput) weightLbsInput.removeAttribute('required');
+
+            if (newUnit === 'kg') {
+                if (weightInput) {
+                    weightInput.value = Math.round(canonicalWeightKg * 10) / 10;
+                    weightInput.min = "20";
+                    weightInput.max = "350";
+                    weightInput.step = "any";
+                }
+                if (weightAffixBadge) weightAffixBadge.textContent = 'kg';
+            } else if (newUnit === 'lbs') {
+                if (weightInput) {
+                    weightInput.value = Math.round(canonicalWeightKg * 2.20462262 * 10) / 10;
+                    weightInput.min = "44";
+                    weightInput.max = "770";
+                    weightInput.step = "any";
+                }
+                if (weightAffixBadge) weightAffixBadge.textContent = 'lbs';
+            } else if (newUnit === 'st') {
+                if (weightInput) {
+                    weightInput.value = (canonicalWeightKg * 0.157473).toFixed(1);
+                    weightInput.min = "3.1";
+                    weightInput.max = "55";
+                    weightInput.step = "0.1";
+                }
+                if (weightAffixBadge) weightAffixBadge.textContent = 'st';
             }
-            weightInput.min = "25";
-            weightInput.max = "350";
-        });
+        }
+        updateWeightHint(canonicalWeightKg);
+    }
 
-        btnImperial.addEventListener('click', () => {
-            if (currentUnitSystem === 'imperial') return;
-            currentUnitSystem = 'imperial';
-            btnImperial.classList.add('active');
-            btnMetric.classList.remove('active');
-
-            if (labelHeight) labelHeight.textContent = 'Height (inches)';
-            if (labelWeight) labelWeight.textContent = 'Weight (lbs)';
-
-            const cm = parseFloat(heightInput.value);
-            if (!isNaN(cm) && cm > 0) {
-                heightInput.value = Math.round(cm / 2.54);
-            } else {
-                heightInput.value = 69;
-            }
-            heightInput.min = "24";
-            heightInput.max = "102";
-
-            const kg = parseFloat(weightInput.value);
-            if (!isNaN(kg) && kg > 0) {
-                weightInput.value = Math.round(kg * 2.20462);
-            } else {
-                weightInput.value = 165;
-            }
-            weightInput.min = "55";
-            weightInput.max = "770";
+    if (heightUnitSelect) {
+        heightUnitSelect.addEventListener('change', (e) => {
+            applyHeightUnit(e.target.value, true);
         });
     }
+
+    if (weightUnitSelect) {
+        weightUnitSelect.addEventListener('change', (e) => {
+            applyWeightUnit(e.target.value, true);
+        });
+    }
+
+    [heightInput, heightFtInput, heightInInput].forEach(inp => {
+        if (inp) {
+            inp.addEventListener('input', () => {
+                canonicalHeightCm = getCanonicalHeightCm();
+                updateHeightHint(canonicalHeightCm);
+            });
+        }
+    });
+
+    [weightInput, weightStInput, weightLbsInput].forEach(inp => {
+        if (inp) {
+            inp.addEventListener('input', () => {
+                canonicalWeightKg = getCanonicalWeightKg();
+                updateWeightHint(canonicalWeightKg);
+            });
+        }
+    });
+
+    // Initialize hints
+    updateHeightHint(canonicalHeightCm);
+    updateWeightHint(canonicalWeightKg);
 
     if (!aiForm || !resultsContainer) return;
 
@@ -180,8 +384,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const age = parseInt(document.querySelector('#age').value, 10);
         const gender = document.querySelector('#gender').value;
-        const rawWeight = parseFloat(weightInput.value);
-        const rawHeight = parseFloat(heightInput.value);
         const country = countrySelect ? countrySelect.value : 'India';
         const region = regionInput ? regionInput.value.trim() : 'Maharashtra';
         const goal = document.querySelector('#goal').value;
@@ -209,24 +411,32 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedAllergies = Array.from(document.querySelectorAll('.allergy-chip.selected'))
             .map(chip => chip.getAttribute('data-value'));
 
-        if (isNaN(age) || isNaN(rawWeight) || isNaN(rawHeight)) {
-            showNotification('Please enter valid numerical values for age, weight, and height.', 'warning');
+        const canonicalHeight = getCanonicalHeightCm();
+        const canonicalWeight = getCanonicalWeightKg();
+
+        if (isNaN(age) || isNaN(canonicalHeight) || isNaN(canonicalWeight) || canonicalHeight <= 0 || canonicalWeight <= 0) {
+            showNotification('Please enter valid numerical values for age, height, and weight.', 'warning');
             return;
         }
 
-        // Standardize to metric kg and cm for backend Mifflin-St Jeor
-        let weightKg = rawWeight;
-        let heightCm = rawHeight;
-        if (currentUnitSystem === 'imperial') {
-            weightKg = rawWeight * 0.453592;
-            heightCm = rawHeight * 2.54;
+        const heightCm = Math.round(canonicalHeight);
+        const weightKg = Math.round(canonicalWeight * 10) / 10;
+
+        if (heightCm < 60 || heightCm > 260) {
+            showNotification(`Height must be between 60 cm and 260 cm (currently ${heightCm} cm).`, 'warning');
+            return;
+        }
+
+        if (weightKg < 20 || weightKg > 350) {
+            showNotification(`Weight must be between 20 kg and 350 kg (currently ${weightKg} kg).`, 'warning');
+            return;
         }
 
         const requestPayload = {
             age: age,
             gender: gender,
-            heightCm: Math.round(heightCm),
-            weightKg: Math.round(weightKg * 10) / 10,
+            heightCm: heightCm,
+            weightKg: weightKg,
             activityLevel: activity,
             goal: goal,
             country: country,
@@ -239,7 +449,9 @@ document.addEventListener('DOMContentLoaded', () => {
             mealCount: mealCount,
             budget: budget,
             maxCookingTimeMinutes: maxCookingTime,
-            cookingSkill: cookingSkill
+            cookingSkill: cookingSkill,
+            heightUnit: currentHeightUnit,
+            weightUnit: currentWeightUnit
         };
 
         currentRequestPayload = requestPayload;
@@ -290,7 +502,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             currentPlanData = plan;
             activeDayIndex = 0;
-            savePlanToStorage(requestPayload, currentUnitSystem, plan);
+            savePlanToStorage(requestPayload, plan);
             renderCompleteDietPlan(plan);
             showNotification('Your personalized diet plan & BMI analysis are ready! 🥗', 'success');
         } catch (err) {
@@ -686,12 +898,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Fallback calculation if not provided by backend
         if (!bmi) {
-            let w = currentRequestPayload?.weightKg || parseFloat(weightInput?.value) || 70;
-            let h = currentRequestPayload?.heightCm || parseFloat(heightInput?.value) || 175;
-            if (currentUnitSystem === 'imperial') {
-                w = w * 0.453592;
-                h = h * 2.54;
-            }
+            let w = currentRequestPayload?.weightKg || canonicalWeightKg || 75;
+            let h = currentRequestPayload?.heightCm || canonicalHeightCm || 175;
             if (w > 0 && h > 0) {
                 const hm = h / 100;
                 bmi = Math.round((w / (hm * hm)) * 10) / 10;
@@ -717,18 +925,49 @@ document.addEventListener('DOMContentLoaded', () => {
         // Scale marker position across 14 to 36 BMI range
         let meterPercent = Math.min(97, Math.max(3, ((bmi - 14) / 22) * 100));
 
-        // Healthy weight range display string
-        const healthyRangeStr = currentUnitSystem === 'imperial' && bio.healthyWeightRangeLbs
-            ? bio.healthyWeightRangeLbs
-            : (bio.healthyWeightRangeKg || '18.5 – 24.9 BMI');
+        // Format height & weight in user's selected metrics
+        const hCm = currentRequestPayload?.heightCm || canonicalHeightCm || 175;
+        const totalInches = hCm / 2.54;
+        let ft = Math.floor(totalInches / 12);
+        let inc = Math.round((totalInches % 12) * 10) / 10;
+        if (inc >= 12) { ft += 1; inc = 0; }
+
+        let heightDisplay = '';
+        if (currentHeightUnit === 'ft_in') {
+            heightDisplay = `${ft} ft ${inc} in (${Math.round(hCm)} cm)`;
+        } else if (currentHeightUnit === 'm') {
+            heightDisplay = `${(hCm / 100).toFixed(2)} m (${Math.round(hCm)} cm)`;
+        } else if (currentHeightUnit === 'in') {
+            heightDisplay = `${Math.round(totalInches)} in (${Math.round(hCm)} cm)`;
+        } else if (currentHeightUnit === 'ft') {
+            heightDisplay = `${(hCm / 30.48).toFixed(2)} ft (${Math.round(hCm)} cm)`;
+        } else {
+            heightDisplay = `${Math.round(hCm)} cm (${ft} ft ${inc} in)`;
+        }
+
+        const wKg = currentRequestPayload?.weightKg || canonicalWeightKg || 75;
+        const totalLbs = wKg * 2.20462262;
+
+        let weightDisplay = '';
+        if (currentWeightUnit === 'lbs') {
+            weightDisplay = `${Math.round(totalLbs * 10) / 10} lbs (${wKg} kg)`;
+        } else if (currentWeightUnit === 'st_lbs') {
+            let st = Math.floor(totalLbs / 14);
+            let lbs = Math.round((totalLbs % 14) * 10) / 10;
+            if (lbs >= 14) { st += 1; lbs = 0; }
+            weightDisplay = `${st} st ${lbs} lbs (${wKg} kg)`;
+        } else if (currentWeightUnit === 'st') {
+            weightDisplay = `${(wKg * 0.157473).toFixed(1)} st (${wKg} kg)`;
+        } else {
+            weightDisplay = `${wKg} kg (${Math.round(totalLbs * 10) / 10} lbs)`;
+        }
+
+        // Healthy weight range display string showing both kg and lbs
+        const healthyRangeStr = (bio.healthyWeightRangeKg && bio.healthyWeightRangeLbs)
+            ? `${bio.healthyWeightRangeKg} (${bio.healthyWeightRangeLbs})`
+            : (bio.healthyWeightRangeKg || bio.healthyWeightRangeLbs || '18.5 – 24.9 BMI');
 
         const goalLabel = bio.goalLabel || 'Optimal Health & Vitality';
-        const weightDisplay = currentUnitSystem === 'imperial'
-            ? `${Math.round((currentRequestPayload?.weightKg || 70) * 2.20462)} lbs`
-            : `${currentRequestPayload?.weightKg || 70} kg`;
-        const heightDisplay = currentUnitSystem === 'imperial'
-            ? `${Math.round((currentRequestPayload?.heightCm || 175) / 2.54)} in`
-            : `${currentRequestPayload?.heightCm || 175} cm`;
 
         let insightAdvice = '';
         if (bmi < 18.5) {
@@ -816,10 +1055,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 8. Storage Persistence Helpers
-    function savePlanToStorage(requestPayload, unitSystem, plan) {
+    function savePlanToStorage(requestPayload, plan) {
         try {
             localStorage.setItem(STORAGE_KEY_INPUTS, JSON.stringify(requestPayload));
-            localStorage.setItem(STORAGE_KEY_UNIT, unitSystem);
+            localStorage.setItem(STORAGE_KEY_HEIGHT_UNIT, currentHeightUnit);
+            localStorage.setItem(STORAGE_KEY_WEIGHT_UNIT, currentWeightUnit);
             localStorage.setItem(STORAGE_KEY_PLAN, JSON.stringify(plan));
         } catch (e) {
             console.warn('Unable to persist diet plan to localStorage', e);
@@ -834,17 +1074,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const plan = JSON.parse(savedPlanRaw);
             if (!plan || !plan.days || plan.days.length === 0) return;
 
-            const savedUnit = localStorage.getItem(STORAGE_KEY_UNIT);
             const savedInputsRaw = localStorage.getItem(STORAGE_KEY_INPUTS);
-
-            // Restore Unit System
-            if (savedUnit && savedUnit !== currentUnitSystem) {
-                if (savedUnit === 'imperial' && btnImperial) {
-                    btnImperial.click();
-                } else if (savedUnit === 'metric' && btnMetric) {
-                    btnMetric.click();
-                }
-            }
+            const savedHeightUnit = localStorage.getItem(STORAGE_KEY_HEIGHT_UNIT) || 'cm';
+            const savedWeightUnit = localStorage.getItem(STORAGE_KEY_WEIGHT_UNIT) || 'kg';
 
             // Restore Input Fields if available
             if (savedInputsRaw) {
@@ -854,13 +1086,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (inputs.age && document.querySelector('#age')) document.querySelector('#age').value = inputs.age;
                 if (inputs.gender && document.querySelector('#gender')) document.querySelector('#gender').value = inputs.gender;
 
-                if (currentUnitSystem === 'imperial') {
-                    if (inputs.weightKg && weightInput) weightInput.value = Math.round(inputs.weightKg * 2.20462);
-                    if (inputs.heightCm && heightInput) heightInput.value = Math.round(inputs.heightCm / 2.54);
-                } else {
-                    if (inputs.weightKg && weightInput) weightInput.value = inputs.weightKg;
-                    if (inputs.heightCm && heightInput) heightInput.value = inputs.heightCm;
-                }
+                if (inputs.heightCm) canonicalHeightCm = inputs.heightCm;
+                if (inputs.weightKg) canonicalWeightKg = inputs.weightKg;
+
+                applyHeightUnit(inputs.heightUnit || savedHeightUnit, false);
+                applyWeightUnit(inputs.weightUnit || savedWeightUnit, false);
 
                 if (inputs.country && countrySelect) countrySelect.value = inputs.country;
                 if (inputs.region && regionInput) regionInput.value = inputs.region;
@@ -896,6 +1126,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     });
                 }
+            } else {
+                applyHeightUnit(savedHeightUnit, false);
+                applyWeightUnit(savedWeightUnit, false);
             }
 
             currentPlanData = plan;
