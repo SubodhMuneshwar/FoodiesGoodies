@@ -130,6 +130,27 @@ public class GeminiDietPlannerAgent : IDietPlannerAgent
                 parsedPlan.Nutrition = targets;
                 parsedPlan.GeneratedAtUtc = DateTime.UtcNow;
 
+                // Ensure cost estimate is populated and mathematically consistent
+                if (parsedPlan.EstimatedCost == null || parsedPlan.EstimatedCost.DailyCost <= 0)
+                {
+                    parsedPlan.EstimatedCost = DietCostCalculator.CalculateCostEstimate(request, cuisine);
+                }
+                else
+                {
+                    if (parsedPlan.EstimatedCost.WeeklyCost <= 0)
+                        parsedPlan.EstimatedCost.WeeklyCost = Math.Round(parsedPlan.EstimatedCost.DailyCost * 7, 2);
+                    if (parsedPlan.EstimatedCost.MonthlyCost <= 0)
+                        parsedPlan.EstimatedCost.MonthlyCost = Math.Round(parsedPlan.EstimatedCost.DailyCost * 30, 2);
+                    if (parsedPlan.EstimatedCost.YearlyCost <= 0)
+                        parsedPlan.EstimatedCost.YearlyCost = Math.Round(parsedPlan.EstimatedCost.DailyCost * 365, 2);
+                    if (string.IsNullOrWhiteSpace(parsedPlan.EstimatedCost.CurrencySymbol))
+                        parsedPlan.EstimatedCost.CurrencySymbol = DietCostCalculator.GetCurrencySymbol(request.Country);
+                    if (string.IsNullOrWhiteSpace(parsedPlan.EstimatedCost.CurrencyCode))
+                        parsedPlan.EstimatedCost.CurrencyCode = DietCostCalculator.GetCurrencyCode(request.Country);
+                    if (string.IsNullOrWhiteSpace(parsedPlan.EstimatedCost.CostTier))
+                        parsedPlan.EstimatedCost.CostTier = "Balanced Everyday Value";
+                }
+
                 // 6. Run Server-Side Validator
                 var validation = _validator.ValidatePlan(parsedPlan, request, targets);
 
@@ -332,7 +353,16 @@ Follow these rules strictly:
 6. COMPLETE 7-DAY SCHEDULE: You MUST generate all 7 days (Day 1 through Day 7). Do not skip days.
 7. GROCERY LIST: Provide a consolidated weekly grocery list categorized into:
    'Fresh Produce & Herbs', 'Whole Grains & Staples', 'Proteins & Dairy', 'Traditional Spices & Oils', and 'Pantry Essentials'.
-8. FORMAT: Output ONLY valid, parseable JSON conforming to the requested schema. No markdown formatting outside of JSON.";
+8. TENTATIVE / ASSUMED DIET COST BREAKDOWN: Calculate a realistic, tentative lump-sum cost estimate for this diet plan tailored to the user's country ({request.Country}), budget ({request.Budget}), and cuisine ({cuisine.Name}). Provide:
+   - dailyCost: Assumed cost per day
+   - weeklyCost: Assumed cost per week (approx dailyCost * 7)
+   - monthlyCost: Assumed cost per month (approx dailyCost * 30)
+   - yearlyCost: Assumed cost per year (approx dailyCost * 365)
+   - currencySymbol (e.g. ₹, $, £, €, ¥, ₩) & currencyCode (INR, USD, GBP, EUR, JPY, KRW, etc.)
+   - costTier: Description of financial tier (e.g. 'Budget-Friendly / Economical', 'Balanced Everyday Value', 'Premium / Gourmet')
+   - pricingNotes: Clear explanation of localized market assumptions (home cooking vs dining out, local grocery market baselines)
+   - moneySavingTip: Actionable advice to reduce grocery/meal preparation expenses while preserving nutritional density
+9. FORMAT: Output ONLY valid, parseable JSON conforming to the requested schema. No markdown formatting outside of JSON.";
     }
 
     private static string BuildUserPrompt(DietPlanRequest request, NutritionTargetsDto targets, CuisineContextDto cuisine)
@@ -408,6 +438,17 @@ Return the complete response strictly adhering to this JSON format:
       ""items"": [""Item 1"", ""Item 2""]
     }}
   ],
+  ""estimatedCost"": {{
+    ""currencySymbol"": ""₹"",
+    ""currencyCode"": ""INR"",
+    ""dailyCost"": 250,
+    ""weeklyCost"": 1750,
+    ""monthlyCost"": 7500,
+    ""yearlyCost"": 91250,
+    ""costTier"": ""Balanced Everyday Value"",
+    ""pricingNotes"": ""Estimated using authentic local retail and grocery market rates for fresh produce, whole grains, and lentils in {cuisine.Country}."",
+    ""moneySavingTip"": ""Buying whole grains and legumes in monthly bulk allotments can lower weekly grocery costs by up to 20%.""
+  }},
   ""recommendations"": [""Recommendation 1"", ""Recommendation 2""],
   ""digestiveTip"": ""{cuisine.DigestiveTradition}"",
   ""disclaimer"": ""This plan provides general lifestyle and nutritional guidance. It is not medical advice or clinical treatment.""

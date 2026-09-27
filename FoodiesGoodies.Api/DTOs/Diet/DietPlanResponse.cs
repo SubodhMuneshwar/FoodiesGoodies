@@ -31,6 +31,9 @@ public class DietPlanResponse
     [JsonPropertyName("disclaimer")]
     public string Disclaimer { get; set; } = "This plan provides general lifestyle and nutritional guidance based on estimated metabolic equations and culinary traditions. It is not medical advice, diagnosis, or clinical treatment.";
 
+    [JsonPropertyName("estimatedCost")]
+    public DietCostEstimateDto EstimatedCost { get; set; } = new();
+
     [JsonPropertyName("generatedAtUtc")]
     public DateTime GeneratedAtUtc { get; set; } = DateTime.UtcNow;
 }

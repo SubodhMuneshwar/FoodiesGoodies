@@ -672,6 +672,9 @@ document.addEventListener('DOMContentLoaded', () => {
             <!-- Grocery Basket -->
             ${groceryHtml}
 
+            <!-- Estimated Diet Budget & Financial Blueprint -->
+            ${renderCostEstimateCard(plan.estimatedCost, cuisine)}
+
             <!-- Plan Actions Bar (Kitchen Print & PDF) -->
             <div class="plan-actions-bar">
                 <div class="plan-actions-text">
@@ -690,6 +693,113 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
         attachInteractiveListeners();
+    }
+
+    // Helper: Render Estimated Diet Cost Blueprint (Lump-sum per Day, Week, Month, Year)
+    function renderCostEstimateCard(cost, cuisine) {
+        if (!cost || (!cost.dailyCost && !cost.DailyCost)) {
+            return '';
+        }
+
+        const symbol = cost.currencySymbol || cost.CurrencySymbol || '₹';
+        const code = cost.currencyCode || cost.CurrencyCode || 'INR';
+        const daily = Number(cost.dailyCost || cost.DailyCost || 0);
+        const weekly = Number(cost.weeklyCost || cost.WeeklyCost || (daily * 7));
+        const monthly = Number(cost.monthlyCost || cost.MonthlyCost || (daily * 30));
+        const yearly = Number(cost.yearlyCost || cost.YearlyCost || (daily * 365));
+        const tier = cost.costTier || cost.CostTier || 'Balanced Everyday Value';
+        const notes = cost.pricingNotes || cost.PricingNotes || 'Estimated using regional grocery store and local market baselines for fresh ingredients.';
+        const tip = cost.moneySavingTip || cost.MoneySavingTip || 'Buying pantry staples and whole grains in bulk allotments significantly optimizes weekly grocery spending.';
+
+        const isZeroDec = code === 'JPY' || code === 'KRW';
+        const fmt = (num) => {
+            return num.toLocaleString(undefined, {
+                minimumFractionDigits: isZeroDec ? 0 : 0,
+                maximumFractionDigits: isZeroDec ? 0 : 2
+            });
+        };
+
+        return `
+            <div class="cost-estimate-card" id="dietCostBlueprint">
+                <div class="cost-header-row">
+                    <div class="cost-title-group">
+                        <div class="cost-icon-box" aria-hidden="true">
+                            <ion-icon name="wallet-outline"></ion-icon>
+                        </div>
+                        <div>
+                            <span class="cost-eyebrow">Financial Culinary Blueprint</span>
+                            <h3 class="cost-main-title">Estimated Diet Budget &amp; Lump-Sum Investment</h3>
+                        </div>
+                    </div>
+                    <div class="cost-badge-group">
+                        <span class="cost-tier-badge">
+                            <ion-icon name="pricetag-outline"></ion-icon>
+                            ${escapeHtml(tier)}
+                        </span>
+                        <span class="cost-currency-pill">${escapeHtml(code)} (${escapeHtml(symbol)})</span>
+                    </div>
+                </div>
+
+                <p class="cost-subtitle">
+                    Tentative and assumed lump-sum expenditure calculated by the AI Dietician for this personalized meal plan based on home-cooked grocery benchmarks in <strong>${escapeHtml(cuisine?.country || 'your region')}</strong>.
+                </p>
+
+                <div class="cost-grid">
+                    <!-- Daily -->
+                    <div class="cost-item">
+                        <span class="cost-item-period">Per Day</span>
+                        <div class="cost-item-amount">
+                            <span class="cost-symbol">${escapeHtml(symbol)}</span>
+                            <span class="cost-value">${fmt(daily)}</span>
+                        </div>
+                        <span class="cost-item-detail">Daily fresh meals &amp; snacks</span>
+                    </div>
+
+                    <!-- Weekly -->
+                    <div class="cost-item highlight">
+                        <div class="cost-highlight-ribbon">Active Cycle</div>
+                        <span class="cost-item-period">Per Week</span>
+                        <div class="cost-item-amount">
+                            <span class="cost-symbol">${escapeHtml(symbol)}</span>
+                            <span class="cost-value">${fmt(weekly)}</span>
+                        </div>
+                        <span class="cost-item-detail">7-day grocery basket cycle</span>
+                    </div>
+
+                    <!-- Monthly -->
+                    <div class="cost-item">
+                        <span class="cost-item-period">Per Month</span>
+                        <div class="cost-item-amount">
+                            <span class="cost-symbol">${escapeHtml(symbol)}</span>
+                            <span class="cost-value">${fmt(monthly)}</span>
+                        </div>
+                        <span class="cost-item-detail">30-day household pantry budget</span>
+                    </div>
+
+                    <!-- Yearly -->
+                    <div class="cost-item">
+                        <span class="cost-item-period">Per Year</span>
+                        <div class="cost-item-amount">
+                            <span class="cost-symbol">${escapeHtml(symbol)}</span>
+                            <span class="cost-value">${fmt(yearly)}</span>
+                        </div>
+                        <span class="cost-item-detail">365-day annual health investment</span>
+                    </div>
+                </div>
+
+                <!-- Notes & Money Saving Tip Box -->
+                <div class="cost-footer-grid">
+                    <div class="cost-note-box">
+                        <ion-icon name="information-circle-outline"></ion-icon>
+                        <p><strong>Regional Pricing Assumptions:</strong> ${escapeHtml(notes)}</p>
+                    </div>
+                    <div class="cost-tip-box">
+                        <ion-icon name="bulb-outline"></ion-icon>
+                        <p><strong>Smart Grocery Saver Tip:</strong> ${escapeHtml(tip)}</p>
+                    </div>
+                </div>
+            </div>
+        `;
     }
 
     // Helper: Render Meals for a given day
@@ -853,7 +963,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         currentPlanData.days[activeDayIndex].meals[mealIdx] = newMeal;
 
                         // Persist updated plan with swapped meal
-                        savePlanToStorage(currentRequestPayload, currentUnitSystem, currentPlanData);
+                        savePlanToStorage(currentRequestPayload, currentPlanData);
 
                         // Re-render day meals
                         const mealsContainer = document.getElementById('mealsContainer');

@@ -2297,6 +2297,305 @@ body {
   }
 }
 
+/* --------------------------------------------------------------------------
+   Estimated Diet Budget & Financial Blueprint Card
+   -------------------------------------------------------------------------- */
+.cost-estimate-card {
+  background: var(--bg-surface-elevated, #FFFFFF);
+  border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
+  border-radius: var(--radius-lg, 16px);
+  padding: 22px 24px;
+  margin-top: 24px;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+  transition: border-color var(--transition-fast, 0.2s ease), box-shadow var(--transition-fast, 0.2s ease);
+}
+
+[data-theme="dark"] .cost-estimate-card {
+  background: var(--bg-surface-elevated, #1E1B18);
+  border-color: var(--border-subtle, rgba(255, 255, 255, 0.09));
+  box-shadow: 0 8px 30px -4px rgba(0, 0, 0, 0.4);
+}
+
+.cost-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+
+.cost-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cost-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.25));
+  color: #059669;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15);
+}
+
+[data-theme="dark"] .cost-icon-box {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.35));
+  color: #34D399;
+}
+
+.cost-eyebrow {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--primary, #E05A47);
+  margin-bottom: 2px;
+}
+
+.cost-main-title {
+  margin: 0;
+  font-family: var(--font-heading, 'Playfair Display', serif);
+  font-size: 1.25rem;
+  color: var(--text-primary, #1C1917);
+  font-weight: 700;
+}
+
+.cost-badge-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cost-tier-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill, 9999px);
+  background: rgba(224, 90, 71, 0.09);
+  color: var(--primary, #E05A47);
+  border: 1px solid rgba(224, 90, 71, 0.22);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+[data-theme="dark"] .cost-tier-badge {
+  background: rgba(248, 113, 113, 0.12);
+  color: #F87171;
+  border-color: rgba(248, 113, 113, 0.3);
+}
+
+.cost-currency-pill {
+  padding: 4px 10px;
+  border-radius: var(--radius-pill, 9999px);
+  background: var(--bg-surface, #F5F3EF);
+  color: var(--text-secondary, #6B7280);
+  border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+[data-theme="dark"] .cost-currency-pill {
+  background: #282420;
+  color: #D1D5DB;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.cost-subtitle {
+  font-size: 0.86rem;
+  color: var(--text-secondary, #6B7280);
+  margin: 4px 0 18px 0;
+  line-height: 1.45;
+}
+
+.cost-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 900px) {
+  .cost-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .cost-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cost-item {
+  background: var(--bg-surface, #FAFAF9);
+  border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
+  border-radius: 12px;
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform var(--transition-fast, 0.2s ease), border-color var(--transition-fast, 0.2s ease), box-shadow var(--transition-fast, 0.2s ease);
+}
+
+[data-theme="dark"] .cost-item {
+  background: #25211D;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.cost-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-strong, #D1D5DB);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.cost-item.highlight {
+  border-color: #10B981;
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.04) 0%, var(--bg-surface, #FAFAF9) 100%);
+  box-shadow: 0 4px 16px -2px rgba(16, 185, 129, 0.15);
+}
+
+[data-theme="dark"] .cost-item.highlight {
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, #25211D 100%);
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.cost-highlight-ribbon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 0.64rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: #10B981;
+  color: #FFFFFF;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill, 9999px);
+}
+
+.cost-item-period {
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted, #9CA3AF);
+  margin-bottom: 6px;
+}
+
+.cost-item-amount {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  margin-bottom: 6px;
+}
+
+.cost-symbol {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--primary, #E05A47);
+}
+
+.cost-item.highlight .cost-symbol {
+  color: #059669;
+}
+
+[data-theme="dark"] .cost-item.highlight .cost-symbol {
+  color: #34D399;
+}
+
+.cost-value {
+  font-size: 1.6rem;
+  font-weight: 800;
+  font-family: var(--font-heading, 'Playfair Display', serif);
+  color: var(--text-primary, #1C1917);
+  letter-spacing: -0.02em;
+}
+
+.cost-item-detail {
+  font-size: 0.74rem;
+  color: var(--text-secondary, #6B7280);
+  line-height: 1.35;
+}
+
+.cost-footer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+@media (max-width: 680px) {
+  .cost-footer-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cost-note-box,
+.cost-tip-box {
+  display: flex;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.cost-note-box {
+  background: var(--bg-surface, #F5F3EF);
+  border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
+  color: var(--text-secondary, #6B7280);
+}
+
+[data-theme="dark"] .cost-note-box {
+  background: #25211D;
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #D1D5DB;
+}
+
+.cost-note-box ion-icon {
+  font-size: 1.25rem;
+  color: #3B82F6;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.cost-tip-box {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.22);
+  color: #065F46;
+}
+
+[data-theme="dark"] .cost-tip-box {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #A7F3D0;
+}
+
+.cost-tip-box ion-icon {
+  font-size: 1.25rem;
+  color: #10B981;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.cost-note-box p,
+.cost-tip-box p {
+  margin: 0;
+}
+
 /* Print Stylesheet for Kitchen & Fridge */
 @media print {
   .header,
@@ -2329,8 +2628,15 @@ body {
     padding: 0 !important;
   }
 
+  .cost-estimate-card {
+    page-break-inside: avoid;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+  }
+
   .meal-item {
     page-break-inside: avoid;
     border: 1px solid #ccc !important;
   }
 }
+
