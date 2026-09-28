@@ -2020,9 +2020,9 @@ select:focus.form-control {
 /* Gourmet Skillet Stage */
 .foodies-skillet-stage {
   position: relative;
-  width: 156px;
-  height: 132px;
-  margin-bottom: 14px;
+  width: 184px;
+  height: 164px;
+  margin-bottom: 12px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -2042,10 +2042,10 @@ select:focus.form-control {
 .foodies-skillet-stage::before {
   content: '';
   position: absolute;
-  bottom: 6px;
-  left: 48px;
-  width: 96px;
-  height: 32px;
+  bottom: 4px;
+  left: 82px;
+  width: 90px;
+  height: 26px;
   border-radius: 50%;
   background: radial-gradient(ellipse at center, rgba(249, 115, 22, 0.55) 0%, rgba(220, 38, 38, 0.28) 50%, transparent 75%);
   filter: blur(6px);
@@ -2054,24 +2054,26 @@ select:focus.form-control {
   animation: stoveGlowPulse 0.9s ease-in-out infinite alternate;
 }
 
+/* Chef Hand Holding and Flipping Skillet (Elevated Above Flame) */
 .foodies-skillet {
   position: absolute;
-  bottom: 22px;
-  left: 20px;
-  width: 116px;
-  height: 48px;
-  transform-origin: 20px 42px;
+  bottom: 70px;
+  left: 10px;
+  width: 160px;
+  height: 52px;
+  transform-origin: 32px 36px;
   animation: skilletSizzleBob 2.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   z-index: 2;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4));
 }
 
-/* High & Big Roaring Stove Flames Below Skillet */
+/* Stove Burner Flames Below Skillet (Separated by Visible Distance from Pan) */
 .foodies-flames-group {
   position: absolute;
-  bottom: 2px;
-  left: 54px;
-  width: 96px;
-  height: 66px;
+  bottom: 4px;
+  left: 87px;
+  width: 80px;
+  height: 40px;
   pointer-events: none;
   z-index: 1;
 }
@@ -2084,7 +2086,7 @@ select:focus.form-control {
 }
 
 .flame-tongue {
-  transform-origin: 50% 55px;
+  transform-origin: 50% 39px;
 }
 
 .flame-tongue-1 {
@@ -2110,8 +2112,8 @@ select:focus.form-control {
 /* Flipping Culinary Delicacy (Sunny Side Up Egg Omelette) */
 .foodies-food-toss {
   position: absolute;
-  bottom: 30px;
-  left: 74px;
+  bottom: 78px;
+  left: 101px;
   width: 52px;
   height: 32px;
   transform-origin: center center;
@@ -2123,8 +2125,8 @@ select:focus.form-control {
 /* Steam Wisps */
 .foodies-steam-group {
   position: absolute;
-  bottom: 46px;
-  left: 68px;
+  bottom: 94px;
+  left: 98px;
   width: 60px;
   height: 60px;
   pointer-events: none;
@@ -2162,8 +2164,8 @@ select:focus.form-control {
 /* Sizzle Sparks */
 .foodies-sizzle-sparks {
   position: absolute;
-  bottom: 28px;
-  left: 72px;
+  bottom: 76px;
+  left: 102px;
   width: 50px;
   height: 30px;
   pointer-events: none;
