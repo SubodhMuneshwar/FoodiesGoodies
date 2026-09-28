@@ -1208,6 +1208,13 @@ document.addEventListener('DOMContentLoaded', () => {
         overlay.setAttribute('aria-busy', 'true');
         overlay.innerHTML = `
             <div class="foodies-loader-card">
+                <!-- Brand Title on Top of Card -->
+                <div class="foodies-loader-badge">
+                    <span class="foodies-loader-badge-star">✦</span>
+                    <span>FOODIES &amp; GOODIES</span>
+                    <span class="foodies-loader-badge-star">✦</span>
+                </div>
+
                 <div class="foodies-skillet-stage" aria-hidden="true">
                     <!-- Rising Steam Wisps -->
                     <div class="foodies-steam-group">
@@ -1229,123 +1236,151 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span class="sizzle-spark spark-3"></span>
                     </div>
 
-                    <!-- Animated Stove Flames Under Pan -->
+                    <!-- High & Big Roaring Stove Flames Under Pan -->
                     <div class="foodies-flames-group">
-                        <svg class="foodies-flames-svg" viewBox="0 0 68 32" width="68" height="32" aria-hidden="true">
+                        <svg class="foodies-flames-svg" viewBox="0 0 96 66" width="96" height="66" aria-hidden="true">
                             <defs>
+                                <!-- Outer Roaring Fire Gradient: Crimson to Bright Orange -->
                                 <linearGradient id="flameOuterGrad" x1="0%" y1="100%" x2="0%" y2="0%">
-                                    <stop offset="0%" stop-color="#DC2626" stop-opacity="0.95"/>
-                                    <stop offset="35%" stop-color="#EA580C" stop-opacity="0.95"/>
-                                    <stop offset="75%" stop-color="#F97316"/>
+                                    <stop offset="0%" stop-color="#991B1B" stop-opacity="0.95"/>
+                                    <stop offset="25%" stop-color="#DC2626" stop-opacity="0.95"/>
+                                    <stop offset="60%" stop-color="#EA580C"/>
+                                    <stop offset="85%" stop-color="#F97316"/>
                                     <stop offset="100%" stop-color="#FBBF24"/>
                                 </linearGradient>
+                                <!-- Mid Flame Core Gradient: Radiant Fiery Orange to Golden Yellow -->
+                                <linearGradient id="flameMidGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+                                    <stop offset="0%" stop-color="#DC2626"/>
+                                    <stop offset="35%" stop-color="#F97316"/>
+                                    <stop offset="75%" stop-color="#FBBF24"/>
+                                    <stop offset="100%" stop-color="#FEF08A"/>
+                                </linearGradient>
+                                <!-- White-Hot Core Gradient -->
                                 <linearGradient id="flameInnerGrad" x1="0%" y1="100%" x2="0%" y2="0%">
                                     <stop offset="0%" stop-color="#EA580C"/>
-                                    <stop offset="40%" stop-color="#F59E0B"/>
-                                    <stop offset="80%" stop-color="#FEF08A"/>
+                                    <stop offset="35%" stop-color="#F59E0B"/>
+                                    <stop offset="70%" stop-color="#FEF08A"/>
                                     <stop offset="100%" stop-color="#FFFFFF"/>
                                 </linearGradient>
+                                <!-- High Heat Gas Burner Blue Base -->
                                 <linearGradient id="flameBlueBaseGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.85"/>
-                                    <stop offset="100%" stop-color="#0284C7" stop-opacity="0"/>
+                                    <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.95"/>
+                                    <stop offset="50%" stop-color="#0284C7" stop-opacity="0.8"/>
+                                    <stop offset="100%" stop-color="#1E3A8A" stop-opacity="0"/>
                                 </linearGradient>
+                                <!-- Broad Stove Heat Aura -->
                                 <radialGradient id="stoveHeatAura" cx="50%" cy="80%" r="50%">
-                                    <stop offset="0%" stop-color="#F97316" stop-opacity="0.6"/>
-                                    <stop offset="60%" stop-color="#EA580C" stop-opacity="0.25"/>
+                                    <stop offset="0%" stop-color="#F97316" stop-opacity="0.75"/>
+                                    <stop offset="55%" stop-color="#EA580C" stop-opacity="0.35"/>
                                     <stop offset="100%" stop-color="#DC2626" stop-opacity="0"/>
                                 </radialGradient>
                             </defs>
-                            <!-- Radiant Heat Aura Base -->
-                            <ellipse cx="34" cy="26" rx="30" ry="6" fill="url(#stoveHeatAura)"/>
-                            <!-- Burner Base Ring -->
-                            <ellipse cx="34" cy="27" rx="26" ry="3.5" fill="#431407" opacity="0.6"/>
-                            <!-- Gas Burner Blue Flame Base -->
-                            <path d="M 12 27 Q 34 29 56 27 Q 34 31 12 27 Z" fill="url(#flameBlueBaseGrad)"/>
+                            <!-- Intense Radiant Heat Aura Base -->
+                            <ellipse cx="48" cy="54" rx="42" ry="9" fill="url(#stoveHeatAura)"/>
+                            <!-- Cast Iron Stove Burner Grate -->
+                            <ellipse cx="48" cy="55" rx="36" ry="5" fill="#292524" opacity="0.7"/>
+                            <!-- Gas Burner Blue Hot Flame Jet Bed -->
+                            <path d="M 14 55 Q 48 59 82 55 Q 48 63 14 55 Z" fill="url(#flameBlueBaseGrad)"/>
                             
-                            <!-- Flame Tongue 1 (Left Flank) -->
+                            <!-- Flame Tongue 1 (Far Left Wrap Flame) -->
                             <g class="flame-tongue flame-tongue-1">
-                                <path d="M 12 27 C 8 23 9 17 14 11 C 16 16 18 19 18 26 Z" fill="url(#flameOuterGrad)"/>
-                                <path d="M 13 26 C 11 23 12 19 14 14 C 15 18 16 21 16 26 Z" fill="url(#flameInnerGrad)"/>
+                                <path d="M 12 55 C 6 46 8 32 16 18 C 20 28 23 38 22 54 Z" fill="url(#flameOuterGrad)"/>
+                                <path d="M 14 54 C 10 46 12 36 17 24 C 20 32 21 42 19 54 Z" fill="url(#flameMidGrad)"/>
+                                <path d="M 15 53 C 12 47 14 40 17 31 C 19 37 19 44 18 53 Z" fill="url(#flameInnerGrad)"/>
                             </g>
-                            <!-- Flame Tongue 2 (Mid Left) -->
+                            <!-- Flame Tongue 2 (Mid-Left High Roaring Flame) -->
                             <g class="flame-tongue flame-tongue-2">
-                                <path d="M 20 27 C 17 21 19 13 24 7 C 27 13 29 18 28 27 Z" fill="url(#flameOuterGrad)"/>
-                                <path d="M 21 26 C 19 22 21 16 24 10 C 26 15 27 20 26 26 Z" fill="url(#flameInnerGrad)"/>
+                                <path d="M 23 55 C 17 40 21 22 29 10 C 35 23 37 38 35 55 Z" fill="url(#flameOuterGrad)"/>
+                                <path d="M 25 54 C 21 42 24 28 30 16 C 34 27 35 41 33 54 Z" fill="url(#flameMidGrad)"/>
+                                <path d="M 27 53 C 24 43 27 33 30 22 C 33 31 33 43 31 53 Z" fill="url(#flameInnerGrad)"/>
                             </g>
-                            <!-- Flame Tongue 3 (Center Peak - Roaring Main Flame) -->
+                            <!-- Flame Tongue 3 (Towering Center Core - Tallest Roaring Pillar) -->
                             <g class="flame-tongue flame-tongue-3">
-                                <path d="M 29 27 C 26 18 29 9 34 2 C 39 9 42 18 39 27 Z" fill="url(#flameOuterGrad)"/>
-                                <path d="M 31 26 C 29 20 31 12 34 5 C 37 12 38 20 37 26 Z" fill="url(#flameInnerGrad)"/>
+                                <path d="M 36 55 C 31 36 37 18 48 3 C 59 18 64 36 59 55 Z" fill="url(#flameOuterGrad)"/>
+                                <path d="M 39 54 C 35 38 41 22 48 9 C 55 22 61 38 56 54 Z" fill="url(#flameMidGrad)"/>
+                                <path d="M 42 53 C 39 41 44 28 48 16 C 52 28 57 41 53 53 Z" fill="url(#flameInnerGrad)"/>
                             </g>
-                            <!-- Flame Tongue 4 (Mid Right) -->
+                            <!-- Flame Tongue 4 (Mid-Right High Roaring Flame) -->
                             <g class="flame-tongue flame-tongue-4">
-                                <path d="M 39 27 C 38 20 41 14 45 8 C 48 14 49 20 47 27 Z" fill="url(#flameOuterGrad)"/>
-                                <path d="M 40 26 C 40 21 42 16 45 11 C 47 16 48 21 46 26 Z" fill="url(#flameInnerGrad)"/>
+                                <path d="M 59 55 C 57 38 61 24 67 11 C 73 24 77 40 73 55 Z" fill="url(#flameOuterGrad)"/>
+                                <path d="M 61 54 C 60 41 63 29 67 18 C 71 28 74 42 71 54 Z" fill="url(#flameMidGrad)"/>
+                                <path d="M 63 53 C 62 43 65 33 67 24 C 69 32 71 43 69 53 Z" fill="url(#flameInnerGrad)"/>
                             </g>
-                            <!-- Flame Tongue 5 (Right Flank) -->
+                            <!-- Flame Tongue 5 (Far Right Wrap Flame) -->
                             <g class="flame-tongue flame-tongue-5">
-                                <path d="M 48 27 C 48 22 51 18 55 12 C 57 17 58 22 55 27 Z" fill="url(#flameOuterGrad)"/>
-                                <path d="M 49 26 C 50 23 52 19 54 15 C 55 19 56 23 53 26 Z" fill="url(#flameInnerGrad)"/>
+                                <path d="M 72 55 C 72 44 76 33 82 20 C 85 30 87 42 83 55 Z" fill="url(#flameOuterGrad)"/>
+                                <path d="M 74 54 C 74 45 77 37 81 26 C 83 34 84 44 81 54 Z" fill="url(#flameMidGrad)"/>
+                                <path d="M 76 53 C 76 46 78 40 81 33 C 82 39 82 46 80 53 Z" fill="url(#flameInnerGrad)"/>
                             </g>
+                            <!-- Soaring Floating Fire Embers -->
+                            <circle cx="44" cy="7" r="1.2" fill="#FEF08A" opacity="0.9"/>
+                            <circle cx="53" cy="13" r="1" fill="#F97316" opacity="0.85"/>
+                            <circle cx="31" cy="15" r="0.9" fill="#FBBF24" opacity="0.85"/>
                         </svg>
                     </div>
 
-                    <!-- Flipping Food (Fluffy Golden Folded Omelette with Fresh Herbs) -->
-                    <div class="foodies-food-toss foodies-omelette-toss">
-                        <svg viewBox="0 0 48 26" width="48" height="26" aria-hidden="true">
+                    <!-- Flipping Food (Sizzling Sunny Side Up Egg Omelette) -->
+                    <div class="foodies-food-toss foodies-egg-toss">
+                        <svg viewBox="0 0 52 32" width="52" height="32" aria-hidden="true">
                             <defs>
-                                <!-- Rich Egg Yolk & Golden Crust Gradient -->
-                                <linearGradient id="omeletteBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <!-- Silky Egg White with Crispy Golden Edge Gradient -->
+                                <radialGradient id="eggWhiteGrad" cx="50%" cy="50%" r="55%">
+                                    <stop offset="0%" stop-color="#FFFFFF"/>
+                                    <stop offset="68%" stop-color="#FFFBEB"/>
+                                    <stop offset="90%" stop-color="#FEF3C7"/>
+                                    <stop offset="100%" stop-color="#FDE68A"/>
+                                </radialGradient>
+                                <!-- Crispy Caramelized Edge Stroke -->
+                                <linearGradient id="crispyEdgeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#D97706"/>
+                                    <stop offset="50%" stop-color="#B45309"/>
+                                    <stop offset="100%" stop-color="#78350F"/>
+                                </linearGradient>
+                                <!-- Vibrant 3D Plump Sunny Egg Yolk Gradient -->
+                                <radialGradient id="sunnyYolkGrad" cx="38%" cy="32%" r="62%">
                                     <stop offset="0%" stop-color="#FEF08A"/>
-                                    <stop offset="25%" stop-color="#FCD34D"/>
-                                    <stop offset="60%" stop-color="#F59E0B"/>
-                                    <stop offset="85%" stop-color="#D97706"/>
-                                    <stop offset="100%" stop-color="#B45309"/>
-                                </linearGradient>
-                                <!-- Omelette Fold Depth / Layer Shadow -->
-                                <linearGradient id="omeletteFoldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" stop-color="#F59E0B"/>
-                                    <stop offset="40%" stop-color="#D97706"/>
-                                    <stop offset="100%" stop-color="#92400E"/>
-                                </linearGradient>
-                                <!-- Golden Buttery Gloss Highlight -->
-                                <radialGradient id="omeletteGloss" cx="35%" cy="30%" r="55%">
-                                    <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.85"/>
-                                    <stop offset="35%" stop-color="#FEF9C3" stop-opacity="0.6"/>
-                                    <stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/>
+                                    <stop offset="26%" stop-color="#FBBF24"/>
+                                    <stop offset="62%" stop-color="#F59E0B"/>
+                                    <stop offset="88%" stop-color="#EA580C"/>
+                                    <stop offset="100%" stop-color="#C2410C"/>
+                                </radialGradient>
+                                <!-- Yolk Base Depression Ring -->
+                                <radialGradient id="yolkRimShadow" cx="50%" cy="55%" r="50%">
+                                    <stop offset="65%" stop-color="#C2410C" stop-opacity="0"/>
+                                    <stop offset="100%" stop-color="#9A3412" stop-opacity="0.4"/>
                                 </radialGradient>
                             </defs>
-                            <!-- Main Folded Omelette Crescent Shape -->
-                            <path d="M 4,14 C 4,6 15,2 25,2 C 37,2 45,7 45,15 C 45,21 36,25 24,25 C 13,25 4,20 4,14 Z" fill="url(#omeletteBodyGrad)" stroke="#B45309" stroke-width="0.8"/>
-                            <!-- Glossy Top Highlight -->
-                            <path d="M 9,11 C 12,5 22,3.5 32,4.5 C 24,6 14,8 9,11 Z" fill="url(#omeletteGloss)"/>
-                            <!-- Fold Crease & Fluffy Inner Layer -->
-                            <path d="M 6,13.5 C 14,9.5 32,9.5 42,13.5 C 38,19 29,22 23,22 C 14,22 8,18 6,13.5 Z" fill="url(#omeletteFoldGrad)" opacity="0.85"/>
-                            <path d="M 7,14 C 16,11 31,11 41,14" stroke="#FDE047" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.9"/>
-                            <!-- Delicate Golden Sear Patches -->
-                            <ellipse cx="16" cy="7.5" rx="4.5" ry="1.8" fill="#B45309" opacity="0.32" transform="rotate(-8 16 7.5)"/>
-                            <ellipse cx="32" cy="8.5" rx="5" ry="2" fill="#B45309" opacity="0.3" transform="rotate(10 32 8.5)"/>
-                            <ellipse cx="24" cy="18" rx="4" ry="1.5" fill="#78350F" opacity="0.28"/>
-                            <!-- Chopped Fresh Herbs / Chives (Green) -->
-                            <rect x="13" y="6" width="3.2" height="1.6" rx="0.8" fill="#16A34A" transform="rotate(-28 14 7)"/>
-                            <rect x="21" y="4.5" width="3.4" height="1.6" rx="0.8" fill="#22C55E" transform="rotate(22 22 5)"/>
-                            <rect x="29" y="6" width="3.2" height="1.5" rx="0.75" fill="#15803D" transform="rotate(-15 30 7)"/>
-                            <rect x="36" y="9" width="3" height="1.5" rx="0.75" fill="#16A34A" transform="rotate(35 37 10)"/>
-                            <rect x="17" y="14" width="3.2" height="1.5" rx="0.75" fill="#22C55E" transform="rotate(18 18 15)"/>
-                            <rect x="27" y="15" width="3" height="1.5" rx="0.75" fill="#15803D" transform="rotate(-12 28 16)"/>
-                            <rect x="34" y="16" width="2.8" height="1.4" rx="0.7" fill="#22C55E" transform="rotate(25 35 17)"/>
-                            <!-- Diced Tomato & Sweet Bell Pepper Specks (Red/Orange) -->
-                            <rect x="17" y="7.5" width="2.4" height="2.2" rx="0.6" fill="#DC2626"/>
-                            <rect x="27" y="5" width="2.2" height="2" rx="0.5" fill="#EF4444"/>
-                            <rect x="33" y="12" width="2.5" height="2.2" rx="0.6" fill="#EA580C"/>
-                            <rect x="22" y="16" width="2.2" height="2" rx="0.5" fill="#DC2626"/>
-                            <circle cx="11" cy="12" r="1.1" fill="#EA580C"/>
-                            <!-- Cracked Black Pepper Specks -->
-                            <circle cx="15" cy="10" r="0.6" fill="#451A03" opacity="0.85"/>
-                            <circle cx="25" cy="7.5" r="0.55" fill="#451A03" opacity="0.9"/>
-                            <circle cx="31" cy="8" r="0.6" fill="#451A03" opacity="0.85"/>
-                            <circle cx="20" cy="17" r="0.5" fill="#451A03" opacity="0.8"/>
-                            <circle cx="30" cy="18" r="0.55" fill="#451A03" opacity="0.8"/>
+                            <!-- Fried Egg White Organic Contour with Crispy Edges -->
+                            <path d="M 6,16 C 5,9 12,3 21,3 C 28,3 34,4 41,7 C 48,11 50,17 47,23 C 44,28 35,30 25,30 C 15,30 6,24 6,16 Z" fill="url(#eggWhiteGrad)" stroke="url(#crispyEdgeGrad)" stroke-width="1.2"/>
+                            <!-- Sizzled Crispy Brown Edges (Pan-Fried Effect) -->
+                            <path d="M 6,17 C 5,12 8,7 13,5" stroke="#B45309" stroke-width="1.4" stroke-linecap="round" fill="none" opacity="0.6"/>
+                            <path d="M 37,6 C 43,9 48,13 47,19" stroke="#B45309" stroke-width="1.3" stroke-linecap="round" fill="none" opacity="0.55"/>
+                            <path d="M 12,27 C 18,30 29,30 36,28" stroke="#D97706" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.5"/>
+                            <!-- Yolk Depth Shadow -->
+                            <ellipse cx="26" cy="18" rx="9" ry="4.5" fill="#B45309" opacity="0.22"/>
+                            <!-- Center Plump Sunny Side Up Yolk -->
+                            <circle cx="26" cy="16" r="8.2" fill="url(#sunnyYolkGrad)" stroke="#EA580C" stroke-width="0.7"/>
+                            <circle cx="26" cy="16" r="8.2" fill="url(#yolkRimShadow)"/>
+                            <!-- Specular Gloss Highlights (Glistening Fresh Runny Yolk) -->
+                            <ellipse cx="23.2" cy="13.2" rx="3.2" ry="1.8" fill="#FFFFFF" opacity="0.95" transform="rotate(-28 23.2 13.2)"/>
+                            <circle cx="21" cy="15.5" r="0.85" fill="#FFFFFF" opacity="0.85"/>
+                            <circle cx="28.5" cy="18.5" r="0.6" fill="#FEF08A" opacity="0.7"/>
+                            <!-- Fresh Sprinkled Chives / Scallions -->
+                            <rect x="12" y="9" width="3.2" height="1.6" rx="0.8" fill="#16A34A" transform="rotate(-30 13 10)"/>
+                            <rect x="36" y="8" width="3" height="1.5" rx="0.75" fill="#22C55E" transform="rotate(25 37 9)"/>
+                            <rect x="13" y="21" width="3.2" height="1.5" rx="0.75" fill="#22C55E" transform="rotate(18 14 22)"/>
+                            <rect x="37" y="21" width="2.8" height="1.4" rx="0.7" fill="#15803D" transform="rotate(-20 38 22)"/>
+                            <rect x="29" y="8" width="2.6" height="1.3" rx="0.65" fill="#16A34A" transform="rotate(40 30 9)"/>
+                            <!-- Paprika & Red Chili Flakes -->
+                            <rect x="18" y="10" width="2.2" height="2" rx="0.5" fill="#DC2626"/>
+                            <rect x="34" y="16" width="2.2" height="2" rx="0.5" fill="#EF4444"/>
+                            <circle cx="10" cy="15" r="1.1" fill="#EA580C"/>
+                            <!-- Coarse Cracked Black Pepper Specks -->
+                            <circle cx="16" cy="14" r="0.65" fill="#1C1917" opacity="0.85"/>
+                            <circle cx="34" cy="12" r="0.6" fill="#1C1917" opacity="0.85"/>
+                            <circle cx="20" cy="24" r="0.6" fill="#1C1917" opacity="0.8"/>
+                            <circle cx="33" cy="23" r="0.55" fill="#1C1917" opacity="0.8"/>
+                            <circle cx="27" cy="18.5" r="0.55" fill="#451A03" opacity="0.85"/>
                         </svg>
                     </div>
 
@@ -1380,12 +1415,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             <ellipse cx="84" cy="35" rx="27" ry="9" fill="#0C0A09"/>
                         </svg>
                     </div>
-                </div>
-
-                <div class="foodies-loader-badge">
-                    <span class="foodies-loader-badge-star">✦</span>
-                    <span>FOODIES &amp; GOODIES</span>
-                    <span class="foodies-loader-badge-star">✦</span>
                 </div>
 
                 <div class="foodies-loader-message" id="foodiesLoaderMessage">
