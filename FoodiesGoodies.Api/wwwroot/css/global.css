@@ -2017,12 +2017,12 @@ select:focus.form-control {
   background: radial-gradient(circle, rgba(229, 169, 59, 0.2) 0%, transparent 70%);
 }
 
-/* Gourmet Skillet Stage */
+/* Gourmet Skillet Stage (Center Aligned) */
 .foodies-skillet-stage {
   position: relative;
-  width: 184px;
-  height: 164px;
-  margin-bottom: 12px;
+  width: 180px;
+  height: 156px;
+  margin: 0 auto 14px auto;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -2038,42 +2038,44 @@ select:focus.form-control {
   justify-content: center;
 }
 
-/* Intense Stove Heat Glow Beneath Skillet */
+/* Realistic Stove Heat Glow Beneath Burner (Centered) */
 .foodies-skillet-stage::before {
   content: '';
   position: absolute;
-  bottom: 4px;
-  left: 82px;
-  width: 90px;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 104px;
   height: 26px;
   border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(249, 115, 22, 0.55) 0%, rgba(220, 38, 38, 0.28) 50%, transparent 75%);
+  background: radial-gradient(ellipse at center, rgba(249, 115, 22, 0.58) 0%, rgba(220, 38, 38, 0.26) 55%, transparent 75%);
   filter: blur(6px);
   pointer-events: none;
   z-index: 0;
   animation: stoveGlowPulse 0.9s ease-in-out infinite alternate;
 }
 
-/* Chef Hand Holding and Flipping Skillet (Elevated Above Flame) */
+/* Gourmet Skillet (Centered Pan Bowl Over Flames, ~27px Gap) */
 .foodies-skillet {
   position: absolute;
-  bottom: 70px;
-  left: 10px;
-  width: 160px;
-  height: 52px;
-  transform-origin: 32px 36px;
+  bottom: 76px;
+  left: calc(50% - 96px);
+  width: 152px;
+  height: 46px;
+  transform-origin: 52px 25px;
   animation: skilletSizzleBob 2.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   z-index: 2;
-  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4));
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.42));
 }
 
-/* Stove Burner Flames Below Skillet (Separated by Visible Distance from Pan) */
+/* Realistic Stove Burner & Flames (Centered Below Pan) */
 .foodies-flames-group {
   position: absolute;
   bottom: 4px;
-  left: 87px;
-  width: 80px;
-  height: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 96px;
+  height: 52px;
   pointer-events: none;
   z-index: 1;
 }
@@ -2085,35 +2087,39 @@ select:focus.form-control {
   filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.85)) drop-shadow(0 0 4px rgba(220, 38, 38, 0.6));
 }
 
+.gas-blue-jets {
+  animation: gasJetPulse 0.8s ease-in-out infinite alternate;
+}
+
 .flame-tongue {
-  transform-origin: 50% 39px;
+  transform-origin: 50% 46px;
 }
 
 .flame-tongue-1 {
-  animation: flameTongueFlicker1 0.65s ease-in-out infinite alternate;
+  animation: flameTongueFlicker1 0.62s ease-in-out infinite alternate;
 }
 
 .flame-tongue-2 {
-  animation: flameTongueFlicker2 0.52s ease-in-out infinite alternate 0.1s;
+  animation: flameTongueFlicker2 0.52s ease-in-out infinite alternate 0.08s;
 }
 
 .flame-tongue-3 {
-  animation: flameTongueFlickerCenter 0.42s ease-in-out infinite alternate 0.05s;
+  animation: flameTongueFlickerCenter 0.42s ease-in-out infinite alternate 0.04s;
 }
 
 .flame-tongue-4 {
-  animation: flameTongueFlicker2 0.58s ease-in-out infinite alternate 0.16s;
+  animation: flameTongueFlicker2 0.56s ease-in-out infinite alternate 0.14s;
 }
 
 .flame-tongue-5 {
-  animation: flameTongueFlicker1 0.7s ease-in-out infinite alternate 0.08s;
+  animation: flameTongueFlicker1 0.68s ease-in-out infinite alternate 0.06s;
 }
 
-/* Flipping Culinary Delicacy (Sunny Side Up Egg Omelette) */
+/* Flipping Culinary Delicacy (Sunny Side Up Egg - Centered Over Pan) */
 .foodies-food-toss {
   position: absolute;
-  bottom: 78px;
-  left: 101px;
+  bottom: 82px;
+  left: 50%;
   width: 52px;
   height: 32px;
   transform-origin: center center;
@@ -2122,13 +2128,14 @@ select:focus.form-control {
   filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.3));
 }
 
-/* Steam Wisps */
+/* Steam Wisps (Centered) */
 .foodies-steam-group {
   position: absolute;
-  bottom: 94px;
-  left: 98px;
-  width: 60px;
-  height: 60px;
+  bottom: 96px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 56px;
+  height: 56px;
   pointer-events: none;
   z-index: 2;
 }
@@ -2144,30 +2151,31 @@ select:focus.form-control {
 }
 
 .steam-wisp-1 {
-  left: 10px;
+  left: 8px;
   animation: steamDrift 2.2s ease-out infinite;
   animation-delay: 0.1s;
 }
 
 .steam-wisp-2 {
-  left: 24px;
+  left: 22px;
   animation: steamDrift 2.2s ease-out infinite;
   animation-delay: 0.75s;
 }
 
 .steam-wisp-3 {
-  left: 38px;
+  left: 36px;
   animation: steamDrift 2.2s ease-out infinite;
-  animation-delay: 1.35s;
+  animation-delay: 1.4s;
 }
 
-/* Sizzle Sparks */
+/* Sizzle Sparks (Centered Over Pan) */
 .foodies-sizzle-sparks {
   position: absolute;
-  bottom: 76px;
-  left: 102px;
-  width: 50px;
-  height: 30px;
+  bottom: 82px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 56px;
+  height: 24px;
   pointer-events: none;
   z-index: 4;
 }
@@ -2306,35 +2314,46 @@ select:focus.form-control {
 
 @keyframes foodTossFlip {
   0%, 18% {
-    transform: translate(0, 0) rotate(0deg) scale(1, 1);
+    transform: translateX(-50%) translateY(0) rotate(0deg) scale(1, 1);
   }
   22% {
     /* Compression before launch */
-    transform: translate(-1px, 2px) rotate(-2deg) scale(1.08, 0.9);
+    transform: translateX(-50%) translateY(2px) rotate(-2deg) scale(1.08, 0.9);
   }
   28% {
     /* Upward flick */
-    transform: translate(-3px, -18px) rotate(45deg) scale(0.96, 1.05);
+    transform: translateX(-50%) translateY(-18px) rotate(45deg) scale(0.96, 1.05);
   }
   48% {
     /* Apex flip */
-    transform: translate(-6px, -46px) rotate(190deg) scale(1, 1);
+    transform: translateX(-50%) translateY(-46px) rotate(190deg) scale(1, 1);
   }
   68% {
     /* Gravity descent */
-    transform: translate(-3px, -12px) rotate(330deg) scale(0.96, 1.04);
+    transform: translateX(-50%) translateY(-12px) rotate(330deg) scale(0.96, 1.04);
   }
   76% {
     /* Catch & squash */
-    transform: translate(0, 1.5px) rotate(360deg) scale(1.12, 0.85);
+    transform: translateX(-50%) translateY(1.5px) rotate(360deg) scale(1.12, 0.85);
   }
   84% {
     /* Rebound */
-    transform: translate(0, -2.5px) rotate(360deg) scale(0.97, 1.03);
+    transform: translateX(-50%) translateY(-2.5px) rotate(360deg) scale(0.97, 1.03);
   }
   92%, 100% {
     /* Rest in skillet */
-    transform: translate(0, 0) rotate(360deg) scale(1, 1);
+    transform: translateX(-50%) translateY(0) rotate(360deg) scale(1, 1);
+  }
+}
+
+@keyframes gasJetPulse {
+  0% {
+    opacity: 0.85;
+    transform: scaleY(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1.08);
   }
 }
 

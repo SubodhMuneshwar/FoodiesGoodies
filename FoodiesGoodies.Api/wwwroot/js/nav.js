@@ -1192,7 +1192,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const MIN_DISPLAY_MS = 380; // Prevents jarring 10ms micro-flickers
 
     function getOrCreateDOM() {
-        if (overlayEl && document.body && document.body.contains(overlayEl) && overlayEl.querySelector('.chef-flipping-hand')) {
+        if (overlayEl && document.body && document.body.contains(overlayEl) && overlayEl.dataset.v === '7.0') {
             return overlayEl;
         }
         let existing = document.getElementById('foodies-global-loader');
@@ -1203,6 +1203,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const overlay = document.createElement('div');
         overlay.id = 'foodies-global-loader';
+        overlay.dataset.v = '7.0';
         overlay.className = 'foodies-loader-overlay';
         overlay.setAttribute('role', 'status');
         overlay.setAttribute('aria-live', 'polite');
@@ -1217,7 +1218,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
 
                 <div class="foodies-skillet-stage" aria-hidden="true">
-                    <!-- Rising Steam Wisps -->
+                    <!-- Rising Steam Wisps (Centered Above Pan) -->
                     <div class="foodies-steam-group">
                         <svg class="steam-wisp steam-wisp-1" width="16" height="34" viewBox="0 0 16 34">
                             <path d="M8 32 C3 26 12 18 6 10 C3 6 8 2 8 0"/>
@@ -1230,96 +1231,138 @@ document.addEventListener('DOMContentLoaded', () => {
                         </svg>
                     </div>
 
-                    <!-- Sizzle Spark Particles -->
+                    <!-- Sizzle Spark Particles (Centered In Pan) -->
                     <div class="foodies-sizzle-sparks">
                         <span class="sizzle-spark spark-1"></span>
                         <span class="sizzle-spark spark-2"></span>
                         <span class="sizzle-spark spark-3"></span>
                     </div>
 
-                    <!-- Stove Burner Flames Below Skillet (Separated by Distance) -->
+                    <!-- Realistic Stove Burner & Flames (Centered Directly Below Pan) -->
                     <div class="foodies-flames-group">
-                        <svg class="foodies-flames-svg" viewBox="0 0 88 44" width="88" height="44" aria-hidden="true">
+                        <svg class="foodies-flames-svg" viewBox="0 0 96 52" width="96" height="52" aria-hidden="true">
                             <defs>
                                 <!-- Outer Roaring Fire Gradient -->
                                 <linearGradient id="flameOuterGrad" x1="0%" y1="100%" x2="0%" y2="0%">
                                     <stop offset="0%" stop-color="#991B1B" stop-opacity="0.95"/>
-                                    <stop offset="25%" stop-color="#DC2626" stop-opacity="0.95"/>
-                                    <stop offset="60%" stop-color="#EA580C"/>
-                                    <stop offset="85%" stop-color="#F97316"/>
+                                    <stop offset="20%" stop-color="#DC2626" stop-opacity="0.95"/>
+                                    <stop offset="55%" stop-color="#EA580C"/>
+                                    <stop offset="82%" stop-color="#F97316"/>
                                     <stop offset="100%" stop-color="#FBBF24"/>
                                 </linearGradient>
                                 <!-- Mid Flame Core Gradient -->
                                 <linearGradient id="flameMidGrad" x1="0%" y1="100%" x2="0%" y2="0%">
                                     <stop offset="0%" stop-color="#DC2626"/>
-                                    <stop offset="35%" stop-color="#F97316"/>
-                                    <stop offset="75%" stop-color="#FBBF24"/>
+                                    <stop offset="30%" stop-color="#F97316"/>
+                                    <stop offset="70%" stop-color="#FBBF24"/>
                                     <stop offset="100%" stop-color="#FEF08A"/>
                                 </linearGradient>
                                 <!-- White-Hot Core Gradient -->
                                 <linearGradient id="flameInnerGrad" x1="0%" y1="100%" x2="0%" y2="0%">
                                     <stop offset="0%" stop-color="#EA580C"/>
-                                    <stop offset="35%" stop-color="#F59E0B"/>
-                                    <stop offset="70%" stop-color="#FEF08A"/>
+                                    <stop offset="30%" stop-color="#F59E0B"/>
+                                    <stop offset="65%" stop-color="#FEF08A"/>
                                     <stop offset="100%" stop-color="#FFFFFF"/>
                                 </linearGradient>
-                                <!-- Gas Burner Blue Base -->
-                                <linearGradient id="flameBlueBaseGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.95"/>
-                                    <stop offset="50%" stop-color="#0284C7" stop-opacity="0.8"/>
-                                    <stop offset="100%" stop-color="#1E3A8A" stop-opacity="0"/>
+                                <!-- Electric-Blue Gas Jet Base -->
+                                <linearGradient id="gasBlueJetGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+                                    <stop offset="0%" stop-color="#1E3A8A" stop-opacity="0.95"/>
+                                    <stop offset="35%" stop-color="#0284C7" stop-opacity="0.95"/>
+                                    <stop offset="75%" stop-color="#00D4FF"/>
+                                    <stop offset="100%" stop-color="#E0F2FE"/>
                                 </linearGradient>
-                                <!-- Stove Heat Aura -->
-                                <radialGradient id="stoveHeatAura" cx="50%" cy="80%" r="50%">
+                                <!-- Gas Combustion Bed Ribbon -->
+                                <linearGradient id="gasBlueBedGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#0284C7" stop-opacity="0.2"/>
+                                    <stop offset="25%" stop-color="#00D4FF" stop-opacity="0.9"/>
+                                    <stop offset="50%" stop-color="#38BDF8" stop-opacity="1"/>
+                                    <stop offset="75%" stop-color="#00D4FF" stop-opacity="0.9"/>
+                                    <stop offset="100%" stop-color="#0284C7" stop-opacity="0.2"/>
+                                </linearGradient>
+                                <!-- Stove Burner Iron Metal -->
+                                <linearGradient id="burnerIronGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#3F3F46"/>
+                                    <stop offset="40%" stop-color="#27272A"/>
+                                    <stop offset="100%" stop-color="#18181B"/>
+                                </linearGradient>
+                                <!-- Radiant Heat Aura Base -->
+                                <radialGradient id="stoveHeatAura" cx="50%" cy="85%" r="55%">
                                     <stop offset="0%" stop-color="#F97316" stop-opacity="0.75"/>
-                                    <stop offset="55%" stop-color="#EA580C" stop-opacity="0.35"/>
+                                    <stop offset="50%" stop-color="#EA580C" stop-opacity="0.32"/>
                                     <stop offset="100%" stop-color="#DC2626" stop-opacity="0"/>
                                 </radialGradient>
                             </defs>
+
                             <!-- Radiant Heat Aura Base -->
-                            <ellipse cx="44" cy="38" rx="40" ry="6" fill="url(#stoveHeatAura)"/>
-                            <!-- Stove Burner Grate -->
-                            <ellipse cx="44" cy="39" rx="34" ry="4" fill="#292524" opacity="0.7"/>
-                            <!-- Gas Burner Blue Flame Jet Bed -->
-                            <path d="M 12 39 Q 44 42 76 39 Q 44 45 12 39 Z" fill="url(#flameBlueBaseGrad)"/>
+                            <ellipse cx="48" cy="46" rx="44" ry="5.5" fill="url(#stoveHeatAura)"/>
                             
-                            <!-- Flame Tongue 1 (Far Left) -->
-                            <g class="flame-tongue flame-tongue-1">
-                                <path d="M 12 39 C 7 32 9 22 16 12 C 19 20 22 28 20 39 Z" fill="url(#flameOuterGrad)"/>
-                                <path d="M 14 38 C 11 32 13 25 17 16 C 19 23 20 30 18 38 Z" fill="url(#flameMidGrad)"/>
-                                <path d="M 15 37 C 13 33 14 27 17 21 C 18 26 19 31 18 37 Z" fill="url(#flameInnerGrad)"/>
+                            <!-- Stove Burner Grate Base & Crown -->
+                            <ellipse cx="48" cy="47" rx="38" ry="4.5" fill="#18181B"/>
+                            <ellipse cx="48" cy="46.2" rx="35" ry="3.8" fill="url(#burnerIronGrad)" stroke="#52525B" stroke-width="0.7"/>
+                            <!-- Burner Gas Port Slots (Radial cast iron teeth) -->
+                            <line x1="20" y1="46" x2="22" y2="47" stroke="#09090B" stroke-width="1.2"/>
+                            <line x1="28" y1="47.2" x2="29" y2="48.5" stroke="#09090B" stroke-width="1.2"/>
+                            <line x1="38" y1="48" x2="38" y2="49.5" stroke="#09090B" stroke-width="1.2"/>
+                            <line x1="48" y1="48.2" x2="48" y2="49.8" stroke="#09090B" stroke-width="1.2"/>
+                            <line x1="58" y1="48" x2="58" y2="49.5" stroke="#09090B" stroke-width="1.2"/>
+                            <line x1="68" y1="47.2" x2="67" y2="48.5" stroke="#09090B" stroke-width="1.2"/>
+                            <line x1="76" y1="46" x2="74" y2="47" stroke="#09090B" stroke-width="1.2"/>
+                            <!-- Inner Burner Cap -->
+                            <ellipse cx="48" cy="45.2" rx="16" ry="2.2" fill="#27272A" stroke="#3F3F46" stroke-width="0.6"/>
+
+                            <!-- Gas Burner Electric-Blue Flame Jets (Authentic High-Heat Combustion) -->
+                            <path d="M 16 46 Q 48 42 80 46 Q 48 48 16 46 Z" fill="url(#gasBlueBedGrad)"/>
+                            <g class="gas-blue-jets">
+                                <path d="M 18 46 Q 22 38 26 46 Z" fill="url(#gasBlueJetGrad)"/>
+                                <path d="M 28 46 Q 33 36 38 46 Z" fill="url(#gasBlueJetGrad)"/>
+                                <path d="M 40 46 Q 44 34 48 46 Z" fill="url(#gasBlueJetGrad)"/>
+                                <path d="M 48 46 Q 52 34 56 46 Z" fill="url(#gasBlueJetGrad)"/>
+                                <path d="M 58 46 Q 63 36 68 46 Z" fill="url(#gasBlueJetGrad)"/>
+                                <path d="M 70 46 Q 74 38 78 46 Z" fill="url(#gasBlueJetGrad)"/>
                             </g>
-                            <!-- Flame Tongue 2 (Mid Left) -->
+                            
+                            <!-- Roaring Dancing Fire Plumes -->
+                            <!-- Flame Tongue 1 (Far Left Flickering Tongue) -->
+                            <g class="flame-tongue flame-tongue-1">
+                                <path d="M 17 45 C 12 36 14 26 22 16 C 26 25 28 34 26 45 Z" fill="url(#flameOuterGrad)"/>
+                                <path d="M 19 44 C 16 37 18 29 22 20 C 25 27 26 35 24 44 Z" fill="url(#flameMidGrad)"/>
+                                <path d="M 20 43 C 18 38 20 32 22 25 C 24 31 25 38 23 43 Z" fill="url(#flameInnerGrad)"/>
+                            </g>
+                            <!-- Flame Tongue 2 (Mid-Left Dancing Tongue) -->
                             <g class="flame-tongue flame-tongue-2">
-                                <path d="M 22 39 C 17 27 20 15 28 6 C 33 16 35 27 33 39 Z" fill="url(#flameOuterGrad)"/>
-                                <path d="M 24 38 C 21 29 23 19 29 11 C 32 19 33 29 31 38 Z" fill="url(#flameMidGrad)"/>
-                                <path d="M 26 37 C 24 30 26 23 29 15 C 31 22 31 30 29 37 Z" fill="url(#flameInnerGrad)"/>
+                                <path d="M 27 45 C 23 32 26 19 35 8 C 40 19 42 32 39 45 Z" fill="url(#flameOuterGrad)"/>
+                                <path d="M 29 44 C 27 34 29 23 35 12 C 39 21 40 33 37 44 Z" fill="url(#flameMidGrad)"/>
+                                <path d="M 31 43 C 30 36 32 27 35 17 C 37 24 38 35 36 43 Z" fill="url(#flameInnerGrad)"/>
                             </g>
                             <!-- Flame Tongue 3 (Towering Center Core) -->
                             <g class="flame-tongue flame-tongue-3">
-                                <path d="M 34 39 C 30 24 35 12 44 2 C 53 12 57 24 53 39 Z" fill="url(#flameOuterGrad)"/>
-                                <path d="M 37 38 C 34 26 38 15 44 6 C 50 15 54 26 50 38 Z" fill="url(#flameMidGrad)"/>
-                                <path d="M 40 37 C 38 28 41 19 44 11 C 47 19 50 28 47 37 Z" fill="url(#flameInnerGrad)"/>
+                                <path d="M 38 45 C 34 27 40 13 48 2 C 56 13 62 27 58 45 Z" fill="url(#flameOuterGrad)"/>
+                                <path d="M 41 44 C 38 30 43 17 48 6 C 53 17 58 30 55 44 Z" fill="url(#flameMidGrad)"/>
+                                <path d="M 44 43 C 42 32 46 22 48 11 C 50 22 54 32 52 43 Z" fill="url(#flameInnerGrad)"/>
+                                <path d="M 46 42 C 45 35 47 27 48 18 C 49 27 51 35 50 42 Z" fill="#FFFFFF" opacity="0.95"/>
                             </g>
-                            <!-- Flame Tongue 4 (Mid Right) -->
+                            <!-- Flame Tongue 4 (Mid-Right Dancing Tongue) -->
                             <g class="flame-tongue flame-tongue-4">
-                                <path d="M 54 39 C 52 26 56 16 61 7 C 67 17 70 28 66 39 Z" fill="url(#flameOuterGrad)"/>
-                                <path d="M 56 38 C 55 28 58 19 61 12 C 65 20 67 30 64 38 Z" fill="url(#flameMidGrad)"/>
-                                <path d="M 58 37 C 57 29 60 22 61 16 C 63 22 64 30 63 37 Z" fill="url(#flameInnerGrad)"/>
+                                <path d="M 57 45 C 54 32 56 19 61 8 C 70 19 73 32 69 45 Z" fill="url(#flameOuterGrad)"/>
+                                <path d="M 59 44 C 57 33 58 22 61 12 C 68 22 70 34 67 44 Z" fill="url(#flameMidGrad)"/>
+                                <path d="M 61 43 C 59 35 61 26 62 17 C 65 24 67 35 65 43 Z" fill="url(#flameInnerGrad)"/>
                             </g>
-                            <!-- Flame Tongue 5 (Far Right) -->
+                            <!-- Flame Tongue 5 (Far Right Flickering Tongue) -->
                             <g class="flame-tongue flame-tongue-5">
-                                <path d="M 66 39 C 66 30 70 22 75 14 C 77 22 79 30 76 39 Z" fill="url(#flameOuterGrad)"/>
-                                <path d="M 68 38 C 68 31 71 25 74 18 C 76 24 76 32 74 38 Z" fill="url(#flameMidGrad)"/>
-                                <path d="M 70 37 C 70 32 72 27 74 22 C 75 27 75 32 73 37 Z" fill="url(#flameInnerGrad)"/>
+                                <path d="M 70 45 C 68 34 72 25 75 16 C 82 26 84 36 79 45 Z" fill="url(#flameOuterGrad)"/>
+                                <path d="M 72 44 C 71 36 73 28 75 20 C 79 28 81 37 77 44 Z" fill="url(#flameMidGrad)"/>
+                                <path d="M 73 43 C 72 37 74 31 75 24 C 77 31 78 38 76 43 Z" fill="url(#flameInnerGrad)"/>
                             </g>
-                            <!-- Floating Embers -->
-                            <circle cx="41" cy="5" r="1.1" fill="#FEF08A" opacity="0.9"/>
-                            <circle cx="49" cy="9" r="0.9" fill="#F97316" opacity="0.85"/>
+
+                            <!-- Floating Heat Embers -->
+                            <circle cx="45" cy="5" r="1.1" fill="#FEF08A" opacity="0.9"/>
+                            <circle cx="53" cy="9" r="0.9" fill="#F97316" opacity="0.85"/>
+                            <circle cx="33" cy="14" r="0.8" fill="#FBBF24" opacity="0.8"/>
+                            <circle cx="63" cy="13" r="0.75" fill="#FEF08A" opacity="0.8"/>
                         </svg>
                     </div>
 
-                    <!-- Flipping Food (Sizzling Sunny Side Up Egg Omelette) -->
+                    <!-- Flipping Food (Sizzling Sunny Side Up Egg Omelette - Centered Over Pan) -->
                     <div class="foodies-food-toss foodies-egg-toss">
                         <svg viewBox="0 0 52 32" width="52" height="32" aria-hidden="true">
                             <defs>
@@ -1384,9 +1427,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         </svg>
                     </div>
 
-                    <!-- Skillet Body, Handle, and Chef Flipping Hand -->
+                    <!-- Gourmet Skillet (Only Pan, Centered Bowl with Helper Tab) -->
                     <div class="foodies-skillet">
-                        <svg viewBox="0 0 160 52" width="160" height="52" aria-hidden="true">
+                        <svg viewBox="0 0 152 46" width="152" height="46" aria-hidden="true">
                             <defs>
                                 <linearGradient id="skilletPanGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                                     <stop offset="0%" stop-color="#C2703A"/>
@@ -1395,9 +1438,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <stop offset="100%" stop-color="#1C1917"/>
                                 </linearGradient>
                                 <linearGradient id="handleGrad" x1="0%" y1="50%" x2="100%" y2="50%">
-                                    <stop offset="0%" stop-color="#D4AF37"/>
-                                    <stop offset="35%" stop-color="#FEF08A"/>
-                                    <stop offset="70%" stop-color="#B45309"/>
+                                    <stop offset="0%" stop-color="#78350F"/>
+                                    <stop offset="15%" stop-color="#B45309"/>
+                                    <stop offset="45%" stop-color="#FEF08A"/>
+                                    <stop offset="65%" stop-color="#D4AF37"/>
                                     <stop offset="100%" stop-color="#78350F"/>
                                 </linearGradient>
                                 <linearGradient id="rimGrad" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -1405,66 +1449,34 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <stop offset="50%" stop-color="#FED7AA" stop-opacity="0.9"/>
                                     <stop offset="100%" stop-color="#EA580C" stop-opacity="0.3"/>
                                 </linearGradient>
-                                <!-- Chef Skin Tone Gradient -->
-                                <linearGradient id="chefSkinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" stop-color="#FED7AA"/>
-                                    <stop offset="35%" stop-color="#FDBA74"/>
-                                    <stop offset="75%" stop-color="#FB923C"/>
-                                    <stop offset="100%" stop-color="#EA580C"/>
-                                </linearGradient>
-                                <!-- Chef Uniform White Gradient -->
-                                <linearGradient id="chefCoatGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" stop-color="#FFFFFF"/>
-                                    <stop offset="70%" stop-color="#F1F5F9"/>
-                                    <stop offset="100%" stop-color="#E2E8F0"/>
+                                <linearGradient id="panSheenGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#FDBA74" stop-opacity="0"/>
+                                    <stop offset="50%" stop-color="#FEF08A" stop-opacity="0.25"/>
+                                    <stop offset="100%" stop-color="#EA580C" stop-opacity="0"/>
                                 </linearGradient>
                             </defs>
 
-                            <!-- Skillet Handle -->
-                            <path d="M 32 30 C 32 27, 48 28, 66 32 C 75 34, 82 36, 86 37 L 84 42 C 80 41, 73 39, 65 37 C 47 33, 32 33, 32 30 Z" fill="url(#handleGrad)"/>
-                            <circle cx="39" cy="30" r="2.5" fill="#451A03"/>
-                            <circle cx="78" cy="37" r="1.5" fill="#78350F"/>
-                            <circle cx="81" cy="40" r="1.5" fill="#78350F"/>
+                            <!-- Long Ergonomic Chef's Handle (Left) -->
+                            <path d="M 14 20 C 8 20 8 23 14 23 C 14 23 28 23 44 25 C 50 26 56 27.5 60 29 L 62 25 C 58 23.5 52 22 46 21 C 28 17.5 14 17 14 20 Z" fill="url(#handleGrad)"/>
+                            <!-- Handle Hanging Loop Hole -->
+                            <circle cx="16" cy="21.5" r="2.8" fill="#1C1917" stroke="#78350F" stroke-width="0.7"/>
+                            <!-- Heavy-Duty Brass Rivets -->
+                            <circle cx="54" cy="25" r="1.5" fill="#D4AF37" stroke="#78350F" stroke-width="0.5"/>
+                            <circle cx="57" cy="27" r="1.5" fill="#D4AF37" stroke="#78350F" stroke-width="0.5"/>
+                            <!-- Spine Highlight -->
+                            <path d="M 18 19.8 C 28 18.8 40 20 48 21.8" stroke="#FEF08A" stroke-width="0.8" stroke-linecap="round" fill="none" opacity="0.65"/>
 
-                            <!-- Pan Body and Rim -->
-                            <path d="M 82 37 C 84 47, 100 50, 115 50 C 130 50, 144 47, 145 37 C 145 35, 143 35, 138 37 C 128 40, 102 40, 89 37 Z" fill="url(#skilletPanGrad)"/>
-                            <ellipse cx="114" cy="37" rx="30" ry="11" fill="#1C1917" stroke="url(#rimGrad)" stroke-width="1.6"/>
-                            <ellipse cx="114" cy="38" rx="27" ry="9" fill="#0C0A09"/>
+                            <!-- Skillet Underbelly Body -->
+                            <path d="M 62 25 C 64 38, 80 43, 96 43 C 112 43, 128 38, 130 25 C 130 23, 128 23, 123 25 C 113 29, 79 29, 69 25 Z" fill="url(#skilletPanGrad)"/>
+                            
+                            <!-- Pan Rim and Interior Cooking Surface (Centered at cx=96) -->
+                            <ellipse cx="96" cy="25" rx="34" ry="11.5" fill="#1C1917" stroke="url(#rimGrad)" stroke-width="1.6"/>
+                            <ellipse cx="96" cy="26" rx="31" ry="9.5" fill="#0C0A09"/>
+                            <ellipse cx="96" cy="26.5" rx="26" ry="6.5" fill="none" stroke="url(#panSheenGrad)" stroke-width="1.2"/>
 
-                            <!-- Chef's Hand Holding & Flipping the Skillet -->
-                            <g class="chef-flipping-hand">
-                                <!-- White Chef Coat Sleeve -->
-                                <path d="M 0 22 L 20 24 C 22 24 23 25 23 27 L 23 41 C 23 43 22 44 20 44 L 0 46 Z" fill="url(#chefCoatGrad)" stroke="#CBD5E1" stroke-width="0.9"/>
-                                <!-- Double-Stitched Jacket Cuff Band -->
-                                <rect x="18" y="23.5" width="4.5" height="21" rx="1.5" fill="#F1F5F9" stroke="#94A3B8" stroke-width="0.7"/>
-                                <!-- Chef Coat Gold Buttons -->
-                                <circle cx="20.2" cy="29" r="1.3" fill="#D4AF37" stroke="#78350F" stroke-width="0.4"/>
-                                <circle cx="20.2" cy="38.5" r="1.3" fill="#D4AF37" stroke="#78350F" stroke-width="0.4"/>
-
-                                <!-- Wrist Emerging from Cuff -->
-                                <path d="M 23 27 C 26 27 28 28 31 29 L 31 39 C 28 40 26 41 23 41 Z" fill="url(#chefSkinGrad)"/>
-
-                                <!-- Palm & Lower Hand Grip Structure -->
-                                <path d="M 30 32 C 32 37 36 41 42 41 L 58 41 C 61 41 63 38 62 36 C 60 34 46 33 30 32 Z" fill="url(#chefSkinGrad)" stroke="#C2410C" stroke-width="0.5"/>
-
-                                <!-- 4 Wrapped Fingers Firmly Gripping Under Handle -->
-                                <!-- Index Finger -->
-                                <rect x="35" y="28.5" width="5.8" height="13" rx="2.8" fill="url(#chefSkinGrad)" stroke="#C2410C" stroke-width="0.6"/>
-                                <line x1="38" y1="35" x2="38" y2="38.5" stroke="#C2410C" stroke-width="0.7" stroke-linecap="round"/>
-                                <!-- Middle Finger -->
-                                <rect x="42" y="29" width="5.8" height="13.5" rx="2.8" fill="url(#chefSkinGrad)" stroke="#C2410C" stroke-width="0.6"/>
-                                <line x1="45" y1="35.5" x2="45" y2="39" stroke="#C2410C" stroke-width="0.7" stroke-linecap="round"/>
-                                <!-- Ring Finger -->
-                                <rect x="49" y="29.5" width="5.5" height="13" rx="2.7" fill="url(#chefSkinGrad)" stroke="#C2410C" stroke-width="0.6"/>
-                                <line x1="51.8" y1="36" x2="51.8" y2="39.5" stroke="#C2410C" stroke-width="0.7" stroke-linecap="round"/>
-                                <!-- Pinky Finger -->
-                                <rect x="55.5" y="30" width="5" height="12" rx="2.5" fill="url(#chefSkinGrad)" stroke="#C2410C" stroke-width="0.6"/>
-                                <line x1="58" y1="36" x2="58" y2="39" stroke="#C2410C" stroke-width="0.7" stroke-linecap="round"/>
-
-                                <!-- Chef's Thumb (Pressing Top of Handle for Flipping Leverage) -->
-                                <path d="M 29 29 C 31 25.5 37 25 46 26 C 49 26.5 50 28.5 49 30.5 C 48 32 44 31.5 39 31 C 35 30.5 31 31 29 31.5 Z" fill="url(#chefSkinGrad)" stroke="#C2410C" stroke-width="0.6"/>
-                                <ellipse cx="46.5" cy="27.5" rx="1.8" ry="1.3" fill="#FED7AA" opacity="0.9"/>
-                            </g>
+                            <!-- Gourmet Cast Helper Tab Handle (Right) -->
+                            <path d="M 130 23.5 C 136 23.5, 140 24.5, 140 26.5 C 140 28.5, 136 29.5, 130 29.5 Z" fill="url(#skilletPanGrad)" stroke="url(#rimGrad)" stroke-width="0.8"/>
+                            <ellipse cx="134.5" cy="26.5" rx="2.4" ry="1.2" fill="#0C0A09"/>
                         </svg>
                     </div>
                 </div>
