@@ -2021,8 +2021,8 @@ select:focus.form-control {
 .foodies-skillet-stage {
   position: relative;
   width: 180px;
-  height: 156px;
-  margin: 0 auto 14px auto;
+  height: 148px;
+  margin: 0 auto 12px auto;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -2055,27 +2055,27 @@ select:focus.form-control {
   animation: stoveGlowPulse 0.9s ease-in-out infinite alternate;
 }
 
-/* Gourmet Skillet (Centered Pan Bowl Over Flames, ~27px Gap) */
+/* Gourmet Skillet (Centered Pan Bowl Closer to Lower Flames) */
 .foodies-skillet {
   position: absolute;
-  bottom: 76px;
+  bottom: 58px;
   left: calc(50% - 96px);
   width: 152px;
   height: 46px;
   transform-origin: 52px 25px;
   animation: skilletSizzleBob 2.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   z-index: 2;
-  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.42));
+  filter: drop-shadow(0 5px 12px rgba(0, 0, 0, 0.42));
 }
 
-/* Realistic Stove Burner & Flames (Centered Below Pan) */
+/* Realistic Stove Burner & Lower Flames (Centered Below Pan) */
 .foodies-flames-group {
   position: absolute;
   bottom: 4px;
   left: 50%;
   transform: translateX(-50%);
   width: 96px;
-  height: 52px;
+  height: 48px;
   pointer-events: none;
   z-index: 1;
 }
@@ -2084,7 +2084,7 @@ select:focus.form-control {
   width: 100%;
   height: 100%;
   overflow: visible;
-  filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.85)) drop-shadow(0 0 4px rgba(220, 38, 38, 0.6));
+  filter: drop-shadow(0 0 8px rgba(249, 115, 22, 0.8)) drop-shadow(0 0 3px rgba(220, 38, 38, 0.55));
 }
 
 .gas-blue-jets {
@@ -2118,7 +2118,7 @@ select:focus.form-control {
 /* Flipping Culinary Delicacy (Sunny Side Up Egg - Centered Over Pan) */
 .foodies-food-toss {
   position: absolute;
-  bottom: 82px;
+  bottom: 64px;
   left: 50%;
   width: 52px;
   height: 32px;
@@ -2131,7 +2131,7 @@ select:focus.form-control {
 /* Steam Wisps (Centered) */
 .foodies-steam-group {
   position: absolute;
-  bottom: 96px;
+  bottom: 78px;
   left: 50%;
   transform: translateX(-50%);
   width: 56px;
@@ -2171,7 +2171,7 @@ select:focus.form-control {
 /* Sizzle Sparks (Centered Over Pan) */
 .foodies-sizzle-sparks {
   position: absolute;
-  bottom: 82px;
+  bottom: 64px;
   left: 50%;
   transform: translateX(-50%);
   width: 56px;
@@ -2420,49 +2420,49 @@ select:focus.form-control {
   }
 }
 
-/* Stove Flame Tongue Dancing Keyframes (High Roaring Flames) */
+/* Stove Flame Tongue Dancing Keyframes (Controlled Lower Flames) */
 @keyframes flameTongueFlicker1 {
   0% {
-    transform: scaleY(0.9) scaleX(0.92) rotate(-3deg);
-    opacity: 0.88;
+    transform: scaleY(0.92) scaleX(0.95) rotate(-2deg);
+    opacity: 0.9;
   }
   50% {
-    transform: scaleY(1.16) scaleX(1.06) rotate(2.5deg);
+    transform: scaleY(1.06) scaleX(1.03) rotate(2deg);
     opacity: 1;
   }
   100% {
-    transform: scaleY(0.93) scaleX(0.95) rotate(-1deg);
-    opacity: 0.9;
+    transform: scaleY(0.95) scaleX(0.97) rotate(-1deg);
+    opacity: 0.92;
   }
 }
 
 @keyframes flameTongueFlicker2 {
   0% {
-    transform: scaleY(0.86) scaleX(0.94) rotate(3deg);
+    transform: scaleY(0.9) scaleX(0.96) rotate(2deg);
     opacity: 0.9;
   }
   50% {
-    transform: scaleY(1.24) scaleX(1.08) rotate(-2.5deg);
+    transform: scaleY(1.08) scaleX(1.04) rotate(-2deg);
     opacity: 1;
   }
   100% {
-    transform: scaleY(0.91) scaleX(0.9) rotate(1.5deg);
-    opacity: 0.88;
+    transform: scaleY(0.94) scaleX(0.96) rotate(1deg);
+    opacity: 0.92;
   }
 }
 
 @keyframes flameTongueFlickerCenter {
   0% {
-    transform: scaleY(0.92) scaleX(0.95);
+    transform: scaleY(0.94) scaleX(0.96);
     opacity: 0.92;
   }
   50% {
-    transform: scaleY(1.3) scaleX(1.1);
+    transform: scaleY(1.08) scaleX(1.04);
     opacity: 1;
   }
   100% {
-    transform: scaleY(0.88) scaleX(0.92);
-    opacity: 0.9;
+    transform: scaleY(0.92) scaleX(0.95);
+    opacity: 0.92;
   }
 }
 

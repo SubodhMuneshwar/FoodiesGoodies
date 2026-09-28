@@ -1192,7 +1192,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const MIN_DISPLAY_MS = 380; // Prevents jarring 10ms micro-flickers
 
     function getOrCreateDOM() {
-        if (overlayEl && document.body && document.body.contains(overlayEl) && overlayEl.dataset.v === '7.0') {
+        if (overlayEl && document.body && document.body.contains(overlayEl) && overlayEl.dataset.v === '7.1') {
             return overlayEl;
         }
         let existing = document.getElementById('foodies-global-loader');
@@ -1203,7 +1203,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const overlay = document.createElement('div');
         overlay.id = 'foodies-global-loader';
-        overlay.dataset.v = '7.0';
+        overlay.dataset.v = '7.1';
         overlay.className = 'foodies-loader-overlay';
         overlay.setAttribute('role', 'status');
         overlay.setAttribute('aria-live', 'polite');
@@ -1238,11 +1238,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span class="sizzle-spark spark-3"></span>
                     </div>
 
-                    <!-- Realistic Stove Burner & Flames (Centered Directly Below Pan) -->
+                    <!-- Realistic Stove Burner & Lower Controlled Flames (Centered Directly Below Pan) -->
                     <div class="foodies-flames-group">
                         <svg class="foodies-flames-svg" viewBox="0 0 96 52" width="96" height="52" aria-hidden="true">
                             <defs>
-                                <!-- Outer Roaring Fire Gradient -->
+                                <!-- Outer Controlled Fire Gradient -->
                                 <linearGradient id="flameOuterGrad" x1="0%" y1="100%" x2="0%" y2="0%">
                                     <stop offset="0%" stop-color="#991B1B" stop-opacity="0.95"/>
                                     <stop offset="20%" stop-color="#DC2626" stop-opacity="0.95"/>
@@ -1310,55 +1310,55 @@ document.addEventListener('DOMContentLoaded', () => {
                             <!-- Inner Burner Cap -->
                             <ellipse cx="48" cy="45.2" rx="16" ry="2.2" fill="#27272A" stroke="#3F3F46" stroke-width="0.6"/>
 
-                            <!-- Gas Burner Electric-Blue Flame Jets (Authentic High-Heat Combustion) -->
+                            <!-- Gas Burner Electric-Blue Flame Jets (Authentic Combustion) -->
                             <path d="M 16 46 Q 48 42 80 46 Q 48 48 16 46 Z" fill="url(#gasBlueBedGrad)"/>
                             <g class="gas-blue-jets">
-                                <path d="M 18 46 Q 22 38 26 46 Z" fill="url(#gasBlueJetGrad)"/>
-                                <path d="M 28 46 Q 33 36 38 46 Z" fill="url(#gasBlueJetGrad)"/>
-                                <path d="M 40 46 Q 44 34 48 46 Z" fill="url(#gasBlueJetGrad)"/>
-                                <path d="M 48 46 Q 52 34 56 46 Z" fill="url(#gasBlueJetGrad)"/>
-                                <path d="M 58 46 Q 63 36 68 46 Z" fill="url(#gasBlueJetGrad)"/>
-                                <path d="M 70 46 Q 74 38 78 46 Z" fill="url(#gasBlueJetGrad)"/>
+                                <path d="M 18 46 Q 22 39 26 46 Z" fill="url(#gasBlueJetGrad)"/>
+                                <path d="M 28 46 Q 33 38 38 46 Z" fill="url(#gasBlueJetGrad)"/>
+                                <path d="M 40 46 Q 44 36 48 46 Z" fill="url(#gasBlueJetGrad)"/>
+                                <path d="M 48 46 Q 52 36 56 46 Z" fill="url(#gasBlueJetGrad)"/>
+                                <path d="M 58 46 Q 63 38 68 46 Z" fill="url(#gasBlueJetGrad)"/>
+                                <path d="M 70 46 Q 74 39 78 46 Z" fill="url(#gasBlueJetGrad)"/>
                             </g>
                             
-                            <!-- Roaring Dancing Fire Plumes -->
-                            <!-- Flame Tongue 1 (Far Left Flickering Tongue) -->
+                            <!-- Controlled Simmer Fire Plumes (Lower Flame Profile) -->
+                            <!-- Flame Tongue 1 (Far Left) -->
                             <g class="flame-tongue flame-tongue-1">
-                                <path d="M 17 45 C 12 36 14 26 22 16 C 26 25 28 34 26 45 Z" fill="url(#flameOuterGrad)"/>
-                                <path d="M 19 44 C 16 37 18 29 22 20 C 25 27 26 35 24 44 Z" fill="url(#flameMidGrad)"/>
-                                <path d="M 20 43 C 18 38 20 32 22 25 C 24 31 25 38 23 43 Z" fill="url(#flameInnerGrad)"/>
+                                <path d="M 17 45 C 13 38 16 30 22 24 C 25 31 27 38 26 45 Z" fill="url(#flameOuterGrad)"/>
+                                <path d="M 19 44 C 17 39 19 33 22 27 C 25 32 26 39 24 44 Z" fill="url(#flameMidGrad)"/>
+                                <path d="M 20 43 C 19 39 20 35 22 30 C 24 35 25 40 23 43 Z" fill="url(#flameInnerGrad)"/>
                             </g>
-                            <!-- Flame Tongue 2 (Mid-Left Dancing Tongue) -->
+                            <!-- Flame Tongue 2 (Mid-Left) -->
                             <g class="flame-tongue flame-tongue-2">
-                                <path d="M 27 45 C 23 32 26 19 35 8 C 40 19 42 32 39 45 Z" fill="url(#flameOuterGrad)"/>
-                                <path d="M 29 44 C 27 34 29 23 35 12 C 39 21 40 33 37 44 Z" fill="url(#flameMidGrad)"/>
-                                <path d="M 31 43 C 30 36 32 27 35 17 C 37 24 38 35 36 43 Z" fill="url(#flameInnerGrad)"/>
+                                <path d="M 27 45 C 24 35 28 25 35 17 C 39 25 41 36 39 45 Z" fill="url(#flameOuterGrad)"/>
+                                <path d="M 29 44 C 27 36 30 28 35 20 C 38 27 40 37 37 44 Z" fill="url(#flameMidGrad)"/>
+                                <path d="M 31 43 C 30 38 32 31 35 24 C 37 30 38 38 36 43 Z" fill="url(#flameInnerGrad)"/>
                             </g>
-                            <!-- Flame Tongue 3 (Towering Center Core) -->
+                            <!-- Flame Tongue 3 (Gentle Center Plume) -->
                             <g class="flame-tongue flame-tongue-3">
-                                <path d="M 38 45 C 34 27 40 13 48 2 C 56 13 62 27 58 45 Z" fill="url(#flameOuterGrad)"/>
-                                <path d="M 41 44 C 38 30 43 17 48 6 C 53 17 58 30 55 44 Z" fill="url(#flameMidGrad)"/>
-                                <path d="M 44 43 C 42 32 46 22 48 11 C 50 22 54 32 52 43 Z" fill="url(#flameInnerGrad)"/>
-                                <path d="M 46 42 C 45 35 47 27 48 18 C 49 27 51 35 50 42 Z" fill="#FFFFFF" opacity="0.95"/>
+                                <path d="M 38 45 C 35 32 41 21 48 13 C 55 21 61 32 58 45 Z" fill="url(#flameOuterGrad)"/>
+                                <path d="M 41 44 C 38 34 43 24 48 16 C 53 24 57 34 55 44 Z" fill="url(#flameMidGrad)"/>
+                                <path d="M 44 43 C 42 35 46 27 48 20 C 50 27 53 35 52 43 Z" fill="url(#flameInnerGrad)"/>
+                                <path d="M 46 42 C 45 36 47 30 48 24 C 49 30 51 36 50 42 Z" fill="#FFFFFF" opacity="0.95"/>
                             </g>
-                            <!-- Flame Tongue 4 (Mid-Right Dancing Tongue) -->
+                            <!-- Flame Tongue 4 (Mid-Right) -->
                             <g class="flame-tongue flame-tongue-4">
-                                <path d="M 57 45 C 54 32 56 19 61 8 C 70 19 73 32 69 45 Z" fill="url(#flameOuterGrad)"/>
-                                <path d="M 59 44 C 57 33 58 22 61 12 C 68 22 70 34 67 44 Z" fill="url(#flameMidGrad)"/>
-                                <path d="M 61 43 C 59 35 61 26 62 17 C 65 24 67 35 65 43 Z" fill="url(#flameInnerGrad)"/>
+                                <path d="M 57 45 C 55 35 57 25 61 17 C 68 25 71 36 69 45 Z" fill="url(#flameOuterGrad)"/>
+                                <path d="M 59 44 C 57 36 58 28 61 20 C 66 27 69 37 67 44 Z" fill="url(#flameMidGrad)"/>
+                                <path d="M 61 43 C 59 37 61 31 62 24 C 64 30 66 38 65 43 Z" fill="url(#flameInnerGrad)"/>
                             </g>
-                            <!-- Flame Tongue 5 (Far Right Flickering Tongue) -->
+                            <!-- Flame Tongue 5 (Far Right) -->
                             <g class="flame-tongue flame-tongue-5">
-                                <path d="M 70 45 C 68 34 72 25 75 16 C 82 26 84 36 79 45 Z" fill="url(#flameOuterGrad)"/>
-                                <path d="M 72 44 C 71 36 73 28 75 20 C 79 28 81 37 77 44 Z" fill="url(#flameMidGrad)"/>
-                                <path d="M 73 43 C 72 37 74 31 75 24 C 77 31 78 38 76 43 Z" fill="url(#flameInnerGrad)"/>
+                                <path d="M 70 45 C 69 38 72 30 75 24 C 80 31 82 38 79 45 Z" fill="url(#flameOuterGrad)"/>
+                                <path d="M 72 44 C 71 38 73 32 75 27 C 78 32 80 39 77 44 Z" fill="url(#flameMidGrad)"/>
+                                <path d="M 73 43 C 72 39 74 35 75 30 C 76 35 77 40 76 43 Z" fill="url(#flameInnerGrad)"/>
                             </g>
 
                             <!-- Floating Heat Embers -->
-                            <circle cx="45" cy="5" r="1.1" fill="#FEF08A" opacity="0.9"/>
-                            <circle cx="53" cy="9" r="0.9" fill="#F97316" opacity="0.85"/>
-                            <circle cx="33" cy="14" r="0.8" fill="#FBBF24" opacity="0.8"/>
-                            <circle cx="63" cy="13" r="0.75" fill="#FEF08A" opacity="0.8"/>
+                            <circle cx="45" cy="12" r="1.0" fill="#FEF08A" opacity="0.9"/>
+                            <circle cx="53" cy="15" r="0.85" fill="#F97316" opacity="0.85"/>
+                            <circle cx="34" cy="19" r="0.8" fill="#FBBF24" opacity="0.8"/>
+                            <circle cx="62" cy="18" r="0.75" fill="#FEF08A" opacity="0.8"/>
                         </svg>
                     </div>
 
