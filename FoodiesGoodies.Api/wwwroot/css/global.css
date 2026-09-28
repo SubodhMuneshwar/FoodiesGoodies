@@ -2038,6 +2038,22 @@ select:focus.form-control {
   justify-content: center;
 }
 
+/* Stove Heat Glow Beneath Skillet */
+.foodies-skillet-stage::before {
+  content: '';
+  position: absolute;
+  bottom: 8px;
+  left: 60px;
+  width: 72px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(249, 115, 22, 0.45) 0%, rgba(220, 38, 38, 0.2) 50%, transparent 75%);
+  filter: blur(5px);
+  pointer-events: none;
+  z-index: 0;
+  animation: stoveGlowPulse 1.1s ease-in-out infinite alternate;
+}
+
 .foodies-skillet {
   position: absolute;
   bottom: 16px;
@@ -2046,18 +2062,62 @@ select:focus.form-control {
   height: 48px;
   transform-origin: 20px 42px;
   animation: skilletSizzleBob 2.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  z-index: 2;
 }
 
-/* Flipping Culinary Delicacy */
+/* Dynamic Stove Flames Below Skillet */
+.foodies-flames-group {
+  position: absolute;
+  bottom: 6px;
+  left: 62px;
+  width: 68px;
+  height: 32px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.foodies-flames-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0 7px rgba(249, 115, 22, 0.65));
+}
+
+.flame-tongue {
+  transform-origin: 50% 27px;
+}
+
+.flame-tongue-1 {
+  animation: flameTongueFlicker1 0.72s ease-in-out infinite alternate;
+}
+
+.flame-tongue-2 {
+  animation: flameTongueFlicker2 0.58s ease-in-out infinite alternate 0.12s;
+}
+
+.flame-tongue-3 {
+  animation: flameTongueFlickerCenter 0.46s ease-in-out infinite alternate 0.06s;
+}
+
+.flame-tongue-4 {
+  animation: flameTongueFlicker2 0.64s ease-in-out infinite alternate 0.18s;
+}
+
+.flame-tongue-5 {
+  animation: flameTongueFlicker1 0.78s ease-in-out infinite alternate 0.1s;
+}
+
+/* Flipping Culinary Delicacy (Fluffy Folded Omelette) */
 .foodies-food-toss {
   position: absolute;
   bottom: 24px;
-  left: 64px;
-  width: 44px;
-  height: 24px;
+  left: 62px;
+  width: 48px;
+  height: 26px;
   transform-origin: center center;
   animation: foodTossFlip 2.2s cubic-bezier(0.35, 0, 0.35, 1) infinite;
   z-index: 3;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.25));
 }
 
 /* Steam Wisps */
@@ -2327,13 +2387,72 @@ select:focus.form-control {
   }
 }
 
+/* Stove Flame Tongue Dancing Keyframes */
+@keyframes flameTongueFlicker1 {
+  0% {
+    transform: scaleY(0.9) scaleX(0.94) rotate(-2deg);
+    opacity: 0.88;
+  }
+  50% {
+    transform: scaleY(1.08) scaleX(1.03) rotate(1.5deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(0.92) scaleX(0.96) rotate(-0.5deg);
+    opacity: 0.9;
+  }
+}
+
+@keyframes flameTongueFlicker2 {
+  0% {
+    transform: scaleY(0.88) scaleX(0.96) rotate(2deg);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scaleY(1.12) scaleX(1.04) rotate(-1.5deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(0.94) scaleX(0.92) rotate(1deg);
+    opacity: 0.88;
+  }
+}
+
+@keyframes flameTongueFlickerCenter {
+  0% {
+    transform: scaleY(0.92) scaleX(0.96);
+    opacity: 0.92;
+  }
+  50% {
+    transform: scaleY(1.18) scaleX(1.06);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(0.9) scaleX(0.94);
+    opacity: 0.9;
+  }
+}
+
+@keyframes stoveGlowPulse {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.65;
+  }
+  100% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+}
+
 /* Reduced Motion Preference */
 @media (prefers-reduced-motion: reduce) {
   .foodies-skillet,
   .foodies-food-toss,
   .steam-wisp,
   .sizzle-spark,
-  .foodies-loader-bar {
+  .foodies-loader-bar,
+  .flame-tongue,
+  .foodies-skillet-stage::before {
     animation-duration: 4s !important;
   }
   .foodies-food-toss {
