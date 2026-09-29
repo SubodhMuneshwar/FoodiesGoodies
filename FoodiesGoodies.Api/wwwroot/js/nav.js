@@ -388,8 +388,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 3.3.1b Mobile Discovery Hint — about the bulb (responsive only)
-    if (window.innerWidth <= 992 && !sessionStorage.getItem('foodies_bulb_hint_dismissed')) {
+    // 3.3.1b Mobile Discovery Hint — about the bulb (only if visible and responsive)
+    const bulbFixture = document.querySelector('.navbar-bulb-fixture');
+    const isBulbVisible = bulbFixture && window.getComputedStyle(bulbFixture).display !== 'none';
+    if (window.innerWidth <= 992 && isBulbVisible && !sessionStorage.getItem('foodies_bulb_hint_dismissed')) {
         const existingBulbHint = document.getElementById('bulb-discovery-hint');
         if (!existingBulbHint) {
             const bulbHint = document.createElement('div');

@@ -443,14 +443,17 @@ footer.footer-mpa {
   display: none;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   gap: 5px;
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   background: var(--bg-surface-elevated);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
   cursor: pointer;
-  padding: 6px;
+  padding: 8px;
   z-index: 10006;
   transition: all var(--transition-fast);
 }

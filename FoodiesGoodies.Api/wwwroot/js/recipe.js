@@ -298,6 +298,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         }
 
+        function showNotification(title, text, icon = 'success') {
+            if (typeof Swal === 'function' && Swal.fire) {
+                return Swal.fire({ title, text, icon });
+            } else if (typeof swal === 'function') {
+                return swal(title, text, icon);
+            } else if (window.Toast && typeof window.Toast.show === 'function') {
+                return window.Toast.show(icon, text, title);
+            } else {
+                alert(`${title}\n${text}`);
+                return Promise.resolve();
+            }
+        }
+
         // 10. Flavor Rating Stars
         // Rating is local-demo only — no social rating backend exists.
         document.querySelectorAll('.star-rating-btn').forEach(btn => {
@@ -307,12 +320,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     b.classList.toggle('active', idx < stars);
                 });
                 // No backend rating call — rating is local visual only
-                const fire = (typeof Swal === 'function') ? Swal.fire : (typeof swal === 'function' ? swal : alert);
-                fire({
-                    title: 'Flavor Rating Submitted! ⭐',
-                    text: `You rated this recipe ${stars} stars!`,
-                    icon: 'success'
-                });
+                showNotification('Flavor Rating Submitted! ⭐', `You rated this recipe ${stars} stars!`, 'success');
             });
         });
 
@@ -345,12 +353,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         `;
                         commentsThread.prepend(noteEl);
                         input.value = '';
-                        const fire = (typeof Swal === 'function') ? Swal.fire : (typeof swal === 'function' ? swal : alert);
-                        fire({
-                            title: 'Flavor Note Added! 📝',
-                            text: 'Your culinary feedback has been shared with the community!',
-                            icon: 'success'
-                        });
+                        showNotification('Flavor Note Added! 📝', 'Your culinary feedback has been shared with the community!', 'success');
                     }
                 }
             });

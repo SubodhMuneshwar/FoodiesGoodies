@@ -1539,9 +1539,11 @@
 .foodies-modal-close {
   position: absolute;
   top: 14px;
-  right: 16px;
-  width: 36px;
-  height: 36px;
+  right: 14px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 50%;
   background: var(--bg-surface-elevated);
   border: 1px solid var(--border-strong);
@@ -1681,5 +1683,24 @@
   }
   .quickview-details {
     padding: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .trending-grid,
+  .cuisine-grid,
+  .testimonials-grid {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+
+  .trending-section,
+  .cuisines-section,
+  .testimonials-section {
+    padding: 0 16px !important;
+  }
+
+  .cuisine-card {
+    height: 200px !important;
   }
 }

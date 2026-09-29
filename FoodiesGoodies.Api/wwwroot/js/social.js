@@ -97,7 +97,12 @@ const Social = {
         if (btnEl) {
             btnEl.classList.toggle('following', isForked);
             btnEl.classList.toggle('forked', isForked);
-            btnEl.textContent = isForked ? 'In Your Kitchen ✓' : '+ Fork This Chef';
+            const textSpan = btnEl.querySelector('#fork-btn-text') || btnEl.querySelector('span');
+            if (textSpan) {
+                textSpan.textContent = isForked ? 'In Your Kitchen ✓' : 'Fork This Chef';
+            } else {
+                btnEl.textContent = isForked ? 'In Your Kitchen ✓' : '+ Fork This Chef';
+            }
         }
 
         // Trigger dynamic event for page listeners
