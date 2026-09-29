@@ -241,13 +241,13 @@ document.addEventListener('DOMContentLoaded', () => {
             tubelight.dataset.wired = 'true';
             tubelight.addEventListener('click', (e) => {
                 e.stopPropagation();
-                toggleTheme();
+                toggleTheme(e);
             });
             tubelight.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
                     e.stopPropagation();
-                    toggleTheme();
+                    toggleTheme(e);
                 }
             });
         }
@@ -259,15 +259,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateTubelight(theme, isUserTriggered = false) {
         const tubelight = document.getElementById('navbar-tubelight');
         if (!tubelight) return;
-
-        if (isUserTriggered) {
-            document.documentElement.classList.add('theme-lighting-transition');
-            if (lightingTransitionTimeout) clearTimeout(lightingTransitionTimeout);
-            lightingTransitionTimeout = setTimeout(() => {
-                document.documentElement.classList.remove('theme-lighting-transition');
-                lightingTransitionTimeout = null;
-            }, 1250);
-        }
 
         if (theme === 'light') {
             tubelight.classList.remove('is-off');
@@ -315,10 +306,63 @@ document.addEventListener('DOMContentLoaded', () => {
         window.dispatchEvent(new CustomEvent('foodies:theme-change', { detail: { theme } }));
     }
 
-    function toggleTheme() {
+    let isThemeTransitioning = false;
+
+    function getThemeToggleOrigin(origin) {
+        if (origin && typeof origin.x === 'number' && typeof origin.y === 'number' && !isNaN(origin.x) && !isNaN(origin.y)) {
+            return { x: origin.x, y: origin.y };
+        }
+        if (origin instanceof Event) {
+            const targetEl = origin.currentTarget || origin.target;
+            if (targetEl && typeof targetEl.getBoundingClientRect === 'function') {
+                const r = targetEl.getBoundingClientRect();
+                return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+            }
+            if (typeof origin.clientX === 'number' && typeof origin.clientY === 'number' && origin.clientX > 0 && origin.clientY > 0) {
+                return { x: origin.clientX, y: origin.clientY };
+            }
+        }
+        if (origin && typeof origin.getBoundingClientRect === 'function') {
+            const r = origin.getBoundingClientRect();
+            return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+        }
+        // If hanging cord canvas is mounted, use the bottom acorn handle's live coordinates
+        const cordCanvas = document.getElementById('cord-theme-switch');
+        if (cordCanvas && window.__umeshCordSwitch && Array.isArray(window.__umeshCordSwitch.nodes)) {
+            const nodes = window.__umeshCordSwitch.nodes;
+            const handle = nodes[nodes.length - 1];
+            const r = cordCanvas.getBoundingClientRect();
+            if (r.width > 0 && r.height > 0 && handle) {
+                return { x: r.left + handle.x, y: r.top + handle.y };
+            }
+        }
+        // Fallback: active focused element or top-right header actions
+        const active = document.activeElement;
+        if (active && active !== document.body && typeof active.getBoundingClientRect === 'function') {
+            const r = active.getBoundingClientRect();
+            if (r.width > 0 && r.height > 0) {
+                return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+            }
+        }
+        return {
+            x: Math.min(window.innerWidth - 60, window.innerWidth * 0.88),
+            y: 35
+        };
+    }
+
+    function toggleTheme(origin = null) {
+        if (isThemeTransitioning) return;
+
         const current = document.documentElement.getAttribute('data-theme') || 'light';
         const next = current === 'light' ? 'dark' : 'light';
-        applyTheme(next, true);
+
+        const originPos = getThemeToggleOrigin(origin);
+        const x = originPos.x;
+        const y = originPos.y;
+        const maxRadius = Math.hypot(
+            Math.max(x, window.innerWidth - x),
+            Math.max(y, window.innerHeight - y)
+        );
 
         const hint = document.getElementById('cord-discovery-hint');
         if (hint) {
@@ -331,7 +375,61 @@ document.addEventListener('DOMContentLoaded', () => {
             bulbHint.classList.add('hidden');
             sessionStorage.setItem('foodies_bulb_hint_dismissed', 'true');
         }
+
+        const supportsViewTransition = typeof document !== 'undefined' &&
+            'startViewTransition' in document &&
+            !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (!supportsViewTransition) {
+            document.documentElement.classList.add('theme-lighting-transition-fallback');
+            applyTheme(next, true);
+            setTimeout(() => {
+                document.documentElement.classList.remove('theme-lighting-transition-fallback');
+            }, 450);
+            return;
+        }
+
+        isThemeTransitioning = true;
+        try {
+            const transition = document.startViewTransition(() => {
+                applyTheme(next, true);
+            });
+
+            transition.ready.then(() => {
+                const anim = document.documentElement.animate(
+                    {
+                        clipPath: [
+                            `circle(0px at ${x}px ${y}px)`,
+                            `circle(${maxRadius}px at ${x}px ${y}px)`
+                        ]
+                    },
+                    {
+                        duration: 750,
+                        easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                        pseudoElement: '::view-transition-new(root)'
+                    }
+                );
+
+                const finishCleanup = () => {
+                    isThemeTransitioning = false;
+                };
+                anim.onfinish = finishCleanup;
+                anim.oncancel = finishCleanup;
+            }).catch(() => {
+                isThemeTransitioning = false;
+            });
+
+            transition.finished.finally(() => {
+                isThemeTransitioning = false;
+            });
+        } catch (_) {
+            applyTheme(next, true);
+            isThemeTransitioning = false;
+        }
     }
+
+    // Expose toggle globally
+    window.toggleFoodiesTheme = (origin) => toggleTheme(origin);
 
     // Initialize tubelight on page mount
     setupNavbarTubelight();
@@ -602,7 +700,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Change modes ONLY when the toggle wire is released
                 if (this.hasPulledPastThreshold || (elapsed < 350 && distMoved < 12)) {
-                    this.toggleTheme();
+                    const rect = canvas.getBoundingClientRect();
+                    const handleNode = this.nodes[this.numNodes - 1];
+                    const originX = rect.left + handleNode.x;
+                    const originY = rect.top + handleNode.y;
+                    this.toggleTheme({ x: originX, y: originY });
                     // Subtle release rebound bounce
                     this.nodes[this.numNodes - 1].y += 18;
                 }
@@ -630,7 +732,9 @@ document.addEventListener('DOMContentLoaded', () => {
             canvas.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    this.toggleTheme();
+                    const rect = canvas.getBoundingClientRect();
+                    const handleNode = this.nodes[this.numNodes - 1];
+                    this.toggleTheme({ x: rect.left + handleNode.x, y: rect.top + handleNode.y });
                     this.nodes[this.numNodes - 1].y += 20;
                     this.wakeUp();
                 }
@@ -638,8 +742,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Silent and minimal toggle (no sounds, no quotes/toasts)
-        toggleTheme() {
-            toggleTheme();
+        toggleTheme(origin) {
+            toggleTheme(origin);
         }
 
         updatePhysics() {
@@ -917,7 +1021,7 @@ document.addEventListener('DOMContentLoaded', () => {
         mobileToggle.innerHTML = `<ion-icon name="${curTheme === 'dark' ? 'sunny-outline' : 'moon-outline'}"></ion-icon>`;
         mobileToggle.addEventListener('click', (e) => {
             e.preventDefault();
-            toggleTheme();
+            toggleTheme(e);
         });
         actionsWrap.appendChild(mobileToggle);
     }
@@ -964,7 +1068,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (drawerThemeBtn) {
             drawerThemeBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                toggleTheme();
+                toggleTheme(e);
             });
         }
     }

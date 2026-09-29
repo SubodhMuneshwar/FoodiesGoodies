@@ -773,20 +773,39 @@ img[loading="lazy"] {
 }
 
 /* ==========================================================================
-   4.3 Site-Wide Gradual Lighting Transition
-   Gradually and seamlessly spreads the light across the entire site or dims into dark mode
+   4.3 Circular Reveal View Transition (Theme Toggle Effect)
+   Inspired by ajseven.me with enhanced dynamic coordinates, spring rebound & fallbacks
    ========================================================================== */
-html.theme-lighting-transition,
-html.theme-lighting-transition *,
-html.theme-lighting-transition *::before,
-html.theme-lighting-transition *::after {
-  transition: background-color 1.15s cubic-bezier(0.25, 1, 0.4, 1),
-              background 1.15s cubic-bezier(0.25, 1, 0.4, 1),
-              color 0.95s cubic-bezier(0.25, 1, 0.4, 1),
-              border-color 1.0s cubic-bezier(0.25, 1, 0.4, 1),
-              box-shadow 1.15s cubic-bezier(0.25, 1, 0.4, 1),
-              backdrop-filter 1.1s cubic-bezier(0.25, 1, 0.4, 1),
-              -webkit-backdrop-filter 1.1s cubic-bezier(0.25, 1, 0.4, 1) !important;
+::view-transition-group(root) {
+  animation-duration: 0.75s;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  mix-blend-mode: normal;
+  animation: none;
+  display: block;
+  height: 100%;
+}
+
+::view-transition-old(root) {
+  z-index: 1 !important;
+}
+
+::view-transition-new(root) {
+  z-index: 9999 !important;
+}
+
+/* Fallback lighting transition for browsers without View Transitions API */
+html.theme-lighting-transition-fallback,
+html.theme-lighting-transition-fallback *,
+html.theme-lighting-transition-fallback *::before,
+html.theme-lighting-transition-fallback *::after {
+  transition: background-color 0.4s ease,
+              background 0.4s ease,
+              color 0.35s ease,
+              border-color 0.4s ease,
+              box-shadow 0.4s ease !important;
 }
 
 /* --------------------------------------------------------------------------
