@@ -773,11 +773,13 @@ img[loading="lazy"] {
 }
 
 /* ==========================================================================
-   4.3 Circular Reveal View Transition (Theme Toggle Effect)
-   Inspired by ajseven.me with enhanced dynamic coordinates, spring rebound & fallbacks
+   4.3 Reverse Circular Overlapse View Transition (Theme Toggle Effect)
+   - Desktop Mode: Top-Right <-> Bottom-Left diagonal reverse sweep
+   - Responsive Mode: Top-Center (vintage bulb) <-> Bottom-Center vertical reverse sweep
+   - Coordinated 3D optical depth parallax across old and new root snapshots
    ========================================================================== */
 ::view-transition-group(root) {
-  animation-duration: 0.75s;
+  animation-duration: 0.82s;
 }
 
 ::view-transition-old(root),
@@ -790,10 +792,12 @@ img[loading="lazy"] {
 
 ::view-transition-old(root) {
   z-index: 1 !important;
+  will-change: transform, opacity, filter;
 }
 
 ::view-transition-new(root) {
   z-index: 9999 !important;
+  will-change: clip-path, transform, filter;
 }
 
 /* Fallback lighting transition for browsers without View Transitions API */

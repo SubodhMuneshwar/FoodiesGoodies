@@ -355,14 +355,71 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const current = document.documentElement.getAttribute('data-theme') || 'light';
         const next = current === 'light' ? 'dark' : 'light';
+        const isNextDark = next === 'dark';
 
+        const isResponsive = window.innerWidth <= 992 || window.matchMedia('(max-width: 992px)').matches;
         const originPos = getThemeToggleOrigin(origin);
-        const x = originPos.x;
-        const y = originPos.y;
-        const maxRadius = Math.hypot(
-            Math.max(x, window.innerWidth - x),
-            Math.max(y, window.innerHeight - y)
-        );
+
+        // Directional coordinates for Reverse Circular Overlapse:
+        // - Responsive Mode (Mobile/Tablet <= 992px):
+        //     * Light Mode: Circle sweeps from Top-Center (where the bulb hangs) down to Bottom-Center
+        //     * Dark Mode: Circle sweeps in reverse from Bottom-Center up to Top-Center (where the bulb is)
+        // - Desktop Mode (> 992px):
+        //     * Light Mode: Circle sweeps from Top-Right (cord) diagonally down to Bottom-Left
+        //     * Dark Mode: Circle sweeps in reverse from Bottom-Left diagonally up to Top-Right
+        let startX, startY, maxRadius;
+        let oldTranslateX, oldTranslateY;
+
+        if (isResponsive) {
+            // Find live center of the hanging bulb fixture
+            const bulbEl = document.querySelector('.navbar-bulb-fixture') || document.getElementById('navbar-tubelight');
+            let bulbX = window.innerWidth / 2;
+            let bulbY = 28;
+            if (bulbEl) {
+                const r = bulbEl.getBoundingClientRect();
+                if (r.width > 0 && r.height > 0) {
+                    bulbX = r.left + r.width / 2;
+                    bulbY = r.top + r.height / 2;
+                }
+            }
+
+            if (isNextDark) {
+                // Dark mode circle emerges from bottom-center and sweeps upwards to the top-center bulb
+                startX = window.innerWidth / 2;
+                startY = window.innerHeight;
+                maxRadius = Math.hypot(window.innerWidth / 2, window.innerHeight) + 40;
+                oldTranslateX = 0;
+                oldTranslateY = -16; // Recede upward as dark surges from bottom
+            } else {
+                // Light mode circle emerges from top-center bulb and sweeps downwards to bottom-center
+                startX = bulbX;
+                startY = bulbY;
+                maxRadius = Math.hypot(window.innerWidth / 2, window.innerHeight - startY) + 40;
+                oldTranslateX = 0;
+                oldTranslateY = 16; // Recede downward as light pours from top
+            }
+        } else {
+            if (isNextDark) {
+                // Dark mode circle emerges from bottom-left corner and sweeps diagonally up to top-right
+                startX = 0;
+                startY = window.innerHeight;
+                maxRadius = Math.hypot(window.innerWidth, window.innerHeight) + 40;
+                oldTranslateX = 16;
+                oldTranslateY = -16;
+            } else {
+                // Light mode circle emerges from top-right and sweeps diagonally down to bottom-left
+                if (originPos && typeof originPos.x === 'number' && typeof originPos.y === 'number') {
+                    startX = Math.max(window.innerWidth - 140, originPos.x);
+                    startY = Math.min(120, originPos.y);
+                } else {
+                    startX = window.innerWidth;
+                    startY = 0;
+                }
+                maxRadius = Math.hypot(startX, window.innerHeight - startY) + 40;
+                oldTranslateX = -16;
+                oldTranslateY = 16;
+            }
+        }
 
         const hint = document.getElementById('cord-discovery-hint');
         if (hint) {
@@ -374,6 +431,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (bulbHint) {
             bulbHint.classList.add('hidden');
             sessionStorage.setItem('foodies_bulb_hint_dismissed', 'true');
+        }
+
+        // Trigger tactile kinetic sparks on cord handle (desktop)
+        if (window.__umeshCordSwitch && typeof window.__umeshCordSwitch.emitSparks === 'function') {
+            window.__umeshCordSwitch.emitSparks(isNextDark);
         }
 
         const supportsViewTransition = typeof document !== 'undefined' &&
@@ -396,25 +458,48 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             transition.ready.then(() => {
-                const anim = document.documentElement.animate(
+                // Incoming Theme Layer: Reverse Circular Overlapse with Dynamic Horizon Bloom
+                const animNew = document.documentElement.animate(
                     {
                         clipPath: [
-                            `circle(0px at ${x}px ${y}px)`,
-                            `circle(${maxRadius}px at ${x}px ${y}px)`
-                        ]
+                            `circle(0px at ${startX}px ${startY}px)`,
+                            `circle(${maxRadius}px at ${startX}px ${startY}px)`
+                        ],
+                        filter: isNextDark
+                            ? ['brightness(0.82) contrast(1.18) saturate(1.15)', 'brightness(1) contrast(1) saturate(1)']
+                            : ['brightness(1.22) contrast(1.04) saturate(1.08)', 'brightness(1) contrast(1) saturate(1)'],
+                        transform: ['scale(1.012)', 'scale(1)']
                     },
                     {
-                        duration: 750,
-                        easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                        duration: 820,
+                        easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
                         pseudoElement: '::view-transition-new(root)'
+                    }
+                );
+
+                // Outgoing Theme Layer: Coordinated Opposing Depth Perspective Parallax
+                const animOld = document.documentElement.animate(
+                    {
+                        transform: isNextDark
+                            ? ['scale(1) translate(0px, 0px)', `scale(0.976) translate(${oldTranslateX}px, ${oldTranslateY}px)`]
+                            : ['scale(1) translate(0px, 0px)', `scale(0.976) translate(${oldTranslateX}px, ${oldTranslateY}px)`],
+                        opacity: [1, 0.82],
+                        filter: isNextDark
+                            ? ['brightness(1)', 'brightness(1.08) blur(1.5px)']
+                            : ['brightness(1)', 'brightness(0.92) blur(1.5px)']
+                    },
+                    {
+                        duration: 820,
+                        easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+                        pseudoElement: '::view-transition-old(root)'
                     }
                 );
 
                 const finishCleanup = () => {
                     isThemeTransitioning = false;
                 };
-                anim.onfinish = finishCleanup;
-                anim.oncancel = finishCleanup;
+                animNew.onfinish = finishCleanup;
+                animNew.oncancel = finishCleanup;
             }).catch(() => {
                 isThemeTransitioning = false;
             });
@@ -571,6 +656,7 @@ document.addEventListener('DOMContentLoaded', () => {
             this.startY = this.pointerY;
             this.startTime = 0;
 
+            this.sparks = [];
             this.isAnimating = false;
             this.rafId = null;
 
@@ -949,12 +1035,65 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.fill();
 
             ctx.restore();
+
+            // 5. Kinetic Theme Sparks / Embers upon Cord Release
+            if (this.sparks && this.sparks.length > 0) {
+                for (let i = this.sparks.length - 1; i >= 0; i--) {
+                    const p = this.sparks[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.08;
+                    p.life -= p.decay;
+
+                    if (p.life <= 0) {
+                        this.sparks.splice(i, 1);
+                        continue;
+                    }
+
+                    ctx.save();
+                    ctx.globalAlpha = Math.max(0, p.life);
+                    ctx.shadowColor = p.color;
+                    ctx.shadowBlur = 6;
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+        }
+
+        emitSparks(isGoingDark) {
+            const bottom = this.getBottomNode();
+            if (!bottom) return;
+            const colors = isGoingDark
+                ? ['#C084FC', '#818CF8', '#38BDF8', '#A855F7', '#E0E7FF']
+                : ['#F59E0B', '#FBBF24', '#FDE047', '#FEF08A', '#FFFFFF'];
+
+            for (let i = 0; i < 18; i++) {
+                const angle = (Math.PI * 2 * i) / 18 + (Math.random() - 0.5) * 0.5;
+                const speed = 1.4 + Math.random() * 2.8;
+                this.sparks.push({
+                    x: bottom.x,
+                    y: bottom.y + 14,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed - 0.7,
+                    life: 1.0,
+                    decay: 0.032 + Math.random() * 0.024,
+                    size: 1.8 + Math.random() * 2.0,
+                    color: colors[Math.floor(Math.random() * colors.length)]
+                });
+            }
+            this.wakeUp();
         }
 
         checkMotion() {
             let totalVelocity = 0;
             for (let i = 1; i < this.numNodes; i++) {
                 totalVelocity += Math.hypot(this.nodes[i].x - this.nodes[i].oldX, this.nodes[i].y - this.nodes[i].oldY);
+            }
+            if (this.sparks && this.sparks.length > 0) {
+                totalVelocity += 1.0;
             }
             return totalVelocity;
         }
