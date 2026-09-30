@@ -433,11 +433,6 @@ document.addEventListener('DOMContentLoaded', () => {
             sessionStorage.setItem('foodies_bulb_hint_dismissed', 'true');
         }
 
-        // Trigger tactile kinetic sparks on cord handle (desktop)
-        if (window.__umeshCordSwitch && typeof window.__umeshCordSwitch.emitSparks === 'function') {
-            window.__umeshCordSwitch.emitSparks(isNextDark);
-        }
-
         const supportsViewTransition = typeof document !== 'undefined' &&
             'startViewTransition' in document &&
             !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -656,7 +651,6 @@ document.addEventListener('DOMContentLoaded', () => {
             this.startY = this.pointerY;
             this.startTime = 0;
 
-            this.sparks = [];
             this.isAnimating = false;
             this.rafId = null;
 
@@ -1035,65 +1029,12 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.fill();
 
             ctx.restore();
-
-            // 5. Kinetic Theme Sparks / Embers upon Cord Release
-            if (this.sparks && this.sparks.length > 0) {
-                for (let i = this.sparks.length - 1; i >= 0; i--) {
-                    const p = this.sparks[i];
-                    p.x += p.vx;
-                    p.y += p.vy;
-                    p.vy += 0.08;
-                    p.life -= p.decay;
-
-                    if (p.life <= 0) {
-                        this.sparks.splice(i, 1);
-                        continue;
-                    }
-
-                    ctx.save();
-                    ctx.globalAlpha = Math.max(0, p.life);
-                    ctx.shadowColor = p.color;
-                    ctx.shadowBlur = 6;
-                    ctx.fillStyle = p.color;
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.restore();
-                }
-            }
-        }
-
-        emitSparks(isGoingDark) {
-            const bottom = this.getBottomNode();
-            if (!bottom) return;
-            const colors = isGoingDark
-                ? ['#C084FC', '#818CF8', '#38BDF8', '#A855F7', '#E0E7FF']
-                : ['#F59E0B', '#FBBF24', '#FDE047', '#FEF08A', '#FFFFFF'];
-
-            for (let i = 0; i < 18; i++) {
-                const angle = (Math.PI * 2 * i) / 18 + (Math.random() - 0.5) * 0.5;
-                const speed = 1.4 + Math.random() * 2.8;
-                this.sparks.push({
-                    x: bottom.x,
-                    y: bottom.y + 14,
-                    vx: Math.cos(angle) * speed,
-                    vy: Math.sin(angle) * speed - 0.7,
-                    life: 1.0,
-                    decay: 0.032 + Math.random() * 0.024,
-                    size: 1.8 + Math.random() * 2.0,
-                    color: colors[Math.floor(Math.random() * colors.length)]
-                });
-            }
-            this.wakeUp();
         }
 
         checkMotion() {
             let totalVelocity = 0;
             for (let i = 1; i < this.numNodes; i++) {
                 totalVelocity += Math.hypot(this.nodes[i].x - this.nodes[i].oldX, this.nodes[i].y - this.nodes[i].oldY);
-            }
-            if (this.sparks && this.sparks.length > 0) {
-                totalVelocity += 1.0;
             }
             return totalVelocity;
         }
